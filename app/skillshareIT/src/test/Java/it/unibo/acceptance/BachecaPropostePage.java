@@ -48,19 +48,11 @@ public class BachecaPropostePage {
         // Attesa che la tabella sia visibile prima di cercare i pulsanti
         wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
 
-        // Richiesta di tutti i pulsanti presenti nella tabella
-        java.util.List<WebElement> bottoni = tabellaProposte.findElements(org.openqa.selenium.By.tagName("button"));
-
-        // Scorrimento della Lista
-        for (WebElement bottone : bottoni) {
-
-            // Se c'è il bottone "Richiedi Scambio" e non è disabilitato, clicchiamo su di esso
-            if (bottone.getText().equals("Richiedi Scambio") && bottone.isEnabled()) {
-                bottone.click();
-                break;
-            }
-        }
-
+        WebElement bottoneScambio = tabellaProposte.findElement(
+            org.openqa.selenium.By.xpath(".//button[starts-with(@id, 'btn-richiedi-scambio-')]")
+        );
+        
+        bottoneScambio.click();
         return this;
     }
 

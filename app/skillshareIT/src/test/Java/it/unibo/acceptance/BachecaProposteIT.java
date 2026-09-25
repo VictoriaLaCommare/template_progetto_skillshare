@@ -35,7 +35,7 @@ public class BachecaProposteIT {
     @BeforeEach
     void vaiAllaPagina() {
         // 1. Partiamo dalla pagina di Login
-        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
         String emailUnica = "bacheca" + System.currentTimeMillis() + "@example.com";
 
         regPage.compila("Test", "Bacheca", "user" + System.currentTimeMillis(), emailUnica, "01/01/2000", "passwordSicura123").registrati();
@@ -43,7 +43,7 @@ public class BachecaProposteIT {
 
         // 2. Aspettiamo di essere reindirizzati alla bacheca dopo la registrazione e il login
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-bacheca-proposte")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte")));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BachecaProposteIT {
         annunciPage.compila("Annuncio di Test Selenium", "Descrizione Test", "Offerta Test", "Richiesta Test").pubblica();
 
         // 2. Clicchiamo sul bottone per andare alla Bacheca Proposte
-        driver.findElement(By.id("btn-bacheca-proposte")).click();
+        driver.findElement(By.id("nav-btn-proposte")).click();
 
         // Inizializziamo la pagina BachecaPropostePage
         BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);

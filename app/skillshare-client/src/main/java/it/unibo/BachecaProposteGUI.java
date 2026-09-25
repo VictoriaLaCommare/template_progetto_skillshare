@@ -14,7 +14,7 @@ public class BachecaProposteGUI {
     private HorizontalPanel creaNavbar(Utente utenteLoggato) {
         HorizontalPanel navbar = new HorizontalPanel();
         
-        navbar.setWidth("89%"); 
+        navbar.setWidth("100%"); 
         
         navbar.setSpacing(10);
         navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);        
@@ -24,6 +24,7 @@ public class BachecaProposteGUI {
         
         navbar.getElement().getStyle().setProperty("borderRadius", "12px"); 
         navbar.getElement().getStyle().setProperty("margin", "15px auto 25px auto");
+        navbar.getElement().getStyle().setProperty("boxSizing", "border-box");
 
         // Logo / Nome a sinistra
         Label lblLogo = new Label("SkillShare");
@@ -56,14 +57,27 @@ public class BachecaProposteGUI {
         btnProposte.getElement().getStyle().setProperty("cursor", "default");
         //btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));
 
-        // 3. Profilo utente
+        // 3. Pulsante i Miei Annunci
+        Button btnMieiAnnunci = creaPannelloStileLink("📋 I Miei Annunci");
+        btnMieiAnnunci.getElement().setId("btn-miei-annunci");
+        btnMieiAnnunci.addClickHandler(event -> {
+            RootPanel.get().clear();
+            // Istanziamo il pannello passando l'username e il callback per tornare alla bacheca annunci
+            MieiAnnunciPanel mieiAnnunciPanel = new MieiAnnunciPanel(
+                utenteLoggato,
+                () -> new PubblicaAnnunciGui().mostra(utenteLoggato)
+            );
+            RootPanel.get().add(mieiAnnunciPanel);
+        });
+
+        // 4. Profilo utente
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
         btnBacheca.getElement().setId("nav-btn-profilo");
         btnProfilo.addClickHandler(event -> {
             com.google.gwt.user.client.Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome() + " (" + utenteLoggato.getMail() + ")");
         });
 
-        // 4. Tasto Logout (Torna alla landing page)
+        // 5. Tasto Logout (Torna alla landing page)
         Button btnLogout = creaPannelloStileLink("↩️ Logout");
         btnBacheca.getElement().setId("nav-btn-logout");
         btnLogout.addClickHandler(event -> {
@@ -72,6 +86,7 @@ public class BachecaProposteGUI {
 
         menuPanel.add(btnBacheca);
         menuPanel.add(btnProposte);
+        menuPanel.add(btnMieiAnnunci);
         menuPanel.add(btnProfilo);
         menuPanel.add(btnLogout);
 
@@ -96,20 +111,21 @@ public class BachecaProposteGUI {
     
     public void mostra(Utente utenteLoggato) {
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("100%");
+        mainContainer.setWidth("90%");
+        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
+        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);  
         mainContainer.setSpacing(0);
-        
-        // Aggiungiamo la Navbar in cima se l'utente è loggato
-        if (utenteLoggato != null) {
-            mainContainer.add(creaNavbar(utenteLoggato));
-        }
 
         VerticalPanel pannelloPrincipale = new VerticalPanel();
         pannelloPrincipale.setSpacing(15);
-        pannelloPrincipale.setWidth("90%");
+        pannelloPrincipale.setWidth("100%");
         pannelloPrincipale.getElement().getStyle().setProperty("margin", "20px auto");
         pannelloPrincipale.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         
+        // Aggiungiamo la Navbar in cima se l'utente è loggato
+        if (utenteLoggato != null) {
+            pannelloPrincipale.add(creaNavbar(utenteLoggato));
+        }
 
         HTML bannerDashboard = new HTML(
         "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
@@ -127,7 +143,7 @@ public class BachecaProposteGUI {
         pannelloAnnunci.setWidth("100%");
 
         Button btnFiltri = new Button("🔍 Filtri Avanzati");
-        btnFiltri.getElement().setId("btn-filtri-avanzati");
+        btnFiltri.getElement().setId("btn-filtri");
         btnFiltri.getElement().getStyle().setProperty("marginBottom", "10px");
         btnFiltri.addClickHandler(event -> mostraPopupFiltriAvanzati(pannelloAnnunci, utenteLoggato, lblStato));
         
@@ -173,12 +189,15 @@ public class BachecaProposteGUI {
         layoutFiltri.add(new HTML("<h3 style='margin-top: 0; color: #1b263b;'>🔍 Ricerca Avanzata</h3>"));
         
         final TextBox txtOfferta = new TextBox();
+        txtOfferta.getElement().setId("tB-Offerta");
         txtOfferta.getElement().setPropertyString("placeholder", "Competenza offerta");
         
         final TextBox txtRichiesta = new TextBox();
+        txtRichiesta.getElement().setId("tB-Richiesta");
         txtRichiesta.getElement().setPropertyString("placeholder", "Competenza richiesta");
         
         final TextBox txtKeyword = new TextBox();
+        txtKeyword.getElement().setId("tB-Keyword");
         txtKeyword.getElement().setPropertyString("placeholder", "Parola chiave");
         
         final ListBox listOrdinamento = new ListBox();

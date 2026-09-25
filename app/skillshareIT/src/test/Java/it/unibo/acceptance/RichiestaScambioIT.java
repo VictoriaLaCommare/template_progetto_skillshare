@@ -42,7 +42,7 @@ public class RichiestaScambioIT {
         RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
 
         // Utente 1: Mario
-        registrazionePage.apri(BASE_URL);
+        registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();
         String emailUtente1 = "utente1_" + System.currentTimeMillis() + "@example.com";
         registrazionePage.compila("Mario", "Rossi", "user1" + System.currentTimeMillis(), emailUtente1, "01/01/2000", "password123").registrati();
         registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
@@ -54,14 +54,16 @@ public class RichiestaScambioIT {
         GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
         annunciPage.compila("Lezioni di Inglese", "Offro grammatica base", "Inglese", "Spagnolo").pubblica();
 
+        driver.findElement(By.id("nav-btn-logout")).click();
+
         // Utente 2: Luigi
-        registrazionePage.apri(BASE_URL);
+        registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();
         String emailUtenteB = "utente2_" + System.currentTimeMillis() + "@example.com";
         registrazionePage.compila("Luigi", "Verdi", "user2" + System.currentTimeMillis(), emailUtenteB, "01/01/1995", "password456").registrati();
         registrazionePage.compilaLogin(emailUtenteB, "password456").accedi();
 
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
-        driver.findElement(By.id("btn-bacheca-proposte")).click();
+        driver.findElement(By.id("nav-btn-proposte")).click();
 
         BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
         // Verifica della presenza della tabella

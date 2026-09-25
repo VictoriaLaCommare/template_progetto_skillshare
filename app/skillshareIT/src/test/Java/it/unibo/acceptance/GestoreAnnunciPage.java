@@ -123,20 +123,20 @@ public class GestoreAnnunciPage {
         campoModificaTitolo.clear();
         campoModificaTitolo.sendKeys(nuovoTitolo);
 
-        WebElement campoModificaDesc = driver.findElement(By.id("modifica-desc"));
+        WebElement campoModificaDesc = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("modifica-desc")));
         campoModificaDesc.clear();
         campoModificaDesc.sendKeys(nuovaDescrizione);
 
-        WebElement campoModificaOfferta = driver.findElement(By.id("modifica-offerta"));
+        WebElement campoModificaOfferta = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("modifica-offerta")));
         campoModificaOfferta.clear();
         campoModificaOfferta.sendKeys("GWT");
 
-        WebElement campoModificaRichiesta = driver.findElement(By.id("modifica-richiesta"));
+        WebElement campoModificaRichiesta = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("modifica-richiesta")));
         campoModificaRichiesta.clear();
         campoModificaRichiesta.sendKeys("Spring Boot");
 
         // 4. Clicca sul tasto Salva della modale
-        WebElement btnSalva = driver.findElement(By.id("modifica-submit"));
+        WebElement btnSalva = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("modifica-submit")));
         btnSalva.click();
 
         // 5. Gestione dell'alert nativo "Annuncio modificato con successo!"
@@ -152,13 +152,13 @@ public class GestoreAnnunciPage {
     }
     
     public void apriFiltriAvanzati() {
-        driver.findElement(By.xpath("//button[contains(., 'Filtri Avanzati')]")).click();
+        driver.findElement(By.id("btn-filtri")).click();
     }
 
     public void compilaFiltri(String competenzaOfferta, String competenzaRichiesta, String parolaChiave) {
-        WebElement txtOfferta = driver.findElement(By.xpath("//input[@placeholder='Competenza offerta']"));
-        WebElement txtRichiesta = driver.findElement(By.xpath("//input[@placeholder='Competenza richiesta']"));
-        WebElement txtParola = driver.findElement(By.xpath("//input[@placeholder='Parola chiave']"));
+        WebElement txtOfferta = driver.findElement(By.id("tB-Offerta"));
+        WebElement txtRichiesta = driver.findElement(By.id("tB-Richiesta"));
+        WebElement txtParola = driver.findElement(By.id("tB-Keyword"));
 
         txtOfferta.clear();
         txtOfferta.sendKeys(competenzaOfferta);
@@ -171,7 +171,7 @@ public class GestoreAnnunciPage {
     }
 
     public void cliccaCercaAvanzata() {
-        WebElement btnCerca = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Cerca']")));
+        WebElement btnCerca = wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-esegui-ricerca")));
         btnCerca.click();    
     }
 

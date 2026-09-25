@@ -42,6 +42,10 @@ public class RegistrazionePage {
     @FindBy(id = "login-mail-error")     private WebElement erroreLoginMail;
     @FindBy(id = "login-password-error") private WebElement erroreLoginPassword;
 
+    @FindBy(id = "btn-vai-login")       private WebElement btnVaiLogin;
+    @FindBy(id = "btn-vai-registra")    private WebElement btnVaiRegistra;
+
+
     public RegistrazionePage(WebDriver driver, Duration timeout) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, timeout);
@@ -50,7 +54,19 @@ public class RegistrazionePage {
 
     public RegistrazionePage apri(String baseUrl) {
         driver.get(baseUrl);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("reg-submit")));
+        wait.until(ExpectedConditions.elementToBeClickable(btnVaiRegistra));
+        return this;
+    }
+
+    public RegistrazionePage vaiAlFormRegistrazione() {
+        btnVaiRegistra.click();
+        wait.until(ExpectedConditions.elementToBeClickable(bottoneRegistrati));
+        return this;
+    }
+
+    public RegistrazionePage vaiAlFormLogin() {
+        btnVaiLogin.click();
+        wait.until(ExpectedConditions.elementToBeClickable(bottoneAccedi));
         return this;
     }
 
@@ -85,6 +101,7 @@ public class RegistrazionePage {
 
     // AZIONI LOGIN
     public RegistrazionePage compilaLogin(String mail, String password) {
+        wait.until(ExpectedConditions.visibilityOf(campoLoginMail));
         campoLoginMail.clear();
         campoLoginMail.sendKeys(mail);
         campoLoginPassword.clear();
@@ -107,6 +124,16 @@ public class RegistrazionePage {
     public boolean campoInErrore(WebElement campo) {
         String bordo = campo.getCssValue("border-top-color");
         return bordo.replace(" ", "").contains("229,57,53");
+    }
+
+    public boolean isFormLoginVisibile() {
+        try {
+            // Aspetta in automatico il timer di 1.5 secondi
+            wait.until(ExpectedConditions.visibilityOf(campoLoginMail));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // GETTER REGISTRAZIONE

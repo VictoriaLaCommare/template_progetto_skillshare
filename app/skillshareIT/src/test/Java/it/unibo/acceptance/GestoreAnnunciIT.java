@@ -38,7 +38,7 @@ class GestoreAnnunciIT {
     void vaiAllaPagina() {
         //pagina = new GestoreAnnunciPage(driver, TIMEOUT).apri(BASE_URL);
         // 1. Partiamo dalla pagina di Login
-        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
 
         // 2. Creiamo un utente al volo e facciamo l'accesso per sbloccare la bacheca
         String emailUnica = "test" + System.currentTimeMillis() + "@example.com";

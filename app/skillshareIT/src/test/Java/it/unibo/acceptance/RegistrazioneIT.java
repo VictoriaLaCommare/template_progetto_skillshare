@@ -41,7 +41,7 @@ class RegistrazioneIT {
 
     @BeforeEach
     void vaiAllaPagina() {
-        pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+        pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
     }
 
     @Nested
@@ -107,7 +107,8 @@ class RegistrazioneIT {
             // Assert
             assertTrue(pagina.testoMessaggio().toLowerCase().contains("successo"),
                     "Messaggio ottenuto: " + pagina.testoMessaggio());
-            assertEquals("", pagina.campoNome().getAttribute("value"));
+            
+            assertTrue(pagina.isFormLoginVisibile(), "Errore: reindirizzamento al login fallito!");
         }
     }
 
@@ -129,7 +130,7 @@ class RegistrazioneIT {
 
             // Act: ricarica la pagina (il form si è svuotato da solo) e riprova con la stessa mail
             // ma uno username diverso
-            pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+            pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
             pagina.compila("Mario", "Rossi", "secondoUser" + System.currentTimeMillis(),
                     mailFissa, "15/06/1998", "passwordSicura123");
             pagina.registrati();

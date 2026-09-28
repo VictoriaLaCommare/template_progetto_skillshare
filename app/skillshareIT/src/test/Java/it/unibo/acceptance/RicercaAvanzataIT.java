@@ -45,7 +45,7 @@ class RicercaAvanzataIT {
         annunciDaPulire = new ArrayList<>();
         
         // 1. Partiamo dalla pagina di Login
-        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
 
         // 2. Registrazione e accesso al volo
         String emailUnica = "test_ricerca_" + System.currentTimeMillis() + "@example.com";
@@ -77,17 +77,17 @@ class RicercaAvanzataIT {
 
         // 2. Ora ci spostiamo nella bacheca delle proposte
         new WebDriverWait(driver, TIMEOUT)
-            .until(ExpectedConditions.elementToBeClickable(By.id("btn-bacheca-proposte")))
+            .until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte")))
             .click();
 
         // 3. Apriamo i filtri avanzati
         new WebDriverWait(driver, TIMEOUT)
-            .until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Filtri Avanzati')]")))
+            .until(ExpectedConditions.elementToBeClickable(By.id("btn-filtri")))
             .click();
 
         // 4. Compiliamo i filtri di ricerca e cerchiamo
         new WebDriverWait(driver, TIMEOUT)
-            .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Competenza offerta']")));
+            .until(ExpectedConditions.visibilityOfElementLocated(By.id("tB-Offerta")));
             
         paginaAnnunci.compilaFiltri("Java", "", ""); 
         paginaAnnunci.cliccaCercaAvanzata();

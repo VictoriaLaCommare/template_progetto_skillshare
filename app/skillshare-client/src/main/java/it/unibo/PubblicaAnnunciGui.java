@@ -34,7 +34,7 @@ public class PubblicaAnnunciGui {
     private HorizontalPanel creaNavbar(Utente utenteLoggato) {
         HorizontalPanel navbar = new HorizontalPanel();
         
-        navbar.setWidth("89%"); 
+        navbar.setWidth("100%"); 
         
         navbar.setSpacing(10);
         navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);        
@@ -44,6 +44,7 @@ public class PubblicaAnnunciGui {
         
         navbar.getElement().getStyle().setProperty("borderRadius", "12px"); 
         navbar.getElement().getStyle().setProperty("margin", "15px auto 25px auto");
+        navbar.getElement().getStyle().setProperty("boxSizing", "border-box");
 
         // Logo / Nome a sinistra
         Label lblLogo = new Label("SkillShare");
@@ -74,25 +75,39 @@ public class PubblicaAnnunciGui {
         
         // 2. Pulsante Cerca / Proposte
         Button btnProposte = creaPannelloStileLink("🔍 Cerca / Scambi");
-        btnBacheca.getElement().setId("nav-btn-proposte");
+        btnProposte.getElement().setId("nav-btn-proposte");
         btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));
 
-        // 3. Profilo utente
+        // 3. Pulsante i Miei Annunci
+        Button btnMieiAnnunci = creaPannelloStileLink("📋 I Miei Annunci");
+        btnMieiAnnunci.getElement().setId("btn-miei-annunci");
+        btnMieiAnnunci.addClickHandler(event -> {
+            RootPanel.get().clear();
+            // Istanziamo il pannello passando l'username e il callback per tornare alla bacheca annunci
+            MieiAnnunciPanel mieiAnnunciPanel = new MieiAnnunciPanel(
+                utenteLoggato,
+                () -> new PubblicaAnnunciGui().mostra(utenteLoggato)
+            );
+            RootPanel.get().add(mieiAnnunciPanel);
+        });
+
+        // 4. Profilo utente
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
-        btnBacheca.getElement().setId("nav-btn-profilo");
+        btnProfilo.getElement().setId("nav-btn-profilo");
         btnProfilo.addClickHandler(event -> {
             com.google.gwt.user.client.Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome() + " (" + utenteLoggato.getMail() + ")");
         });
 
-        // 4. Tasto Logout (Torna alla landing page)
+        // 5. Tasto Logout (Torna alla landing page)
         Button btnLogout = creaPannelloStileLink("↩️ Logout");
-        btnBacheca.getElement().setId("nav-btn-logout");
+        btnLogout.getElement().setId("nav-btn-logout");
         btnLogout.addClickHandler(event -> {
             new HomePageGUI().mostra();
         });
 
         menuPanel.add(btnBacheca);
         menuPanel.add(btnProposte);
+        menuPanel.add(btnMieiAnnunci);
         menuPanel.add(btnProfilo);
         menuPanel.add(btnLogout);
 
@@ -117,19 +132,21 @@ public class PubblicaAnnunciGui {
 
     public void mostra(Utente utenteLoggato) {
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("100%");
+        mainContainer.setWidth("90%");
+        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);  
+        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setSpacing(0);
+
+        VerticalPanel panel = new VerticalPanel();
+        panel.setSpacing(15);
+        panel.setWidth("100%");
+        panel.getElement().getStyle().setProperty("margin", "20px auto");
+        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         // Aggiungiamo la Navbar in cima se l'utente è loggato
         if (utenteLoggato != null) {
-            mainContainer.add(creaNavbar(utenteLoggato));
+            panel.add(creaNavbar(utenteLoggato));
         }
-
-        VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(10);
-        panel.setWidth("90%");
-        panel.getElement().getStyle().setProperty("margin", "20px auto");
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         HTML bannerDashboard = new HTML(
         "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +

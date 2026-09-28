@@ -39,7 +39,7 @@ class LoginIT {
 
     @BeforeEach
     void vaiAllaPagina() {
-        pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL);
+        pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormLogin();
     }
 
     @Nested
@@ -107,6 +107,7 @@ class LoginIT {
         @Test
         @DisplayName("mostra il messaggio di benvenuto con il nome dell'utente")
         void loginValido_mostraBenvenuto() {
+            pagina.apri(BASE_URL).vaiAlFormRegistrazione();
             // Arrange: Registriamo un utente fittizio per garantire l'accesso al DB
             String nome = "Luigi";
             String emailUnica = "luigi" + System.currentTimeMillis() + "@example.com";

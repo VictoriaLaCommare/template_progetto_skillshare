@@ -37,9 +37,10 @@ public class HomePageGUI {
 
     public void mostra() {
         mainPanel = new VerticalPanel();
-        mainPanel.setWidth("100%");
+        mainPanel.setWidth("90%");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(15);
+        mainPanel.getElement().getStyle().setProperty("margin", "20px auto");
+        mainPanel.setSpacing(0);
         mainPanel.getElement().getStyle().setProperty("padding", "30px");
         mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
 

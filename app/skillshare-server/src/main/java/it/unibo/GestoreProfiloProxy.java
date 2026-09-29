@@ -1,5 +1,7 @@
 package it.unibo;
 
+import java.util.*;
+
 // Classe proxy che si occupa del controllo dei valori del profilo prima di passarli al Reale
 public class GestoreProfiloProxy implements GestoreProfilo {
     private final GestoreProfilo gestoreReale = new GestoreProfiloReale();
@@ -18,5 +20,25 @@ public class GestoreProfiloProxy implements GestoreProfilo {
 
         // Se i controlli passano, delega al gestore reale
         return gestoreReale.aggiornaProfilo(utenteAggiornato);
+    }
+
+    @Override
+    public Utente ottieniProfiloUtente(String username) throws Exception {
+        // Controlla se l'username è null o da spazi bianchi
+        if (username == null || username.trim().isEmpty()){
+            throw new IllegalArgumentException("Username non valido per la ricerca");
+        }
+
+        return gestoreReale.ottieniProfiloUtente(username);
+    }
+
+    @Override
+    public List<RichiestaScambio> ottieniStoricoScambi(String username) throws Exception {
+        // Controlla se l'username è null o da spazi bianchi
+        if (username == null || username.trim().isEmpty()){
+            throw new IllegalArgumentException("Username non valido per lo storico scambi");
+        }
+
+        return gestoreReale.ottieniStoricoScambi(username);
     }
 }

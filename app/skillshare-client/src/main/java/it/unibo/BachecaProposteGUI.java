@@ -70,14 +70,22 @@ public class BachecaProposteGUI {
             RootPanel.get().add(mieiAnnunciPanel);
         });
 
-        // 4. Profilo utente
+        // 4. Pulsante Richieste
+        Button btnRichieste = creaPannelloStileLink("📥 Richieste Ricevute");
+        btnRichieste.getElement().setId("nav-btn-richieste");
+        btnRichieste.addClickHandler(event -> {
+            // Apriamo la nuova schermata
+            new GestisciRichiesteGUI().mostra(utenteLoggato);
+        });
+
+        // 5. Profilo utente
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
         btnBacheca.getElement().setId("nav-btn-profilo");
         btnProfilo.addClickHandler(event -> {
             com.google.gwt.user.client.Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome() + " (" + utenteLoggato.getMail() + ")");
         });
 
-        // 5. Tasto Logout (Torna alla landing page)
+        // 6. Tasto Logout (Torna alla landing page)
         Button btnLogout = creaPannelloStileLink("↩️ Logout");
         btnBacheca.getElement().setId("nav-btn-logout");
         btnLogout.addClickHandler(event -> {
@@ -87,6 +95,7 @@ public class BachecaProposteGUI {
         menuPanel.add(btnBacheca);
         menuPanel.add(btnProposte);
         menuPanel.add(btnMieiAnnunci);
+        menuPanel.add(btnRichieste);
         menuPanel.add(btnProfilo);
         menuPanel.add(btnLogout);
 

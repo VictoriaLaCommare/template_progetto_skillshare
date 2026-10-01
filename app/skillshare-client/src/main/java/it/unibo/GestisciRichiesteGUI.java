@@ -67,6 +67,7 @@ public class GestisciRichiesteGUI {
 
         // 4. Pulsante Richieste Ricevute (Attivo/Evidenziato perché siamo qui)
         Button btnRichieste = creaPannelloStileLink("📥 Richieste Ricevute");
+        btnRichieste.getElement().setId("nav-btn-richieste");
         btnRichieste.setEnabled(false);
         btnRichieste.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
         btnRichieste.getElement().getStyle().setProperty("color", "#6c757d");

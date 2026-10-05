@@ -9,56 +9,6 @@ import java.util.List;
 public class ProfiloUtenteGUI {
     private final GestoreProfiloAsync profiloService = GWT.create(GestoreProfilo.class);
 
-    /*// NAVBAR SUPERIORE FISSA
-    private HorizontalPanel creaNavbar(Utente utenteLoggato) {
-        HorizontalPanel navbar = new HorizontalPanel();
-        
-        navbar.setWidth("100%"); 
-        
-        navbar.setSpacing(10);
-        navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);        
-        navbar.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        navbar.getElement().getStyle().setProperty("padding", "10px 20px");
-        navbar.getElement().getStyle().setProperty("boxShadow", "0 4px 8px rgba(0,0,0,0.15)");
-        
-        navbar.getElement().getStyle().setProperty("borderRadius", "12px"); 
-        navbar.getElement().getStyle().setProperty("margin", "15px auto 25px auto");
-        navbar.getElement().getStyle().setProperty("boxSizing", "border-box");
-
-        // Logo / Nome a sinistra
-        Label lblLogo = new Label("SkillShare");
-        lblLogo.getElement().getStyle().setProperty("color", "#ffffff");
-        lblLogo.getElement().getStyle().setProperty("fontSize", "20px");
-        lblLogo.getElement().getStyle().setProperty("fontWeight", "bold");
-        lblLogo.getElement().getStyle().setProperty("cursor", "pointer");
-        
-        navbar.add(lblLogo);
-        navbar.setCellWidth(lblLogo, "30%");
-
-        // Pannello pulsanti a destra
-        HorizontalPanel menuPanel = new HorizontalPanel();
-        Button btnIndietro = new Button("Torna alla Bacheca");
-        btnIndietro.getElement().setId("btn-torna-bacheca");
-        btnIndietro.getElement().getStyle().setProperty("padding", "6px 12px");
-        
-        btnIndietro.addClickHandler(event -> {
-            if(utenteLoggato != null) {
-                // Se sei loggato, ti riporto alla bacheca annunci
-                new BachecaProposteGUI().mostra(utenteLoggato);
-            } else {
-                // Se sei un Guest, ti riporto alla schermata iniziale
-                new HomePageGUI().mostra();
-            }
-        });
-
-        menuPanel.add(btnIndietro);
-        navbar.add(menuPanel);
-        navbar.setCellHorizontalAlignment(menuPanel, HasHorizontalAlignment.ALIGN_RIGHT);
-
-        return navbar;
-    }
-    */
-
     public void mostra(Utente utenteLoggato, String targetUsername) {
         
         final PopupPanel popup = new PopupPanel(false);

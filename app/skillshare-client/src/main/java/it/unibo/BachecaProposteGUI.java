@@ -9,120 +9,12 @@ import java.util.List;
 public class BachecaProposteGUI {
     private final GestoreAnnunciAsync rpcService = GWT.create(GestoreAnnunci.class);
     private final GestoreRichiesteServiceAsync richiesteService = GWT.create(GestoreRichiesteService.class);
-
-    // NAVBAR SUPERIORE FISSA
-    private HorizontalPanel creaNavbar(Utente utenteLoggato) {
-        HorizontalPanel navbar = new HorizontalPanel();
-        
-        navbar.setWidth("100%"); 
-        
-        navbar.setSpacing(10);
-        navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);        
-        navbar.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        navbar.getElement().getStyle().setProperty("padding", "10px 20px");
-        navbar.getElement().getStyle().setProperty("boxShadow", "0 4px 8px rgba(0,0,0,0.15)");
-        
-        navbar.getElement().getStyle().setProperty("borderRadius", "12px"); 
-        navbar.getElement().getStyle().setProperty("margin", "15px auto 25px auto");
-        navbar.getElement().getStyle().setProperty("boxSizing", "border-box");
-
-        // Logo / Nome a sinistra
-        Label lblLogo = new Label("SkillShare");
-        lblLogo.getElement().getStyle().setProperty("color", "#ffffff");
-        lblLogo.getElement().getStyle().setProperty("fontSize", "20px");
-        lblLogo.getElement().getStyle().setProperty("fontWeight", "bold");
-        lblLogo.getElement().getStyle().setProperty("cursor", "pointer");
-        lblLogo.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
-        
-        navbar.add(lblLogo);
-        navbar.setCellWidth(lblLogo, "30%");
-
-        // Pannello pulsanti a destra
-        HorizontalPanel menuPanel = new HorizontalPanel();
-        menuPanel.setSpacing(15);
-        menuPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-        menuPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-
-        // 1. Pulsante Bacheca / Home loggato
-        Button btnBacheca = creaPannelloStileLink("📢 Bacheca");
-        btnBacheca.getElement().setId("nav-btn-bacheca");
-        btnBacheca.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
-        
-        // 2. Pulsante Cerca / Proposte
-        Button btnProposte = creaPannelloStileLink("🔍 Cerca / Scambi");
-        btnProposte.setEnabled(false);
-        btnProposte.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        btnProposte.getElement().getStyle().setProperty("color", "#6c757d");
-        btnProposte.getElement().getStyle().setProperty("boxShadow", "inset 0 4px 6px rgba(0,0,0,0.4)");
-        btnProposte.getElement().getStyle().setProperty("cursor", "default");
-        //btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));
-
-        // 3. Pulsante i Miei Annunci
-        Button btnMieiAnnunci = creaPannelloStileLink("📋 I Miei Annunci");
-        btnMieiAnnunci.getElement().setId("btn-miei-annunci");
-        btnMieiAnnunci.addClickHandler(event -> {
-            RootPanel.get().clear();
-            // Istanziamo il pannello passando l'username e il callback per tornare alla bacheca annunci
-            MieiAnnunciPanel mieiAnnunciPanel = new MieiAnnunciPanel(
-                utenteLoggato,
-                () -> new PubblicaAnnunciGui().mostra(utenteLoggato)
-            );
-            RootPanel.get().add(mieiAnnunciPanel);
-        });
-
-        // 4. Pulsante Richieste
-        Button btnRichieste = creaPannelloStileLink("📥 Richieste Ricevute");
-        btnRichieste.getElement().setId("nav-btn-richieste");
-        btnRichieste.addClickHandler(event -> {
-            // Apriamo la nuova schermata
-            new GestisciRichiesteGUI().mostra(utenteLoggato);
-        });
-
-        // 5. Profilo utente
-        Button btnProfilo = creaPannelloStileLink("👤 Profilo");
-        btnBacheca.getElement().setId("nav-btn-profilo");
-        btnProfilo.addClickHandler(event -> {
-            com.google.gwt.user.client.Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome() + " (" + utenteLoggato.getMail() + ")");
-        });
-
-        // 6. Tasto Logout (Torna alla landing page)
-        Button btnLogout = creaPannelloStileLink("↩️ Logout");
-        btnBacheca.getElement().setId("nav-btn-logout");
-        btnLogout.addClickHandler(event -> {
-            new HomePageGUI().mostra();
-        });
-
-        menuPanel.add(btnBacheca);
-        menuPanel.add(btnProposte);
-        menuPanel.add(btnMieiAnnunci);
-        menuPanel.add(btnRichieste);
-        menuPanel.add(btnProfilo);
-        menuPanel.add(btnLogout);
-
-        navbar.add(menuPanel);
-        navbar.setCellHorizontalAlignment(menuPanel, HasHorizontalAlignment.ALIGN_RIGHT);
-
-        return navbar;
-    }
-
-    private Button creaPannelloStileLink(String testo) {
-        Button btn = new Button(testo);
-        btn.getElement().getStyle().setProperty("backgroundColor", "#f0f2f5");
-        btn.getElement().getStyle().setProperty("color", "#1b263b");
-        btn.getElement().getStyle().setProperty("border", "none");
-        btn.getElement().getStyle().setProperty("padding", "6px 12px");
-        btn.getElement().getStyle().setProperty("borderRadius", "4px");
-        btn.getElement().getStyle().setProperty("fontSize", "13px");
-        btn.getElement().getStyle().setProperty("fontWeight", "bold");
-        btn.getElement().getStyle().setProperty("cursor", "pointer");
-        return btn;
-    }
     
     public void mostra(Utente utenteLoggato) {
         VerticalPanel mainContainer = new VerticalPanel();
         mainContainer.setWidth("90%");
         mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
-        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);  
+        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);  
         mainContainer.setSpacing(0);
 
         VerticalPanel pannelloPrincipale = new VerticalPanel();
@@ -131,9 +23,9 @@ public class BachecaProposteGUI {
         pannelloPrincipale.getElement().getStyle().setProperty("margin", "20px auto");
         pannelloPrincipale.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         
-        // Aggiungiamo la Navbar in cima se l'utente è loggato
+        // Aggiungiamo la Navbar centralizzata in cima
         if (utenteLoggato != null) {
-            pannelloPrincipale.add(creaNavbar(utenteLoggato));
+            pannelloPrincipale.add(new AppNavbar(utenteLoggato, "ricerca"));
         }
 
         HTML bannerDashboard = new HTML(

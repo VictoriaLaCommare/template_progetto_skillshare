@@ -301,7 +301,16 @@ public class BachecaProposteGUI {
         int riga = 1;
         for (Annuncio annuncio : listaProposte) {
             tabellaAnnunci.setText(riga, 0, annuncio.getTitolo());
-            tabellaAnnunci.setText(riga, 1, annuncio.getAutoreUsername());
+
+            Button btnAutore = new Button(annuncio.getAutoreUsername());
+
+            btnAutore.getElement().setId("link-profilo-" + annuncio.getAutoreUsername()); 
+
+            btnAutore.addClickHandler(e -> {
+                new ProfiloUtenteGUI().mostra(utenteLoggato, annuncio.getAutoreUsername());
+            });
+            
+            tabellaAnnunci.setWidget(riga, 1, btnAutore);
             tabellaAnnunci.setText(riga, 2, annuncio.getDescrizione());
             tabellaAnnunci.setText(riga, 3, annuncio.getCompetenzaOfferta());
             tabellaAnnunci.setText(riga, 4, annuncio.getCompetenzaRichiesta());

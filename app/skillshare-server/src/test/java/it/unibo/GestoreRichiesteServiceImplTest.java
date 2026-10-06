@@ -1,5 +1,6 @@
 package it.unibo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -71,7 +72,7 @@ public class GestoreRichiesteServiceImplTest {
     }
 
     @Test
-    @DisplayName("Aggiorna Stato Richiesta: Modifica lo stato e rimuove dai sospesi")
+    @DisplayName("Aggiorna Stato Richiesta: Modifica lo stato e lo mantiene visibile come Accettata")
     public void testAggiornaStatoRichiesta() throws Exception {
         GestoreRichiesteServiceImpl servizio = new GestoreRichiesteServiceImpl();
         RichiestaScambio req = new RichiestaScambio("", "ann100", "Mario", "Luigi");
@@ -83,15 +84,17 @@ public class GestoreRichiesteServiceImplTest {
         Boolean aggiornato = servizio.aggiornaStatoRichiesta(idRichiesta, "Accettata");
         assertTrue(aggiornato, "L'aggiornamento dello stato della richiesta deve restituire true");
 
-        // Verifichiamo che la richiesta non compaia più tra quelle "In sospeso" per Luigi
-        List<RichiestaScambio> sospese = servizio.ottieniRichiesteRicevute("Luigi");
-        boolean ancoraPresente = false;
-        for (RichiestaScambio r : sospese) {
+        // Verifichiamo che la richiesta compaia ancora tra quelle ricevute con lo stato aggiornato        
+        List<RichiestaScambio> ricevute = servizio.ottieniRichiesteRicevute("Luigi");
+        RichiestaScambio richiestaAggiornata = null;
+        for (RichiestaScambio r : ricevute) {
             if (r.getIdRichiesta().equals(idRichiesta)) {
-                ancoraPresente = true;
+                richiestaAggiornata = r;
                 break;
             }
         }
-        assertFalse(ancoraPresente, "Una richiesta accettata non deve più risultare tra le richieste 'In sospeso'");
+
+        assertNotNull(richiestaAggiornata, "La richiesta accettata deve rimanere visibile nelle ricevute");
+        assertEquals("Accettata", richiestaAggiornata.getStato());
     }
 }

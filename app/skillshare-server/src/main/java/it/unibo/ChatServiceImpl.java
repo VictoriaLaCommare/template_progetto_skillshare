@@ -19,18 +19,26 @@ public class ChatServiceImpl extends RemoteServiceServlet implements ChatService
     private IndexTreeList<Messaggio> messaggiDB;
     private static final String DB_FILE = "progetto_sweng.db";
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public ChatServiceImpl() {
+        initDb();
+    }
+
     @Override
     public void init() throws ServletException {
         super.init();
-        // Inizializza la connessione a MapDB quando parte il server
-        db = DBMaker.fileDB(new File(DB_FILE))
-                .transactionEnable()
-                .closeOnJvmShutdown()
-                .make();
-        
-        // Cast esplicito per risolvere l'errore di tipizzazione di MapDB
-        messaggiDB = (IndexTreeList<Messaggio>) db.indexTreeList("chat_messaggi", (Serializer) Serializer.JAVA).createOrOpen();
+        initDb();
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private void initDb() {
+        if (db == null || db.isClosed()) {
+            db = DBMaker.fileDB(new File(DB_FILE))
+                    .transactionEnable()
+                    .closeOnJvmShutdown()
+                    .make();
+            
+            messaggiDB = (IndexTreeList<Messaggio>) db.indexTreeList("chat_messaggi", (Serializer) Serializer.JAVA).createOrOpen();
+        }
     }
 
     @Override
@@ -43,30 +51,31 @@ public class ChatServiceImpl extends RemoteServiceServlet implements ChatService
 
     @Override
     public Messaggio inviaMessaggio(Messaggio messaggio) throws Exception {
+        initDb(); 
         try {
             messaggiDB.add(messaggio);
-            db.commit(); // Salva permanentemente il messaggio
+            db.commit();
             return messaggio;
         } catch (Exception e) {
-            db.rollback();
+            if (db != null) {
+                db.rollback();
+            }
             throw new Exception("Errore di connessione durante l'invio del messaggio", e);
         }
     }
 
     @Override
     public List<Messaggio> getStoricoMessaggi(String idRichiesta) throws Exception {
+        initDb();
         List<Messaggio> storico = new ArrayList<>();
         
-        // Filtra i messaggi associati a questa specifica richiesta di scambio
         for (Messaggio m : messaggiDB) {
             if (m.getIdRichiesta() != null && m.getIdRichiesta().equals(idRichiesta)) {
                 storico.add(m);
             }
         }
         
-        // Ordina i messaggi dal più vecchio al più recente
         storico.sort(Comparator.comparing(Messaggio::getTimestamp));
-        
         return storico;
     }
 }

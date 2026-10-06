@@ -17,4 +17,7 @@ public interface GestoreRichiesteService extends RemoteService {
 
     // Metodo per aggiornare lo stato di una richiesta (es. Accettata / Rifiutata)
     Boolean aggiornaStatoRichiesta(String idRichiesta, String nuovoStato) throws Exception;
+
+    List<RichiestaScambio> ottieniTutteLeRichieste(String username) throws Exception;
 }
+

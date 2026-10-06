@@ -56,9 +56,12 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
                 .valueSerializer(Serializer.JAVA)
                 .createOrOpen();
                 
-            // Filtriamo solo le richieste in cui l'utente loggato è il "ricevente" e sono "In sospeso"
             for (RichiestaScambio req : mappaRichieste.values()) {
-                if (req.getRicevente().equals(username) && "In sospeso".equals(req.getStato())) {
+                if (req.getRicevente().equals(username)) {
+                    String stato = req.getStato();
+                    if ("In sospeso".equals(stato) || "Accettata".equals(stato)) {
+                        richiesteRicevute.add(req);
+                    }
                     richiesteRicevute.add(req);
                 }
             }
@@ -94,5 +97,28 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<RichiestaScambio> ottieniTutteLeRichieste(String username) throws Exception {
+        DB db = DatabaseCore.getDB();
+        List<RichiestaScambio> tutteLeRichieste = new ArrayList<>();
+        
+        try {
+            HTreeMap<String, RichiestaScambio> mappaRichieste = db.hashMap("richieste")
+                .keySerializer(Serializer.STRING)
+                .valueSerializer(Serializer.JAVA)
+                .createOrOpen();
+                
+            for (RichiestaScambio req : mappaRichieste.values()) {
+                // Se l'utente è coinvolto nella richiesta (sia che l'abbia inviata, sia che l'abbia ricevuta)
+                if (req.getRicevente().equals(username) || req.getRichiedente().equals(username)) {
+                    tutteLeRichieste.add(req);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tutteLeRichieste;
     }
 }

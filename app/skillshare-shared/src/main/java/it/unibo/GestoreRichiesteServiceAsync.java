@@ -9,4 +9,6 @@ public interface GestoreRichiesteServiceAsync {
     void ottieniRichiesteRicevute(String username, AsyncCallback<List<RichiestaScambio>> callback);
     
     void aggiornaStatoRichiesta(String idRichiesta, String nuovoStato, AsyncCallback<Boolean> callback);
+
+    void ottieniTutteLeRichieste(String username, AsyncCallback<List<RichiestaScambio>> callback);
 }

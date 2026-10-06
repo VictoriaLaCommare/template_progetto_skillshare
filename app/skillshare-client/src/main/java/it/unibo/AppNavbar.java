@@ -36,19 +36,19 @@ public class AppNavbar extends Composite {
 
         // 1. Bacheca
         Button btnBacheca = creaPannelloStileLink("📢 Bacheca");
-        btnBacheca.getElement().setId("nav-btn-bacheca"); // ID per Selenium aggiunto
+        btnBacheca.getElement().setId("nav-btn-bacheca"); 
         if ("bacheca".equals(paginaAttiva)) evidenziaBottone(btnBacheca);
         btnBacheca.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
         
         // 2. Cerca / Proposte
         Button btnProposte = creaPannelloStileLink("🔍 Cerca / Scambi");
-        btnProposte.getElement().setId("nav-btn-proposte"); // ID per Selenium aggiunto
+        btnProposte.getElement().setId("nav-btn-proposte"); 
         if ("ricerca".equals(paginaAttiva)) evidenziaBottone(btnProposte);
         btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));
 
         // 3. I Miei Annunci
         Button btnMieiAnnunci = creaPannelloStileLink("📋 I Miei Annunci");
-        btnMieiAnnunci.getElement().setId("btn-miei-annunci"); // ID per Selenium aggiunto
+        btnMieiAnnunci.getElement().setId("btn-miei-annunci"); 
         if ("miei_annunci".equals(paginaAttiva)) evidenziaBottone(btnMieiAnnunci);
         btnMieiAnnunci.addClickHandler(event -> {
             RootPanel.get().clear();
@@ -57,24 +57,24 @@ public class AppNavbar extends Composite {
 
         // 4. Richieste Ricevute
         Button btnRichieste = creaPannelloStileLink("📥 Richieste Ricevute");
-        btnRichieste.getElement().setId("nav-btn-richieste"); // ID per Selenium aggiunto
+        btnRichieste.getElement().setId("nav-btn-richieste"); 
         if ("richieste".equals(paginaAttiva)) evidenziaBottone(btnRichieste);
         btnRichieste.addClickHandler(event -> new GestisciRichiesteGUI().mostra(utenteLoggato));
 
         // 5. Chat
-        Button btnChat = creaPannelloStileLink("💬 Le Mie Chat");
-        btnChat.getElement().setId("nav-btn-chat"); // ID per Selenium aggiunto
+        Button btnChat = creaPannelloStileLink("💬 Chat");
+        btnChat.getElement().setId("nav-btn-chat"); 
         if ("chat".equals(paginaAttiva)) evidenziaBottone(btnChat);
         btnChat.addClickHandler(event -> new LeMieChatGUI().mostra(utenteLoggato));
 
         // 6. Profilo
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
-        btnProfilo.getElement().setId("nav-btn-profilo"); // ID per Selenium aggiunto
+        btnProfilo.getElement().setId("nav-btn-profilo"); 
         btnProfilo.addClickHandler(event -> Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome()));
 
         // 7. Logout
         Button btnLogout = creaPannelloStileLink("↩️ Logout");
-        btnLogout.getElement().setId("nav-btn-logout"); // ID per Selenium aggiunto
+        btnLogout.getElement().setId("nav-btn-logout"); 
         btnLogout.addClickHandler(event -> new HomePageGUI().mostra());
 
         menuPanel.add(btnBacheca);

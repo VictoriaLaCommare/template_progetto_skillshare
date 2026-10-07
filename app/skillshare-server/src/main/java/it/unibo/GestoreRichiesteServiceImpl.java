@@ -62,7 +62,6 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
                     if ("In sospeso".equals(stato) || "Accettata".equals(stato)) {
                         richiesteRicevute.add(req);
                     }
-                    richiesteRicevute.add(req);
                 }
             }
         } catch (Exception e) {

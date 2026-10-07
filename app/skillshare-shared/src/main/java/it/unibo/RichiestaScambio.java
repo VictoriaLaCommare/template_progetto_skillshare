@@ -9,6 +9,7 @@ public class RichiestaScambio implements Serializable {
     private String ricevente;
     private String stato;
 
+    @SuppressWarnings("unused")
     private RichiestaScambio() {
         // Costruttore privato per la serializzazione
     }

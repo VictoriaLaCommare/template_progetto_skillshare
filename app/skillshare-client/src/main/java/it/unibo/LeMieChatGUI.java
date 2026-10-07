@@ -127,6 +127,7 @@ public class LeMieChatGUI {
         chatPanel.setWidth("100%");
 
         Button btnChiudi = new Button("X");
+        btnChiudi.getElement().setId("chat-btn-chiudi");
         btnChiudi.addClickHandler(event -> {
             chatPanel.fermaAggiornamento();
             chatDialog.hide();

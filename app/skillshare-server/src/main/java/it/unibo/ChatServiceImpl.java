@@ -3,12 +3,10 @@ package it.unibo;
 import com.google.gwt.user.server.rpc.jakarta.RemoteServiceServlet;
 
 import org.mapdb.DB;
-import org.mapdb.DBMaker;
 import org.mapdb.IndexTreeList;
 import org.mapdb.Serializer;
 
 import jakarta.servlet.ServletException;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,10 +15,8 @@ public class ChatServiceImpl extends RemoteServiceServlet implements ChatService
 
     private DB db;
     private IndexTreeList<Messaggio> messaggiDB;
-    private static final String DB_FILE = "progetto_sweng.db";
 
     public ChatServiceImpl() {
-        initDb();
     }
 
     @Override
@@ -32,20 +28,13 @@ public class ChatServiceImpl extends RemoteServiceServlet implements ChatService
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void initDb() {
         if (db == null || db.isClosed()) {
-            db = DBMaker.fileDB(new File(DB_FILE))
-                    .transactionEnable()
-                    .closeOnJvmShutdown()
-                    .make();
-            
+            db = DatabaseCore.getDB();
             messaggiDB = (IndexTreeList<Messaggio>) db.indexTreeList("chat_messaggi", (Serializer) Serializer.JAVA).createOrOpen();
         }
     }
 
     @Override
     public void destroy() {
-        if (db != null && !db.isClosed()) {
-            db.close();
-        }
         super.destroy();
     }
 
@@ -54,12 +43,10 @@ public class ChatServiceImpl extends RemoteServiceServlet implements ChatService
         initDb(); 
         try {
             messaggiDB.add(messaggio);
-            db.commit();
+            DatabaseCore.commit();        
             return messaggio;
         } catch (Exception e) {
-            if (db != null) {
-                db.rollback();
-            }
+            e.printStackTrace();
             throw new Exception("Errore di connessione durante l'invio del messaggio", e);
         }
     }

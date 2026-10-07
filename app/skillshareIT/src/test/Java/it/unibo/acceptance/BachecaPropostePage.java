@@ -1,5 +1,6 @@
 package it.unibo.acceptance;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -70,5 +71,21 @@ public class BachecaPropostePage {
         alert.accept();
 
         return testoAlert;
+    }
+
+    // Clicca il bottone "Richiedi Scambio" associato a uno specifico titolo di annuncio
+    public BachecaPropostePage cliccaRichiediScambioPerTitolo(String titoloAnnuncio) {
+        wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
+        
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.xpath("//*[contains(text(), '" + titoloAnnuncio + "')]")
+        ));
+        
+        WebElement bottoneScambio = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//*[contains(text(), '" + titoloAnnuncio + "')]//following::button[starts-with(@id, 'btn-richiedi-scambio-')][1]")
+        ));
+        
+        bottoneScambio.click();
+        return this;
     }
 }

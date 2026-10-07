@@ -36,7 +36,6 @@ public class ChatPanel extends Composite {
     private void setupUI() {
         mainPanel.setWidth("100%");
 
-        // ScrollPanel con un bordo grigio per definire l'area della chat
         scrollPanel.setSize("100%", "330px"); 
         scrollPanel.getElement().getStyle().setProperty("border", "1px solid #cccccc");
         scrollPanel.getElement().getStyle().setProperty("backgroundColor", "#ffffff");
@@ -44,13 +43,17 @@ public class ChatPanel extends Composite {
         scrollPanel.setWidget(messaggiContainer);
         messaggiContainer.setWidth("100%");
         messaggiContainer.setSpacing(5); 
+        messaggiContainer.getElement().setId("chat-messaggi-container");
 
         HorizontalPanel inputPanel = new HorizontalPanel();
         inputPanel.setWidth("100%");
         inputPanel.getElement().getStyle().setProperty("paddingTop", "10px");
         
         inputTextBox.setWidth("95%");
+        inputTextBox.getElement().setId("chat-input-messaggio");
+
         inviaButton.setWidth("100%");
+        inviaButton.getElement().setId("chat-btn-invia");
         inviaButton.addClickHandler(event -> inviaMessaggio());
 
         inputPanel.add(inputTextBox);
@@ -73,7 +76,7 @@ public class ChatPanel extends Composite {
         chatService.inviaMessaggio(nuovoMessaggio, new AsyncCallback<Messaggio>() {
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("Errore invio.");
+                Window.alert("Errore invio: " + caught.getMessage());                
                 inviaButton.setEnabled(true);
             }
             @Override

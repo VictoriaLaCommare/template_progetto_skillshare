@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.lang.reflect.Field;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,5 +77,75 @@ public class GestoreProfiloTest{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test 
+    @DisplayName ("Sicurezza: Il profilo restituito non deve contenere la password")
+    void testOttieniProfiloUtente_Sicurezza() throws Exception {
+        
+        utenteDiTest.setPassword("passwordSicura123");
+
+        // Salva l'utente di test nel database
+        gestoreProfilo.aggiornaProfilo(utenteDiTest);
+
+        // Recupera il profilo dell'utente
+        Utente utenteRecuperato = gestoreProfilo.ottieniProfiloUtente(utenteDiTest.getUsername());
+
+        assertNotNull(utenteRecuperato, "Il profilo dell'utente non deve essere nullo");
+
+        assertEquals(utenteDiTest.getUsername(), utenteRecuperato.getUsername());
+        assertEquals(utenteDiTest.getNome(), utenteRecuperato.getNome());
+
+        // Verifica che la password non sia presente nel profilo restituito
+        assertNull(utenteRecuperato.getPassword(), "La password non deve essere presente nel profilo restituito");
+    }
+
+    @Test
+    @DisplayName("Storico Scambi: Recupero solo le richieste in cui l'utente è coinvolto")
+    void testOttieniStoricoScambi_ConDati() throws Exception {
+        
+        GestoreRichiesteServiceImpl gestoreRichieste = new GestoreRichiesteServiceImpl();
+        
+        // Creazione di 3 richieste diverse.
+        RichiestaScambio req1 = new RichiestaScambio("", "annuncio1", "govonsx", "mario_rossi");
+        RichiestaScambio req2 = new RichiestaScambio("", "annuncio2", "luigi_verdi", "govonsx");
+        RichiestaScambio req3 = new RichiestaScambio("", "annuncio3", "terzo_utente", "quarto_utente"); 
+
+        // Salvataggio nel database
+        gestoreRichieste.inviaRichiesta(req1);
+        gestoreRichieste.inviaRichiesta(req2);
+        gestoreRichieste.inviaRichiesta(req3);
+
+        // Richiesta dello storico scambi per l'utente
+        List<RichiestaScambio> storico = gestoreProfilo.ottieniStoricoScambi(utenteDiTest.getUsername());
+
+        // Verifichiamo che non ci dia "null"
+        assertNotNull(storico, "Lo storico non deve essere nullo");
+        
+        // Verifichiamo che ci dia esattamente 2 richieste, quelle in cui l'utente è coinvolto
+        assertEquals(2, storico.size(), "Lo storico deve contenere esattamente 2 richieste");
+
+        // Facciamo un ciclo su tutti i risultati restituiti:
+        for (RichiestaScambio r : storico) {
+            // Se in una delle richieste restituite "govonsx" non compare né a destra né a sinistra, il test fallisce!
+            assertTrue(
+                r.getRichiedente().equals(utenteDiTest.getUsername()) || r.getRicevente().equals(utenteDiTest.getUsername()),
+                "Errore: L'utente target deve essere il richiedente o il ricevente nella richiesta"
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("Storico Scambi: Un utente nuovo riceve una lista vuota senza errori")
+    void testOttieniStoricoScambi_Vuoto() throws Exception {
+        
+        // Richiesta dello storico scambi per un utente che non esiste nel database
+        List<RichiestaScambio> storico = gestoreProfilo.ottieniStoricoScambi("utente_fantasma_mai_esistito");
+
+        // Ci assicuriamo che il server non ci abbia restituito "null"
+        assertNotNull(storico, "Il metodo deve restituire una lista vuota in sicurezza, non null");
+
+        // Ci assicuriamo che il server ci abbia restituito una vera lista, ma completamente vuota
+        assertTrue(storico.isEmpty(), "La lista dello storico deve essere vuota");
     }
 }

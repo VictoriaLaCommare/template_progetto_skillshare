@@ -18,6 +18,8 @@ public class GestoreRichiesteIT {
     private static final Duration TIMEOUT = Duration.ofSeconds(15);
     private static WebDriver driver;
 
+    private String emailUtente1;
+
     @BeforeAll
     static void avviaBrowser() {
         ChromeOptions options = new ChromeOptions();
@@ -35,6 +37,37 @@ public class GestoreRichiesteIT {
         }
     }
 
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            if (emailUtente1 != null) {
+                // 1. Rientriamo con l'Utente 1 (ricevente) per eliminare l'annuncio dal DB
+                RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
+                registrazionePage.apri(BASE_URL);
+                WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+                
+                WebElement btnVaiLogin = wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
+                btnVaiLogin.click();
+                
+                registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
+
+                // 2. Elimino l'annuncio se ancora visibile
+                GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+                if (annunciPage.isAnnuncioPresente("Lezioni di Inglese")) {
+                    annunciPage.eliminaAnnuncio("Lezioni di Inglese");
+                }
+
+                // 3. Logout
+                WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+                if (btnLogout != null && btnLogout.isDisplayed()) {
+                    btnLogout.click();
+                }
+            }
+        } catch (Exception ignored) {
+            // Gestisce eventuali eccezioni se il test si interrompe prima del dovuto
+        }
+    }
+
     @Test
     @DisplayName("Gestione Richieste (UC09): Visualizzazione e Accettazione richieste ricevute")
     void testNavigazioneEAccettazioneRichieste() {
@@ -43,7 +76,7 @@ public class GestoreRichiesteIT {
 
         // 1. Utente 1 (Ricevente): Registrazione, Login e Pubblicazione Annuncio
         registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();
-        String emailUtente1 = "utente1_" + System.currentTimeMillis() + "@example.com";
+        emailUtente1 = "utente1_" + System.currentTimeMillis() + "@example.com";
         registrazionePage.compila("Mario", "Rossi", "user1" + System.currentTimeMillis(), emailUtente1, "01/01/2000", "password123").registrati();
         registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
 

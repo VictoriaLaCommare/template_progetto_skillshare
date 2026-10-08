@@ -2,6 +2,8 @@ package it.unibo.acceptance;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -59,6 +61,35 @@ class RicercaAvanzataIT {
             .until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
     }
 
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // Resetta i filtri di ricerca prima di ripulire, altrimenti non vediamo gli annunci nascosti
+            try {
+                driver.findElement(By.id("nav-btn-proposte")).click();
+            } catch (Exception ignored) {}
+
+            // Cicliamo sulla lista degli annunci creati nel test e li eliminiamo
+            if (annunciDaPulire != null && !annunciDaPulire.isEmpty()) {
+                for (String titolo : annunciDaPulire) {
+                    try {
+                        if (paginaAnnunci.isAnnuncioPresente(titolo)) {
+                            paginaAnnunci.eliminaAnnuncio(titolo);
+                        }
+                    } catch (Exception ignored) {}
+                }
+            }
+            
+            // Logout
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Gestione di eventuali eccezioni se il test si interrompe prima del previsto
+        }
+    }
+
     @Test
     @DisplayName("La ricerca avanzata per competenza offerta filtra correttamente gli annunci")
     void ricercaAvanzata_filtraPerCompetenzaOfferta() {
@@ -91,6 +122,11 @@ class RicercaAvanzataIT {
             
         paginaAnnunci.compilaFiltri("Java", "", ""); 
         paginaAnnunci.cliccaCercaAvanzata();
+
+        new WebDriverWait(driver, TIMEOUT)
+            .until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//*[contains(text(), '" + titoloPython + "')]")
+            ));
 
         // 5. Verifiche finali
         assertTrue(paginaAnnunci.isAnnuncioPresente(titoloJava), "L'annuncio Java DEVE essere visibile.");

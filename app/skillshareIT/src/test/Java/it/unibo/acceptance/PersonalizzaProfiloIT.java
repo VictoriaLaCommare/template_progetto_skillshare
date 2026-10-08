@@ -2,6 +2,8 @@ package it.unibo.acceptance;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -38,6 +40,19 @@ public class PersonalizzaProfiloIT {
     @BeforeEach
     public void vaiAllaPagina() {
         pagina = new PersonalizzaProfiloPage(driver, TIMEOUT).apri(BASE_URL);
+    }
+
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // Se un test viene riattivato e richiede il login, effettuiamo il logout
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Viene ignorato se il bottone di logout non è presente nella pagina corrente
+        }
     }
 
     //@Test

@@ -2,8 +2,11 @@ package it.unibo.acceptance;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import java.util.*;
+import org.openqa.selenium.By;
 
 import java.time.Duration;
 
@@ -16,6 +19,7 @@ class GestoreAnnunciIT {
 
     private static WebDriver driver;
     private GestoreAnnunciPage pagina;
+    private List<String> annunciDaPulire;
 
     @BeforeAll
     static void avviaBrowser() {
@@ -36,7 +40,8 @@ class GestoreAnnunciIT {
 
     @BeforeEach
     void vaiAllaPagina() {
-        //pagina = new GestoreAnnunciPage(driver, TIMEOUT).apri(BASE_URL);
+        annunciDaPulire = new ArrayList<>();
+
         // 1. Partiamo dalla pagina di Login
         RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
 
@@ -52,6 +57,33 @@ class GestoreAnnunciIT {
         // Aspettiamo che la bacheca sia effettivamente visibile prima di far partire i test
         new org.openqa.selenium.support.ui.WebDriverWait(driver, TIMEOUT)
             .until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(org.openqa.selenium.By.id("annuncio-submit")));
+    }
+
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // Rimozione di tutti gli annunci registrati nella lista durante il test
+            if (annunciDaPulire != null && !annunciDaPulire.isEmpty()) {
+                for (String titolo : annunciDaPulire) {
+                    try {
+                        // Tenta di eliminare l'annuncio solo se è effettivamente visibile a schermo
+                        if (pagina.isAnnuncioPresente(titolo)) {
+                            pagina.eliminaAnnuncio(titolo);
+                        }
+                    } catch (Exception ignored) {
+                        // Se l'eliminazione di un singolo annuncio fallisce,
+                        // ignora l'errore e passa al prossimo titolo nella lista.
+                    }
+                }
+            }
+            // Logout finale per pulire la sessione
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Gestisce in sicurezza eventuali eccezioni se il test fallisce prima di raggiungere la pagina annunci
+        }
     }
 
     @Nested
@@ -103,6 +135,7 @@ class GestoreAnnunciIT {
         void datiValidi_pubblicazioneCompletataConSuccesso() {
             // Arrange
             String titoloTest = "Lezione GWT " + System.currentTimeMillis();
+            annunciDaPulire.add(titoloTest);
 
             // Act
             pagina.compila(titoloTest, "Insegno GWT base", "GWT", "Spring Boot");
@@ -125,6 +158,8 @@ class GestoreAnnunciIT {
         @DisplayName("un annuncio pubblicato può essere eliminato correttamente")
         void annuncioPubblicato_puoiEliminarlo() {
             String titoloTest = "Annuncio da Eliminare " + System.currentTimeMillis();
+            annunciDaPulire.add(titoloTest);
+
             pagina.compila(titoloTest, "Descrizione per eliminazione", "Java", "Python");
             pagina.pubblica();
 
@@ -141,6 +176,8 @@ class GestoreAnnunciIT {
         void annuncioPubblicato_puoiModificarlo() {
             String titoloVecchio = "Annuncio Vecchio " + System.currentTimeMillis();
             String titoloNuovo = "Annuncio Modificato " + System.currentTimeMillis();
+            
+            annunciDaPulire.add(titoloNuovo);
 
             pagina.compila(titoloVecchio, "Descrizione vecchia", "GWT", "Spring Boot");
             pagina.pubblica();

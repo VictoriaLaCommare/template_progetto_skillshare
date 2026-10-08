@@ -50,8 +50,20 @@ public class BachecaPropostePage {
         wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
 
         WebElement bottoneScambio = tabellaProposte.findElement(
-            org.openqa.selenium.By.xpath(".//button[starts-with(@id, 'btn-richiedi-scambio-')]")
+            By.xpath(".//button[starts-with(@id, 'btn-richiedi-scambio-')]")
         );
+        
+        bottoneScambio.click();
+        return this;
+    }
+
+    public BachecaPropostePage cliccaRichiediScambioDi(String autoreUsername) {
+        wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
+        
+        // Cerchiamo il bottone 'richiedi-scambio' che sta dentro alla rigain cui c'è il link del profilo dell'autore"
+        WebElement bottoneScambio = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath(".//tr[.//button[@id='link-profilo-" + autoreUsername + "']]//button[starts-with(@id, 'btn-richiedi-scambio-')]")
+        ));
         
         bottoneScambio.click();
         return this;
@@ -87,5 +99,17 @@ public class BachecaPropostePage {
         
         bottoneScambio.click();
         return this;
+    }
+
+    // Metodo per cliccare sul nome dell'autore e aprire il suo profilo
+    public void cliccaProfiloAutore(String username) {
+
+        wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
+        
+        // Ricerca del pulsante del profilo dell'autore usando l'ID creato dinamicamente
+        WebElement btnAutore = wait.until(ExpectedConditions.elementToBeClickable(
+            By.id("link-profilo-" + username)
+        ));
+        btnAutore.click();
     }
 }

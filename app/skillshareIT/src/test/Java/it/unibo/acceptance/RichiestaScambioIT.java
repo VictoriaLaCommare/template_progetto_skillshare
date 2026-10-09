@@ -3,6 +3,7 @@ package it.unibo.acceptance;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,6 +17,8 @@ public class RichiestaScambioIT {
     public static String BASE_URL = System.getProperty("app.url", "http://localhost:8080/");
     private static final Duration TIMEOUT = Duration.ofSeconds(15);
     private static WebDriver driver;
+
+    private String emailUtente1;
 
     @BeforeAll
     static void avviaBrowser() {
@@ -34,6 +37,37 @@ public class RichiestaScambioIT {
         }
     }
 
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            if (emailUtente1 != null) {
+                // 1. Rientriamo con l'Utente 1 per eliminare l'annuncio di test dal DB
+                RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
+                registrazionePage.apri(BASE_URL);
+                WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+                
+                WebElement btnVaiLogin = wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
+                btnVaiLogin.click();
+                
+                registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
+
+                // 2. Eliminazione dell'annuncio se ancora presente
+                GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+                if (annunciPage.isAnnuncioPresente("Lezioni di Inglese")) {
+                    annunciPage.eliminaAnnuncio("Lezioni di Inglese");
+                }
+
+                // 3. Logout
+                WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+                if (btnLogout != null && btnLogout.isDisplayed()) {
+                    btnLogout.click();
+                }
+            }
+        } catch (Exception ignored) {
+            // Gestione di eventuali eccezioni se il test si interrompe prima del previsto
+        }
+    }
+
     @Test
     @DisplayName("Invia Richiesta: Scenario di successo")
     void testInvioRichiestaScambioSuccesso() {
@@ -43,7 +77,7 @@ public class RichiestaScambioIT {
 
         // Utente 1: Mario
         registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();
-        String emailUtente1 = "utente1_" + System.currentTimeMillis() + "@example.com";
+        emailUtente1 = "utente1_" + System.currentTimeMillis() + "@example.com";
         registrazionePage.compila("Mario", "Rossi", "user1" + System.currentTimeMillis(), emailUtente1, "01/01/2000", "password123").registrati();
         registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
 

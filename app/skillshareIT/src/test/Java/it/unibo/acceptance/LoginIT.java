@@ -1,6 +1,8 @@
 package it.unibo.acceptance;
 
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -40,6 +42,19 @@ class LoginIT {
     @BeforeEach
     void vaiAllaPagina() {
         pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormLogin();
+    }
+
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // Se un test ha effettuato il login con successo, effettuiamo il logout
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Se l'utente non era loggato, il bottone non esiste ed eccezione ignorata
+        }
     }
 
     @Nested

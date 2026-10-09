@@ -3,6 +3,7 @@ package it.unibo.acceptance;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,6 +45,24 @@ public class BachecaProposteIT {
         // 2. Aspettiamo di essere reindirizzati alla bacheca dopo la registrazione e il login
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte")));
+    }
+
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // 1. Rimozione dell'annuncio creato durante il test
+            GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+            if (annunciPage.isAnnuncioPresente("Annuncio di Test Selenium")) {
+                annunciPage.eliminaAnnuncio("Annuncio di Test Selenium");
+            }
+            // 2. Logout
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Gestisce in sicurezza eventuali eccezioni se il test fallisce prima di raggiungere la pagina annunci
+        }
     }
 
     @Test

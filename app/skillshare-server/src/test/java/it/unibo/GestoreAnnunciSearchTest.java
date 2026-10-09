@@ -1,5 +1,6 @@
 package it.unibo;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -9,6 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GestoreAnnunciSearchTest {
     private GestoreAnnunciImpl gestore;
 
+    @BeforeAll
+    public static void testmode() {
+        DatabaseCore.enableTestMode();
+    }
+    
     @BeforeEach
     public void setUp() {
         gestore = new GestoreAnnunciImpl();

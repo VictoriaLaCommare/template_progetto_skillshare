@@ -2,6 +2,8 @@ package it.unibo.acceptance;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -42,6 +44,19 @@ class RegistrazioneIT {
     @BeforeEach
     void vaiAllaPagina() {
         pagina = new RegistrazionePage(driver, TIMEOUT).apri(BASE_URL).vaiAlFormRegistrazione();
+    }
+
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            // Controllo se per errore è rimasta una sessione attiva e avviene la pulizia
+            WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+            if (btnLogout != null && btnLogout.isDisplayed()) {
+                btnLogout.click();
+            }
+        } catch (Exception ignored) {
+            // Viene ignorato se il bottone di logout non è presente
+        }
     }
 
     @Nested

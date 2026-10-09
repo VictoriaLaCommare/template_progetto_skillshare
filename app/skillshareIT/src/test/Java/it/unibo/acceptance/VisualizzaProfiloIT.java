@@ -19,6 +19,12 @@ public class VisualizzaProfiloIT {
     private static WebDriver driver;
     private WebDriverWait wait;
 
+    private String emailUtenteVuoto;
+    private String emailUtenteA;
+    
+    private String titoloAnnuncioVuoto;
+    private String titoloAnnuncioConDati;
+
     @BeforeAll
     static void avviaBrowser() {
         ChromeOptions options = new ChromeOptions();
@@ -41,6 +47,45 @@ public class VisualizzaProfiloIT {
         wait = new WebDriverWait(driver, TIMEOUT);
     }
 
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT);
+            
+            // Pulizia per testStoricoVuoto
+            if (emailUtenteVuoto != null) {
+                regPage.apri(BASE_URL);
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
+                regPage.compilaLogin(emailUtenteVuoto, "passwordSicura123").accedi();
+                
+                GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+                annunciPage.apriMieiAnnunci();
+                if (annunciPage.isAnnuncioPresente(titoloAnnuncioVuoto)) {
+                    annunciPage.eliminaAnnuncio(titoloAnnuncioVuoto);
+                }
+                driver.findElement(By.id("nav-btn-logout")).click();
+                emailUtenteVuoto = null;
+            }
+            
+            // Pulizia per testStoricoConDati (Utente A)
+            if (emailUtenteA != null && titoloAnnuncioConDati != null) {
+                regPage.apri(BASE_URL);
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
+                regPage.compilaLogin(emailUtenteA, "passwordSicu123").accedi();
+                
+                GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+                annunciPage.apriMieiAnnunci();
+                if (annunciPage.isAnnuncioPresente(titoloAnnuncioConDati)) {
+                    annunciPage.eliminaAnnuncio(titoloAnnuncioConDati);
+                }
+                driver.findElement(By.id("nav-btn-logout")).click();
+                emailUtenteA = null;
+            }
+        } catch (Exception ignored) {
+            // Gestione di eventuali eccezioni se il test si interrompe prima del previsto
+        }
+    }
+
     @Test
     @DisplayName("Visualizzazione storico di un utente senza scambi")
     void testStoricoVuoto() {
@@ -49,18 +94,19 @@ public class VisualizzaProfiloIT {
         // 1. Registriamo un nuovo utente (che non ha scambi)
         regPage.apri(BASE_URL).vaiAlFormRegistrazione();
         String username1 = "nuovo" + System.currentTimeMillis();
-        String email1 = username1 + "@example.com";
-
-        regPage.compila("Luca", "Neri", username1, email1, "01/01/2000", "passwordSicura123").registrati();
-        regPage.compilaLogin(email1, "passwordSicura123").accedi();
+        emailUtenteVuoto = username1 + "@example.com";
+        regPage.compila("Luca", "Neri", username1, emailUtenteVuoto, "01/01/2000", "passwordSicura123").registrati();
+        regPage.compilaLogin(emailUtenteVuoto, "passwordSicura123").accedi();
         
         // 2. Pubblica un annuncio per farsi vedere in bacheca
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
         GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
-        annunciPage.compila("Lezioni di Prova", "Descrizione", "Cucina", "Informatica").pubblica();
+        
+        titoloAnnuncioVuoto = "Lezioni di Prova " + System.currentTimeMillis();
+        annunciPage.compila(titoloAnnuncioVuoto, "Descrizione", "Cucina", "Informatica").pubblica();
 
         // 3. Andiamo in Bacheca e clicchiamo sul nostro stesso nome
-        driver.findElement(By.id("nav-btn-proposte")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
         BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
 
         // Clicchiamo sul profilo dell'autore dell'annuncio
@@ -68,7 +114,6 @@ public class VisualizzaProfiloIT {
 
         // 4. Interagiamo con il popup del profilo
         ProfiloUtentePage profiloPage = new ProfiloUtentePage(driver, TIMEOUT);
-
         profiloPage.cliccaMostraStorico();
 
         // Assert
@@ -76,7 +121,9 @@ public class VisualizzaProfiloIT {
         assertFalse(profiloPage.isTabellaStoricoVisibile(), "La tabella non deve essere visibile se lo storico è vuoto");
         
         profiloPage.chiudiProfilo();
-        driver.findElement(By.id("nav-btn-logout")).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
     }
 
     @Test
@@ -87,14 +134,18 @@ public class VisualizzaProfiloIT {
         // 1. Registriamo Utente A e pubblichiamo un annuncio
         regPage.apri(BASE_URL).vaiAlFormRegistrazione();
         String userA = "off" + System.currentTimeMillis();
-        String emailA = userA + "@example.com";
-        regPage.compila("Anna", "Gialli", userA, emailA, "01/01/1990", "passwordSicu123").registrati();
-        regPage.compilaLogin(emailA, "passwordSicu123").accedi();
+        emailUtenteA = userA + "@example.com";
+        regPage.compila("Anna", "Gialli", userA, emailUtenteA, "01/01/1990", "passwordSicu123").registrati();
+        regPage.compilaLogin(emailUtenteA, "passwordSicu123").accedi();
         
         // Pubblicazione annuncio e logout
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
-        new GestoreAnnunciPage(driver, TIMEOUT).compila("Annuncio Serio", "Descrizione", "Pittura", "Scultura").pubblica();
-        driver.findElement(By.id("nav-btn-logout")).click();
+        
+        titoloAnnuncioConDati = "Annuncio Serio " + System.currentTimeMillis();
+        new GestoreAnnunciPage(driver, TIMEOUT).compila(titoloAnnuncioConDati, "Descrizione", "Pittura", "Scultura").pubblica();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
 
         // 2. Registriamo Utente B
         regPage.apri(BASE_URL).vaiAlFormRegistrazione();
@@ -105,21 +156,53 @@ public class VisualizzaProfiloIT {
 
         // 3. Utente B va in bacheca, richiede lo scambio ad Utente A
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
-        driver.findElement(By.id("nav-btn-proposte")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
         
         BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
-        bachecaPage.cliccaRichiediScambioDi(userA);
+        bachecaPage.cliccaRichiediScambioPerTitolo(titoloAnnuncioConDati);
 
         // Assert: Verifica che l'alert confermi il successo della richiesta
         String testoAlert = bachecaPage.getTestoAlertEAccetta();
         assertTrue(testoAlert.toLowerCase().contains("successo"), "La richiesta è fallita. L'alert dice: " + testoAlert);
+        
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
 
-        // 4. Utente B clicca sul profilo di Utente A
+        // Rientro dell'Utente A per ACCETTARE la richiesta ricevuta
+        regPage.apri(BASE_URL);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
+        regPage.compilaLogin(emailUtenteA, "passwordSicu123").accedi();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
+        
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']")));
+        
+        WebElement btnAccetta = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[contains(., 'Accetta')]")
+        ));
+        btnAccetta.click();
+        try {
+            wait.until(ExpectedConditions.alertIsPresent());
+            driver.switchTo().alert().accept();
+        } catch (Exception ignored) {}
+        
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
+
+        // 4. Rientriamo con Utente B per verificare lo storico completato dell'Utente A
+        regPage.apri(BASE_URL);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
+        regPage.compilaLogin(emailB, "passwordsicur456").accedi();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
+        
         bachecaPage.cliccaProfiloAutore(userA);
 
         // 5. Interagiamo con il popup del profilo di Utente A e mostriamo lo storico
         ProfiloUtentePage profiloPage = new ProfiloUtentePage(driver, TIMEOUT);
-
         profiloPage.cliccaMostraStorico();
 
         // Assert
@@ -127,6 +210,7 @@ public class VisualizzaProfiloIT {
         assertFalse(profiloPage.isMessaggioVuotoVisibile(), "Il messaggio di storico vuoto non deve apparire");
 
         profiloPage.chiudiProfilo();
-        driver.findElement(By.id("nav-btn-logout")).click();
+        
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
     }
 }

@@ -62,10 +62,11 @@ public class GestoreAnnunciPage {
 
     // Metodo di navigazione per spostarsi nella vista "I Miei Annunci"
     public GestoreAnnunciPage apriMieiAnnunci() {
-        WebElement btnMieiAnnunci = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@id='btn-miei-annunci' or normalize-space()='I Miei Annunci']")));
-        btnMieiAnnunci.click();
-        // Attende che compaia il titolo del pannello dei propri annunci
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'I Miei Annunci')]")));
+        WebElement btnMieiAnnunci = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@id='btn-miei-annunci' or normalize-space()='I Miei Annunci']")));
+        if (btnMieiAnnunci.isEnabled()) {
+            wait.until(ExpectedConditions.elementToBeClickable(btnMieiAnnunci)).click();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'I Miei Annunci')]")));
+        }
         return this;
     }
 

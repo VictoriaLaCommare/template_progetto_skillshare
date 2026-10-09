@@ -17,6 +17,10 @@ public class ChatIT {
     private static final Duration TIMEOUT = Duration.ofSeconds(15);
     private static WebDriver driver;
 
+    private String emailUtente1;
+    private String titoloAnnuncio;
+    private final String password = "password123";
+
     @BeforeAll
     static void avviaBrowser() {
         ChromeOptions options = new ChromeOptions();
@@ -34,6 +38,37 @@ public class ChatIT {
         }
     }
 
+    @AfterEach
+    void puliziaAnnunci() {
+        try {
+            if (titoloAnnuncio != null && emailUtente1 != null) {
+                // 1. Rientriamo con l'Utente 1 per eliminare l'annuncio di prova dal DB
+                RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
+                registrazionePage.apri(BASE_URL);
+                WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+                
+                WebElement btnVaiLogin = wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
+                btnVaiLogin.click();
+                
+                registrazionePage.compilaLogin(emailUtente1, password).accedi();
+
+                // 2. Eliminazione l'annuncio se ancora presente
+                GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+                if (annunciPage.isAnnuncioPresente(titoloAnnuncio)) {
+                    annunciPage.eliminaAnnuncio(titoloAnnuncio);
+                }
+
+                // 3. Logout
+                WebElement btnLogout = driver.findElement(By.id("nav-btn-logout"));
+                if (btnLogout != null && btnLogout.isDisplayed()) {
+                    btnLogout.click();
+                }
+            }
+        } catch (Exception ignored) {
+            // Gestisce eventuali fallimenti di pulizia se il test si è interrotto prima
+        }
+    }
+
     @Test
     @DisplayName("Chat (UC10): Flusso completo di invio richiesta, accettazione e chat bidirezionale")
     void testFlussoChatEndToEnd() {
@@ -41,10 +76,9 @@ public class ChatIT {
         RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
 
         String timestamp = String.valueOf(System.currentTimeMillis());
-        String emailUtente1 = "mario_chat_" + timestamp + "@example.com";
+        emailUtente1 = "mario_chat_" + timestamp + "@example.com";
         String emailUtente2 = "luigi_chat_" + timestamp + "@example.com";
-        String password = "password123";
-        String titoloAnnuncio = "Lezioni di Calcio " + timestamp;
+        titoloAnnuncio = "Lezioni di Calcio " + timestamp;
 
         // FASE 1: UTENTE 1 (Mario) - Registrazione, Login e Pubblicazione Annuncio
         registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();

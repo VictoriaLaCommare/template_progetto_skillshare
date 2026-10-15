@@ -7,7 +7,9 @@ public class RichiestaScambio implements Serializable {
     private String idAnnuncio;
     private String richiedente;
     private String ricevente;
-    private String stato;
+    private StatoRichiesta stato;
+    private boolean confermataTerminazioneRichiedente = false;
+    private boolean confermataTerminazioneRicevente = false;
 
     @SuppressWarnings("unused")
     private RichiestaScambio() {
@@ -20,8 +22,47 @@ public class RichiestaScambio implements Serializable {
         this.idAnnuncio = idAnnuncio;
         this.richiedente = richiedente;
         this.ricevente = ricevente;
-        this.stato = "In sospeso"; // Stato iniziale della richiesta
+        this.stato = new StatoInSospeso(); // Stato iniziale della richiesta
+
     }
+
+    public boolean accetta(String nomeutente) {
+        return stato.accetta(this, nomeutente);
+    }
+
+    public boolean rifiuta(String nomeutente) {
+        return stato.rifiuta(this, nomeutente);
+    }
+
+    public boolean dichiaraTerminazione(String nomeutente) {
+        return stato.dichiaraTerminazione(this, nomeutente);
+    }
+
+    // Getter e Setter di stato e flag
+    public String getStato() {
+        return stato.getNomeStato();
+    }
+
+    public void setStato(StatoRichiesta stato) {
+        this.stato = stato;
+    }
+
+    public boolean isConfermataTerminazioneRichiedente() {
+        return confermataTerminazioneRichiedente;
+    }
+
+    public void setConfermataTerminazioneRichiedente(boolean val) {
+        this.confermataTerminazioneRichiedente = val;
+    }
+
+    public boolean isConfermataTerminazioneRicevente() {
+        return confermataTerminazioneRicevente;
+    }
+
+    public void setConfermataTerminazioneRicevente(boolean val) {
+        this.confermataTerminazioneRicevente = val;
+    }
+    
 
     public String getIdRichiesta() {
         return idRichiesta;
@@ -55,12 +96,5 @@ public class RichiestaScambio implements Serializable {
         this.ricevente = ricevente;
     }
 
-    public String getStato() {
-        return stato;
-    }
-
-    public void setStato(String stato) {
-        this.stato = stato;
-    }
 
 }

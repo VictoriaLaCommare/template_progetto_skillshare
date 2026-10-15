@@ -97,17 +97,7 @@ public class GestisciRichiesteGUI {
         // Controlli per il ruolo dell'utente loggato e della sua controparte
         boolean sonoRichiedente = utenteLoggato.getUsername().equals(req.getRichiedente());
         String controparte = sonoRichiedente ? req.getRicevente() : req.getRichiedente();
-
         String stato = req.getStato().toLowerCase();
-
-        // Gestione visiva dello stato "Terminata" o "Completata" con etichetta dedicata in cima
-        if ("terminata".equals(stato) || "completata".equals(stato)) {
-            HTML badgeTerminata = new HTML(
-                    "<div style=\"background-color: #28a745; color: white; padding: 4px 10px; border-radius: 4px; display: inline-block; font-size: 12px; font-weight: bold; margin-bottom: 8px;\">" +
-                            "TERMINATA</div>"
-            );
-            card.add(badgeTerminata);
-        }
 
         HTML info = new HTML(
                 "<b style=\"font-size: 16px; color: #1b263b;\">Richiesta da: " + req.getRichiedente() + "</b><br/>" +
@@ -170,7 +160,7 @@ public class GestisciRichiesteGUI {
                 buttonPanel.add(btnRifiuta);
                 break;
             }
-            case "accettato"://stesso comportamento
+            case "accettata"://stesso comportamento
             case "in attesa di conferma dall'altro utente" : {
                 boolean haGiaConfermato = (sonoRichiedente && req.isConfermataTerminazioneRichiedente())
                         || (!sonoRichiedente && req.isConfermataTerminazioneRicevente());

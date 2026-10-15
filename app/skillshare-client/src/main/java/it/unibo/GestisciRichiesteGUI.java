@@ -15,7 +15,7 @@ public class GestisciRichiesteGUI {
 
     public void mostra(Utente utente) {
         this.utenteLoggato = utente;
-        
+
         VerticalPanel mainContainer = new VerticalPanel();
         mainContainer.setWidth("90%");
         mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
@@ -33,12 +33,12 @@ public class GestisciRichiesteGUI {
             mainPanel.add(new AppNavbar(utenteLoggato, "richieste"));
         }
 
-        // Intestazione / Banner allineata nello stile a "I Miei Annunci"
+        // Intestazione allineata nello stile a "I Miei Annunci"
         HTML titolo = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Richieste Ricevute</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Gestisci le richieste di scambio in sospeso e le chat attive</p>" +
-            "</div>"
+                "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
+                        "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Richieste Ricevute</h1>" +
+                        "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Gestisci le richieste di scambio in sospeso e le chat attive</p>" +
+                        "</div>"
         );
         mainPanel.add(titolo);
 
@@ -50,7 +50,7 @@ public class GestisciRichiesteGUI {
         mainPanel.add(listaRichiestePanel);
 
         // Caricamento asincrono dal DB
-        caricaRichiesteInSospeso(listaRichiestePanel);
+        caricaRichieste(listaRichiestePanel);
 
         mainContainer.add(mainPanel);
 
@@ -58,11 +58,12 @@ public class GestisciRichiesteGUI {
         RootPanel.get().add(mainContainer);
     }
 
-    private void caricaRichiesteInSospeso(VerticalPanel container) {
+    // ottieniTutteLeRichieste fa in modo che anche il richiedente veda le sue richieste attive
+    private void caricaRichieste(VerticalPanel container) {
         container.clear();
         container.add(new Label("Caricamento richieste in corso..."));
 
-        richiesteService.ottieniRichiesteRicevute(utenteLoggato.getUsername(), new AsyncCallback<List<RichiestaScambio>>() {
+        richiesteService.ottieniTutteLeRichieste(utenteLoggato.getUsername(), new AsyncCallback<List<RichiestaScambio>>() {
             @Override
             public void onFailure(Throwable caught) {
                 container.clear();
@@ -73,12 +74,9 @@ public class GestisciRichiesteGUI {
             public void onSuccess(List<RichiestaScambio> result) {
                 container.clear();
                 if (result == null || result.isEmpty()) {
-                    // Testo centrato e pulito
                     container.add(new Label("Nessuna richiesta al momento."));
                     return;
                 }
-
-                // Genera una card per ogni richiesta
                 for (RichiestaScambio req : result) {
                     container.add(creaCardRichiesta(req, container));
                 }
@@ -96,9 +94,24 @@ public class GestisciRichiesteGUI {
         card.getElement().getStyle().setProperty("borderRadius", "4px");
         card.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.05)");
 
+        // Controlli per il ruolo dell'utente loggato e della sua controparte
+        boolean sonoRichiedente = utenteLoggato.getUsername().equals(req.getRichiedente());
+        String controparte = sonoRichiedente ? req.getRicevente() : req.getRichiedente();
+
+        String stato = req.getStato().toLowerCase();
+
+        // Gestione visiva dello stato "Terminata" o "Completata" con etichetta dedicata in cima
+        if ("terminata".equals(stato) || "completata".equals(stato)) {
+            HTML badgeTerminata = new HTML(
+                    "<div style=\"background-color: #28a745; color: white; padding: 4px 10px; border-radius: 4px; display: inline-block; font-size: 12px; font-weight: bold; margin-bottom: 8px;\">" +
+                            "TERMINATA</div>"
+            );
+            card.add(badgeTerminata);
+        }
+
         HTML info = new HTML(
-            "<b style=\"font-size: 16px; color: #1b263b;\">Richiesta da: " + req.getRichiedente() + "</b><br/>" +
-            "<span style=\"color: #555; font-size: 14px;\">Riferimento Annuncio ID: " + req.getIdAnnuncio() + "</span>"
+                "<b style=\"font-size: 16px; color: #1b263b;\">Richiesta da: " + req.getRichiedente() + "</b><br/>" +
+                        "<span style=\"color: #555; font-size: 14px;\">Riferimento Annuncio ID: " + req.getIdAnnuncio() + "</span>"
         );
         card.add(info);
 
@@ -107,61 +120,92 @@ public class GestisciRichiesteGUI {
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         buttonPanel.getElement().getStyle().setProperty("marginTop", "10px");
 
-        // Logica condizionale in base allo stato della richiesta
-        if ("Accettata".equalsIgnoreCase(req.getStato())) {
-            
-            HTML statusLabel = new HTML(
-                "<span style=\"color: #28a745; font-weight: bold; font-size: 16px;\">✓ Accettata</span>" +
-                "<span style=\"color: #6c757d; font-size: 14px; margin-left: 15px;\">(Vai nella sezione 'Le Mie Chat' per chattare)</span>"
-            );
-            
-            buttonPanel.add(statusLabel);
-            
-        } else if (!"Rifiutata".equalsIgnoreCase(req.getStato())) {
-            
-            // La richiesta è ancora in sospeso, mostriamo i bottoni di decisione
-            Button btnAccetta = new Button("Accetta");
-            btnAccetta.getElement().setId("btn-accetta-" + req.getIdRichiesta());
-            estilsaPulsante(btnAccetta, "#28a745"); // Verde
+        // Utilizzo dello switch per la gestione dei diversi stati della richiesta
+        switch (stato) {
+            case "in sospeso": {
+                if (!sonoRichiedente) {
+                    // Solo il ricevente può accettare
+                    Button btnAccetta = new Button("Accetta");
+                    btnAccetta.getElement().setId("btn-accetta-" + req.getIdRichiesta());
+                    estilsaPulsante(btnAccetta, "#28a745");
+                    btnAccetta.addClickHandler(event ->
+                            richiesteService.accettaRichiesta(req.getIdRichiesta(), utenteLoggato.getUsername(), new AsyncCallback<Boolean>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    Window.alert("Errore: " + caught.getMessage());
+                                }
 
-            Button btnRifiuta = new Button("Rifiuta");
-            btnRifiuta.getElement().setId("btn-rifiuta-" + req.getIdRichiesta());
-            estilsaPulsante(btnRifiuta, "#dc3545"); // Rosso
-
-            btnAccetta.addClickHandler(event -> gestisciRichiesta(req.getIdRichiesta(), "Accettata", container));
-            btnRifiuta.addClickHandler(event -> gestisciRichiesta(req.getIdRichiesta(), "Rifiutata", container));
-
-            buttonPanel.add(btnAccetta);
-            buttonPanel.add(btnRifiuta);
-        }
-        
-        card.add(buttonPanel);
-
-        return card;
-    }
-
-    private void gestisciRichiesta(String idRichiesta, String nuovoStato, VerticalPanel container) {
-        richiesteService.aggiornaStatoRichiesta(idRichiesta, nuovoStato, new AsyncCallback<Boolean>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("Errore di comunicazione col server: " + caught.getMessage());
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                if (Boolean.TRUE.equals(result)) {
-                    if ("Accettata".equals(nuovoStato)) {
-                        Window.alert("Richiesta accettata! Ora puoi aprire la chat per accordarti con l'utente.");
-                    } else {
-                        Window.alert("Richiesta rifiutata ed eliminata.");
-                    }
-                    // Ricarica la lista per mostrare il bottone della chat (se accettata) o rimuoverla (se rifiutata)
-                    caricaRichiesteInSospeso(container);
-                } else {
-                    Window.alert("Errore: impossibile aggiornare la richiesta.");
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    Window.alert(Boolean.TRUE.equals(result) ? "Richiesta accettata! Ora puoi accordarti con l'utente." : "Errore: impossibile accettare la richiesta.");
+                                    caricaRichieste(container);
+                                }
+                            })
+                    );
+                    buttonPanel.add(btnAccetta);
                 }
+
+                // Entrambi i ruoli possono rifiutare/annullare cambia solo la presentazione a seconda del ruolo
+                String labelBtn = sonoRichiedente ? "Annulla" : "Rifiuta";
+                String coloreBtn = sonoRichiedente ? "#6c757d" : "#dc3545";
+                String msgOk = sonoRichiedente ? "Richiesta annullata." : "Richiesta rifiutata.";
+
+                Button btnRifiuta = new Button(labelBtn);
+                btnRifiuta.getElement().setId("btn-rifiuta-" + req.getIdRichiesta());
+                estilsaPulsante(btnRifiuta, coloreBtn);
+                btnRifiuta.addClickHandler(event ->
+                        richiesteService.rifiutaRichiesta(req.getIdRichiesta(), utenteLoggato.getUsername(), new AsyncCallback<Boolean>() {
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                Window.alert("Errore: " + caught.getMessage());
+                            }
+
+                            @Override
+                            public void onSuccess(Boolean result) {
+                                Window.alert(Boolean.TRUE.equals(result) ? msgOk : "Errore: impossibile completare l'operazione.");
+                                caricaRichieste(container);
+                            }
+                        })
+                );
+                buttonPanel.add(btnRifiuta);
+                break;
             }
-        });
+            case "accettato"://stesso comportamento
+            case "in attesa di conferma dall'altro utente" : {
+                boolean haGiaConfermato = (sonoRichiedente && req.isConfermataTerminazioneRichiedente())
+                        || (!sonoRichiedente && req.isConfermataTerminazioneRicevente());
+
+                if (!haGiaConfermato) {
+                    Button btnTermina = new Button("Dichiara Terminazione");
+                    btnTermina.getElement().setId("btn-termina-" + req.getIdRichiesta());
+                    estilsaPulsante(btnTermina, "#007bff");
+                    btnTermina.addClickHandler(event ->
+                            richiesteService.dichiaraTerminazione(req.getIdRichiesta(), utenteLoggato.getUsername(), new AsyncCallback<Boolean>() {
+                                @Override public void onFailure(Throwable caught) { Window.alert("Errore: " + caught.getMessage()); }
+                                @Override public void onSuccess(Boolean result) {
+                                    Window.alert(Boolean.TRUE.equals(result) ? "Terminazione dichiarata con successo." : "Errore: impossibile dichiarare la terminazione.");
+                                    caricaRichieste(container);
+                                }
+                            })
+                    );
+                    buttonPanel.add(btnTermina);
+                } else {
+                    buttonPanel.add(new HTML(
+                            "<span style=\"color: #6c757d;\">In attesa della conferma dell'altro utente...</span>"
+                    ));
+                }
+                break;
+            }
+            case "completato": {
+                buttonPanel.add(new HTML(
+                        "<span style=\"color: purple;\">Richiesta Completata</span>"));                break;
+            }
+            default:
+                break;
+        }
+
+        card.add(buttonPanel);
+        return card;
     }
 
     private void estilsaPulsante(Button btn, String coloreBase) {

@@ -95,7 +95,11 @@
                 <executions>
                     <execution>
                         <id>copy-app-war</id>
-                        <phase>process-test-classes</phase>
+                        <!-- MODIFICATO: era process-test-classes, fase troppo precoce nella
+                             reactor build — il WAR non è ancora stato prodotto da package.
+                             pre-integration-test scatta dopo package su tutti i moduli,
+                             garantendo che app.war esista prima che Jetty provi ad avviarsi. -->
+                        <phase>pre-integration-test</phase>
                         <goals><goal>copy</goal></goals>
                         <configuration>
                             <artifactItems>

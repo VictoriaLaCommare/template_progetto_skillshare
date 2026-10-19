@@ -15,7 +15,6 @@ public class Utente implements Serializable {
     private String bio;
     private String tagCompetenze;
     private String immagineProfilo;
-    private java.util.ArrayList<Wishlist> mieWishlist;
 
     public Utente(){};
 
@@ -99,16 +98,5 @@ public class Utente implements Serializable {
 
     public void setImmagineProfilo(String immagineProfilo){
         this.immagineProfilo = immagineProfilo;
-    }
-
-    public java.util.ArrayList<Wishlist> getMieWishlist() {
-        if (mieWishlist == null) {
-            mieWishlist = new java.util.ArrayList<>();
-        }
-        return mieWishlist;
-    }
-
-    public void setMieWishlist(java.util.ArrayList<Wishlist> mieWishlist) {
-        this.mieWishlist = mieWishlist;
     }
 }

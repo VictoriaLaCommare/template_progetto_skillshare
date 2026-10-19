@@ -1,6 +1,9 @@
 package it.unibo;
 
 import com.google.gwt.user.server.rpc.jakarta.RemoteServiceServlet;
+
+import java.util.ArrayList;
+
 import org.mapdb.DB;
 import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
@@ -9,8 +12,8 @@ import jakarta.servlet.ServletException;
 public class WishlistServiceImpl extends RemoteServiceServlet implements WishlistService {
 
     private DB db;
-    // Usiamo HTreeMap perché Utente.java sfrutta un hashmap che ha come chiave la mail
-    private HTreeMap<String, Utente> utentiDB; 
+    //Chiave=mail utente, valore= le sue wishlist
+    private HTreeMap<String, ArrayList<ServizioRichiesto>> wishlistDB; 
 
     @Override
     public void init() throws ServletException {
@@ -23,33 +26,44 @@ public class WishlistServiceImpl extends RemoteServiceServlet implements Wishlis
         if (db == null || db.isClosed()) {
             db = DatabaseCore.getDB();
             
-            utentiDB = (HTreeMap<String, Utente>) db.hashMap("utenti", Serializer.STRING, Serializer.JAVA).createOrOpen();
+            wishlistDB = (HTreeMap<String, ArrayList<ServizioRichiesto>>) db.hashMap("wishlist_servizi", Serializer.STRING, Serializer.JAVA).createOrOpen();
         }
     }
 
     @Override
-    public Boolean salvaWishlist(String mailUtente, Wishlist nuovaWishlist) throws Exception {
+    public Boolean aggiungiServizio(String mailUtente, ServizioRichiesto nuovaWishlist) throws Exception {
         initDb(); 
         try {
-            //Recupera l'utente usando la mail
-            Utente utente = utentiDB.get(mailUtente);
-            
-            if (utente == null) {
-                throw new Exception("Utente non trovato nel database");
+            if(mailUtente == null || mailUtente.isEmpty()){
+                throw new Exception("mail utente non valida");
             }
 
-            //Aggiungi la nuova wishlist alla sua lista
-            utente.getMieWishlist().add(nuovaWishlist);
-            
-            //Aggiorna l'utente nel MapDB e fai il commit
-            utentiDB.put(mailUtente, utente);
+            ArrayList<ServizioRichiesto> lista = wishlistDB.get(mailUtente);
+            if (lista == null){
+                lista = new ArrayList<>();
+            }
+
+            lista.add(nuovaWishlist);
+
+            wishlistDB.put(mailUtente, lista);
             DatabaseCore.commit();        
             
             return true;
             
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Errore durante il salvataggio della wishlist", e);
+            throw new Exception("errore durante il salvataggio della wishlist: "+ e,e);
         }
+    }
+
+    @Override
+    public ArrayList<ServizioRichiesto> getWishlistUtente(String mailUtente) throws Exception {
+        initDb();
+        if (mailUtente == null || mailUtente.isEmpty()) {
+            throw new Exception("mail utente non valida");
+        }
+        ArrayList<ServizioRichiesto> lista = wishlistDB.get(mailUtente);
+        // Restituisco una lista vuota invece di null, così la GUI non deve gestire il caso
+        return lista != null ? lista : new ArrayList<>();
     }
 }

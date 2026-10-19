@@ -1,27 +1,27 @@
 package it.unibo;
 import java.io.Serializable;
 
-public class Wishlist implements Serializable {
-    private String servizioRichiesto;
+public class ServizioRichiesto implements Serializable {
+    private String nomeServizio;
     private String tagCompetenza;
     private String descrizione;
     private boolean isPubblica; 
     
-    public Wishlist(){}
+    public ServizioRichiesto(){}
 
-    public Wishlist(String servizioRichiesto, String tagCompetenza, String descrizione, boolean isPubblica){
-    this.servizioRichiesto = servizioRichiesto;
+    public ServizioRichiesto(String nomeServizio, String tagCompetenza, String descrizione, boolean isPubblica){
+    this.nomeServizio = nomeServizio;
     this.tagCompetenza = tagCompetenza;
     this.descrizione = descrizione;
     this.isPubblica = isPubblica;
     }
 
-    public String getServizioRichiesto() {
-        return servizioRichiesto;
+    public String getNomeServizio() {
+        return nomeServizio;
     }
 
-    public void setServizioRichiesto(String servizioRichiesto) {
-        this.servizioRichiesto = servizioRichiesto;
+    public void setNomeServizio(String nomeServizio) {
+        this.nomeServizio = nomeServizio;
     }
 
     public String getTagCompetenza() {

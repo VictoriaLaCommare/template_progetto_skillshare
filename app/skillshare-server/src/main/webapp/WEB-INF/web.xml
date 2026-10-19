@@ -79,4 +79,18 @@
         <servlet-name>chatServlet</servlet-name>
         <url-pattern>/app/chat</url-pattern>
     </servlet-mapping>
+
+  <!-- Servlet della Wishlist -->
+    <servlet>
+      <servlet-name>wishlistServlet</servlet-name>
+      <servlet-class>it.unibo.WishlistServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>wishlistServlet</servlet-name>
+      <url-pattern>/app/wishlist</url-pattern>
+    </servlet-mapping>
+
 </web-app>
+
+

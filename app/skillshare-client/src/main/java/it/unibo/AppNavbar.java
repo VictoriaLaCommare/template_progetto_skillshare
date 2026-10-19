@@ -67,12 +67,18 @@ public class AppNavbar extends Composite {
         if ("chat".equals(paginaAttiva)) evidenziaBottone(btnChat);
         btnChat.addClickHandler(event -> new LeMieChatGUI().mostra(utenteLoggato));
 
-        // 6. Profilo
+        // 6.Wishlist
+        Button btnWishlist = creaPannelloStileLink("❤️ Wishlist");
+        btnWishlist.getElement().setId("nav-btn-wishlist"); 
+        if ("wishlist".equals(paginaAttiva)) evidenziaBottone(btnWishlist);
+        btnWishlist.addClickHandler(event -> new MiaWishlistGUI().mostra(utenteLoggato));
+
+        // 7. Profilo
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
         btnProfilo.getElement().setId("nav-btn-profilo"); 
         btnProfilo.addClickHandler(event -> Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome()));
 
-        // 7. Logout
+        // 8. Logout
         Button btnLogout = creaPannelloStileLink("↩️ Logout");
         btnLogout.getElement().setId("nav-btn-logout"); 
         btnLogout.addClickHandler(event -> new HomePageGUI().mostra());
@@ -82,6 +88,7 @@ public class AppNavbar extends Composite {
         menuPanel.add(btnMieiAnnunci);
         menuPanel.add(btnRichieste);
         menuPanel.add(btnChat);
+        menuPanel.add(btnWishlist);
         menuPanel.add(btnProfilo);
         menuPanel.add(btnLogout);
 

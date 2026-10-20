@@ -40,6 +40,7 @@ public class MiaWishlistGUI {
 
         //Collegamento all'interfaccia per aggiungere servizi alla wishlist
         Button btnAggiungi = new Button("➕ Aggiungi servizio");
+        btnAggiungi.getElement().setId("btn-vai-aggiungi-servizio");
         btnAggiungi.getElement().getStyle().setProperty("background", "#ffffff");
         btnAggiungi.getElement().getStyle().setProperty("color", "#1b263b");
         btnAggiungi.getElement().getStyle().setProperty("border", "2px solid #1b263b");
@@ -52,6 +53,7 @@ public class MiaWishlistGUI {
 
         // Contenitore delle card, riempito dopo la risposta del server
         VerticalPanel listaPanel = new VerticalPanel();
+        listaPanel.getElement().setId("lista-wishlist");
         listaPanel.setWidth("50%");
         listaPanel.setSpacing(10);
 
@@ -82,6 +84,7 @@ public class MiaWishlistGUI {
 
                 if (wishlist == null || wishlist.isEmpty()) {
                     Label vuoto = new Label("Wishlist vuota.");
+                    vuoto.getElement().setId("msg-wishlist-vuota");
                     vuoto.getElement().getStyle().setProperty("fontWeight", "bold");
                     listaPanel.add(vuoto);
                     return;
@@ -111,6 +114,7 @@ public class MiaWishlistGUI {
             "</div>"
         );
         card.setWidth("100%");
+        card.addStyleName("card-servizio");
         return card;
     }
 }

@@ -26,5 +26,8 @@ public interface GestoreRichiesteService extends RemoteService {
     Boolean rifiutaRichiesta(String idRichiesta, String username) throws Exception;
 
     List<RichiestaScambio> ottieniTutteLeRichieste(String username) throws Exception;
+
+    //Metodo per inviare una recensione a seguito del completamento di una richiesta
+    Boolean inviaRecensione(String idRichiesta, String usernameRecensito, Recensione recensione) throws Exception;
 }
 

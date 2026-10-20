@@ -12,4 +12,6 @@ public interface GestoreProfilo extends RemoteService {
     Utente ottieniProfiloUtente(String username) throws Exception;
 
     List<RichiestaScambio> ottieniStoricoScambi(String username) throws Exception;
+
+    StatisticheUtente ottieniStatistiche(String username) throws Exception;
 }

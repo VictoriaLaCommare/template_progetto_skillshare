@@ -17,5 +17,6 @@ public interface GestoreRichiesteServiceAsync {
 
     void dichiaraTerminazione(String idRichiesta, String username, AsyncCallback<Boolean> callback);
 
+    void inviaRecensione(String idRichiesta, String usernameRecensito, Recensione recensione, AsyncCallback<Boolean> callback);
 
 }

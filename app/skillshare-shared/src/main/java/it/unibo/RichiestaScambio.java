@@ -10,6 +10,7 @@ public class RichiestaScambio implements Serializable {
     private StatoRichiesta stato;
     private boolean confermataTerminazioneRichiedente = false;
     private boolean confermataTerminazioneRicevente = false;
+    private Recensione recensione;
 
     @SuppressWarnings("unused")
     private RichiestaScambio() {
@@ -36,6 +37,10 @@ public class RichiestaScambio implements Serializable {
 
     public boolean dichiaraTerminazione(String nomeutente) {
         return stato.dichiaraTerminazione(this, nomeutente);
+    }
+
+    public void aggiungiRecensione(Recensione recensione) {
+        this.recensione = recensione;
     }
 
     // Getter e Setter di stato e flag

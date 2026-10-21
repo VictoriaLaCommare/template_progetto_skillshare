@@ -10,53 +10,72 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unchecked")
-public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService {
+public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
+        implements GestoreRichiesteService, SoggettoOsservabile {
 
-    private final DB db=DatabaseCore.getDB();
-    // Apriamo (o creiamo) la mappa che contiene tutte le richieste in modo da non doverlo ripetere
+    private final DB db = DatabaseCore.getDB();
+    //Lista osservatori
+    private final List<OsservatoreScambio> osservatori;
+
     private final HTreeMap<String, RichiestaScambio> mappaRichieste = db.hashMap("richieste")
             .keySerializer(Serializer.STRING)
             .valueSerializer(Serializer.JAVA)
             .createOrOpen();
-    private boolean ReqInDb(String idRichiesta){
-        if(mappaRichieste.containsKey(idRichiesta))
-            return true;
-        return false;
+
+    private boolean ReqInDb(String idRichiesta) {
+        return mappaRichieste.containsKey(idRichiesta);
+    }
+
+//---------------------------------------------------------------------
+    public GestoreRichiesteServiceImpl() {
+        //Registriamo subito il gestore della gamification come osservatore
+        osservatori=new ArrayList<>();
+        aggiungiOsservatore(new GestoreLeveling(db));
+    }
+
+    //@Override di SoggettoOsservabile
+    @Override
+    public void aggiungiOsservatore(OsservatoreScambio o) {
+        osservatori.add(o);
+    }
+
+    @Override
+    public void notificaCompletamento(RichiestaScambio richiesta) {
+        for (OsservatoreScambio o : osservatori) {
+            o.DopoScambioCompletato(richiesta);
+        }
+    }
+
+    @Override
+    public void notificaRecensione(String usernameRecensito, int valutazione) {
+        for (OsservatoreScambio o : osservatori) {
+            o.DopoRecensioneAggiunta(usernameRecensito, valutazione);
+        }
     }
 
 
+    // Metodi legati allo scambio di richieste
     @Override
     public Boolean inviaRichiesta(RichiestaScambio richiesta) throws Exception {
-        // Blocco auto-scambio
-        if (richiesta.getRichiedente().equals(richiesta.getRicevente())){
-            return false; // Fallisce perché l'utente non può inviare una richiesta a se stesso
+        if (richiesta.getRichiedente().equals(richiesta.getRicevente())) {
+            return false;
         }
-
-        // Generare un ID univoco per la richiesta
         if (richiesta.getIdRichiesta() == null || richiesta.getIdRichiesta().isEmpty()) {
             richiesta.setIdRichiesta(UUID.randomUUID().toString());
         }
-
-
         try {
-
-            // Salviamo la richiesta usando il suo ID univoco
             mappaRichieste.put(richiesta.getIdRichiesta(), richiesta);
-
-            // Salvare fisicamente le modifiche sul file del database
             DatabaseCore.commit();
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Fallisce in caso di errore
+            return false;
         }
     }
 
     @Override
     public List<RichiestaScambio> ottieniRichiesteRicevute(String nomeutente) throws Exception {
         List<RichiestaScambio> richiesteRicevute = new ArrayList<>();
-
         try {
             for (RichiestaScambio req : mappaRichieste.values()) {
                 if (req.getRicevente().equals(nomeutente)) {
@@ -75,21 +94,19 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
     @Override
     public Boolean dichiaraTerminazione(String idRichiesta, String nomeutente) throws Exception {
         try {
-            // Se la richiesta non esiste, falliamo
-            if (!ReqInDb(idRichiesta)) {
-                return false;
-            }
+            if (!ReqInDb(idRichiesta)) return false;
 
-            // Recuperiamo la richiesta e deleghiamo l'azione di terminazione
             RichiestaScambio richiesta = mappaRichieste.get(idRichiesta);
             boolean esito = richiesta.dichiaraTerminazione(nomeutente);
 
-            if (!esito) {
-                return false;
-            }
-            else {
-                mappaRichieste.put(idRichiesta, richiesta);
-                DatabaseCore.commit();
+            if (!esito) return false;
+
+            mappaRichieste.put(idRichiesta, richiesta);
+            DatabaseCore.commit();
+
+            // La recensione e la notifica si creano al completamento definitivo
+            if ("Completato".equals(richiesta.getStato())) {
+                notificaCompletamento(richiesta);
             }
 
             return true;
@@ -101,65 +118,42 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
 
     @Override
     public Boolean accettaRichiesta(String idRichiesta, String nomeutente) throws Exception {
-        try{
-            if (!ReqInDb(idRichiesta)) {
+        try {
+            if (!ReqInDb(idRichiesta)) return false;
+            RichiestaScambio req = mappaRichieste.get(idRichiesta);
+            if (!req.getRicevente().equals(nomeutente)) return false;
+            boolean esito = req.accetta(nomeutente);
+            if (!esito) return false;
+            mappaRichieste.put(idRichiesta, req);
+            DatabaseCore.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-            RichiestaScambio req=mappaRichieste.get(idRichiesta);
-            if(req.getRicevente().equals(nomeutente)) {//solo il ricevente può accettare
-                boolean esito = req.accetta(nomeutente);
-                if (!esito) {
-                    return false;
-                } else {
-                    mappaRichieste.put(idRichiesta, req);
-                    DatabaseCore.commit();
-                }
-
-                return true;
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override
     public Boolean rifiutaRichiesta(String idRichiesta, String nomeutente) throws Exception {
-        try{
-            if (!ReqInDb(idRichiesta)) {
-                return false;
-            }
-
-            RichiestaScambio req=mappaRichieste.get(idRichiesta);
-            assert req != null;
-
-
+        try {
+            if (!ReqInDb(idRichiesta)) return false;
+            RichiestaScambio req = mappaRichieste.get(idRichiesta);
             boolean esito = req.rifiuta(nomeutente);
-            if (!esito) {
-                return false;
-            } else {
-                mappaRichieste.put(idRichiesta, req);
-                DatabaseCore.commit();
-            }
-
+            if (!esito) return false;
+            mappaRichieste.put(idRichiesta, req);
+            DatabaseCore.commit();
             return true;
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-
-
-
-        return false;
     }
 
     @Override
     public List<RichiestaScambio> ottieniTutteLeRichieste(String nomeutente) throws Exception {
         List<RichiestaScambio> tutteLeRichieste = new ArrayList<>();
-
         try {
             for (RichiestaScambio req : mappaRichieste.values()) {
-                // Se l'utente è coinvolto nella richiesta (sia che l'abbia inviata, sia che l'abbia ricevuta)
                 if (req.getRicevente().equals(nomeutente) || req.getRichiedente().equals(nomeutente)) {
                     tutteLeRichieste.add(req);
                 }
@@ -169,4 +163,33 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
         }
         return tutteLeRichieste;
     }
+
+    @Override
+    public Boolean inviaRecensione(String idRichiesta, String usernameRecensito, Recensione recensione) throws Exception {
+        try {
+            if (!ReqInDb(idRichiesta)) return false;
+
+            // Associa la recensione alla richiesta nel DB
+            RichiestaScambio richiesta = mappaRichieste.get(idRichiesta);
+            if(richiesta.getStato().equalsIgnoreCase("completato")){
+                richiesta.aggiungiRecensione(recensione);
+                mappaRichieste.put(idRichiesta, richiesta);
+                DatabaseCore.commit();
+
+                // Notifica l'Observer: aggiorna punti e media recensioni dell'utente recensito
+                notificaRecensione(usernameRecensito, recensione.getValutazione());
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
+
+
 }

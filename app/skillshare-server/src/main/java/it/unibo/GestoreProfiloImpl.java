@@ -21,4 +21,12 @@ public class GestoreProfiloImpl extends RemoteServiceServlet implements GestoreP
     public List<RichiestaScambio> ottieniStoricoScambi(String username) throws Exception {
         return proxy.ottieniStoricoScambi(username);
     }
+
+    private final GestoreLeveling gestoreLeveling =
+            new GestoreLeveling(DatabaseCore.getDB());
+
+    @Override
+    public StatisticheUtente ottieniStatistiche(String nomeutente) throws Exception {
+        return gestoreLeveling.getStatistiche(nomeutente);
+    }
 }

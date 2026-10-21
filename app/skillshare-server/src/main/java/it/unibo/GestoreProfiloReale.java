@@ -72,4 +72,9 @@ public class GestoreProfiloReale implements GestoreProfilo {
 
         return storico;
     }
+
+    @Override
+    public StatisticheUtente ottieniStatistiche(String username) throws Exception {
+        return null;
+    }
 }

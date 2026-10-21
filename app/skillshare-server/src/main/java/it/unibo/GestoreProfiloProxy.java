@@ -41,4 +41,9 @@ public class GestoreProfiloProxy implements GestoreProfilo {
 
         return gestoreReale.ottieniStoricoScambi(username);
     }
+
+    @Override
+    public StatisticheUtente ottieniStatistiche(String username) throws Exception {
+        return gestoreReale.ottieniStatistiche(username);
+    }
 }

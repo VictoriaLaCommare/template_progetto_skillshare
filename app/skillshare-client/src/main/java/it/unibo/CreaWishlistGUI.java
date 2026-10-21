@@ -49,31 +49,37 @@ public class CreaWishlistGUI {
         Label lblServizio = new Label("Servizio Richiesto:");
         lblServizio.getElement().getStyle().setProperty("fontWeight", "bold");
         TextBox txtServizio = new TextBox();
+        txtServizio.getElement().setId("txt-servizio");
         txtServizio.setWidth("100%");
 
         //Tag Competenza
         Label lblTag = new Label("Tag Competenza:");
         lblTag.getElement().getStyle().setProperty("fontWeight", "bold");
         TextBox txtTag = new TextBox();
+        txtTag.getElement().setId("txt-tag");
         txtTag.setWidth("100%");
 
         //Descrizione
         Label lblDescrizione = new Label("Descrizione dettagliata:");
         lblDescrizione.getElement().getStyle().setProperty("fontWeight", "bold");
         TextArea txtDescrizione = new TextArea();
+        txtDescrizione.getElement().setId("txt-descrizione");
         txtDescrizione.setWidth("100%");
         txtDescrizione.setVisibleLines(5);
 
         //Checkbox per il parametro booleano isPubblica
         CheckBox chkPubblica = new CheckBox("Rendi pubblico");
+        chkPubblica.getElement().setId("chk-pubblica"); 
         chkPubblica.getElement().getStyle().setProperty("fontWeight", "bold");
         chkPubblica.setValue(true); // Impostiamo di default su true
 
         Label lblMessaggio = new Label();
+        lblMessaggio.getElement().setId("msg-wishlist");
         lblMessaggio.getElement().getStyle().setProperty("fontWeight", "bold");
         lblMessaggio.getElement().getStyle().setProperty("marginTop", "10px");
 
         Button btnSalva = new Button("💾 Aggiungi alla Wishlist");
+        btnSalva.getElement().setId("btn-aggiungi-servizio");
         btnSalva.getElement().getStyle().setProperty("background", "#ffffff");
         btnSalva.getElement().getStyle().setProperty("color", "#1b263b");
         btnSalva.getElement().getStyle().setProperty("padding", "10px 20px");

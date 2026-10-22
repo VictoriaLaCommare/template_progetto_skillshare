@@ -91,6 +91,16 @@
       <url-pattern>/app/wishlist</url-pattern>
     </servlet-mapping>
 
+  <servlet>
+    <servlet-name>matchmakingServlet</servlet-name>
+    <servlet-class>it.unibo.MatchmakingServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>matchmakingServlet</servlet-name>
+    <url-pattern>/app/matchmaking</url-pattern>
+  </servlet-mapping>
+
 </web-app>
 
 

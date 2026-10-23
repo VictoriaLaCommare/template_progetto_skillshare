@@ -7,8 +7,7 @@ import java.io.File;
 public class DatabaseCore {
 
     private static DB db;
-    private static boolean testMode = false;
-
+    private static boolean testMode = Boolean.getBoolean("db.testmode"); //modifica necessaria per impedire i problemi con la serializzazione
     // Blocco statico di inizializzazione: apre il database una sola volta all'avvio della classe
     static {
         inizializzaDB();

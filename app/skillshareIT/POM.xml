@@ -136,6 +136,9 @@
                     <stopKey>${app.stopKey}</stopKey>
                     <stopPort>${app.stopPort}</stopPort>
                     <stopWait>5</stopWait>
+                    <systemProperties>
+                        <db.testmode>true</db.testmode>
+                    </systemProperties>
                 </configuration>
                 <executions>
                     <execution>

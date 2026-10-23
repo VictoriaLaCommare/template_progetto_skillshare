@@ -90,8 +90,20 @@ public class MiaWishlistGUI {
                     return;
                 }
 
-                for (ServizioRichiesto w : wishlist) {
-                    listaPanel.add(creaCard(w));
+                for(ServizioRichiesto w : wishlist){
+                    //Crea contenitore per raggruppare la wishlist e i suoi suggerimenti
+                    VerticalPanel bloccoWishlist = new VerticalPanel();
+                    bloccoWishlist.setWidth("100%");
+                    
+                    // Aggiunge la tua card originale
+                    bloccoWishlist.add(creaCard(w));
+                    
+                    // Aggiunge sotto i profili suggeriti per QUEL tag
+                    ProfiliSuggeritiWidget suggerimenti = new ProfiliSuggeritiWidget(utenteLoggato.getMail(), w.getTagCompetenza());
+                    bloccoWishlist.add(suggerimenti);
+                    
+                    // Aggiunge tutto alla lista principale
+                    listaPanel.add(bloccoWishlist);
                 }
             }
         });

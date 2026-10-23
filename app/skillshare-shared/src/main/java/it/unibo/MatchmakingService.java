@@ -12,4 +12,7 @@ public interface MatchmakingService extends RemoteService {
     
     //Salva il profilo tra i preferiti dell'utente
     Boolean salvaProfilo(String mailUtente, String mailProfiloSalvato) throws Exception;
+
+    //Restituisce le mail dei profili che l'utente ha già salvato   
+    List<String> getProfiliSalvati(String mailUtente) throws Exception;  
 }

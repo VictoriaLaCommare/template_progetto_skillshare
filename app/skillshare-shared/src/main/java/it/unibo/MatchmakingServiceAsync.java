@@ -8,4 +8,6 @@ public interface MatchmakingServiceAsync {
     void trovaProfiliCompatibili(String mailUtente, String tagRicercato, AsyncCallback<List<Utente>> callback);
     
     void salvaProfilo(String mailUtente, String mailProfiloSalvato, AsyncCallback<Boolean> callback);
+
+    void getProfiliSalvati(String mailUtente, AsyncCallback<List<String>> callback);
 }

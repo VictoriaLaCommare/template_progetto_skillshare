@@ -98,8 +98,7 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
     @Override
     public Boolean salvaProfilo(String mailUtente, String mailProfiloSalvato) throws Exception {
         initDb(); 
-        try {
-            if (mailUtente == null || mailUtente.isEmpty()) {
+        if (mailUtente == null || mailUtente.isEmpty()) {
                 throw new Exception("Mail utente non valida");
             }
 
@@ -109,10 +108,13 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
             if (mailUtente.equals(mailProfiloSalvato)) {
                 throw new Exception("Non puoi salvare il tuo stesso profilo");
             }
+            
+
+        try {
             if (!utentiDB.containsKey(mailProfiloSalvato)) {
                 throw new Exception("Profilo non trovato");
             }
-
+            
             //Recupero la lista dei profili salvati. Se è nulla la creo.
             ArrayList<String> salvati = preferenzeDB.get(mailUtente);
             if (salvati == null) {

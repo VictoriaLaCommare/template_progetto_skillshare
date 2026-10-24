@@ -1,5 +1,6 @@
 package it.unibo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
  (livello, tag) che il server popola tramite la catena di Decorator
  prima di spedirla al client.*/
 public class StatisticheUtente implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private String  username;
     private int     scambiCompletati  = 0;

@@ -172,6 +172,17 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
             // Associa la recensione alla richiesta nel DB
             RichiestaScambio richiesta = mappaRichieste.get(idRichiesta);
             if(richiesta.getStato().equalsIgnoreCase("completato")){
+                // il recensito deve far parte dello scambio; il recensore è l'altra parte
+                if (!usernameRecensito.equals(richiesta.getRichiedente()) && !usernameRecensito.equals(richiesta.getRicevente())) {
+                    return false;
+                }
+                String recensore = usernameRecensito.equals(richiesta.getRicevente())
+                        ? richiesta.getRichiedente() : richiesta.getRicevente();
+
+                // una sola recensione per utente
+                if (richiesta.isRecensioneInviata(recensore)) return false;
+                
+                richiesta.setRecensioneInviata(recensore);
                 richiesta.aggiungiRecensione(recensione);
                 mappaRichieste.put(idRichiesta, richiesta);
                 DatabaseCore.commit();

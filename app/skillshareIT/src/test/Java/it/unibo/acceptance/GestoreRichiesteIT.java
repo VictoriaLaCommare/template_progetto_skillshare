@@ -113,7 +113,7 @@ public class GestoreRichiesteIT {
         navBtnRichieste.click();
 
         WebElement bannerTitolo = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']"))
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']"))
         );
         assertNotNull(bannerTitolo, "Il titolo della schermata Le Mie Richieste deve essere visibile");
     }
@@ -121,7 +121,7 @@ public class GestoreRichiesteIT {
     // Scenario 2 – Attesa di conferma dalla controparte
 
     @Test
-    @DisplayName("Scenario 2 – Prima conferma: sistema registra e mostra attesa della controparte")
+    @DisplayName("Scenario 2: Prima conferma: sistema registra e mostra attesa della controparte")
     void testTA2_AttesaConfermaControparte() {
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
         RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
@@ -184,16 +184,17 @@ public class GestoreRichiesteIT {
     // Scenario 1 – Chiusura definitiva dello scambio
 
     @Test
-    @DisplayName("TA1 – Chiusura definitiva: entrambe le conferme portano a Completato")
-    void testTA1_ChiusuraDefinitiva() {
+    @DisplayName(" Chiusura definitiva: entrambe le conferme portano a Completato")
+    void ChiusuraDefinitiva() {
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
         RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
 
         //Setup: User1 (ricevente/autore) crea annuncio
         registrazionePage.apri(BASE_URL).vaiAlFormRegistrazione();
         emailUtente1 = "u1ta1_" + System.currentTimeMillis() + "@example.com";
+        String usernameU1 = "u1ta1_" + System.currentTimeMillis();
         registrazionePage
-                .compila("Mario", "Rossi", "u1ta1_" + System.currentTimeMillis(), emailUtente1, "01/01/2000", "password123")
+                .compila("Mario", "Rossi", usernameU1, emailUtente1, "01/01/2000", "password123")
                 .registrati();
         registrazionePage.compilaLogin(emailUtente1, "password123").accedi();
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
@@ -208,10 +209,11 @@ public class GestoreRichiesteIT {
                 .compila("Luigi", "Verdi", "u2ta1_" + System.currentTimeMillis(), emailUtente2, "01/01/1995", "password456")
                 .registrati();
         registrazionePage.compilaLogin(emailUtente2, "password456").accedi();
+
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte")));
         driver.findElement(By.id("nav-btn-proposte")).click();
         BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
-        bachecaPage.cliccaRichiediScambio();
+        bachecaPage.cliccaRichiediScambioDi(usernameU1);   // così evita gli altri annunci
         bachecaPage.getTestoAlertEAccetta();
         driver.findElement(By.id("nav-btn-logout")).click();
 
@@ -252,4 +254,5 @@ public class GestoreRichiesteIT {
                 "Dopo il completamento non devono esserci pulsanti di terminazione attivi");
 
     }
+
 }

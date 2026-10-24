@@ -91,13 +91,55 @@ public class ProfiloUtenteGUI {
         String tagCompetenze = utenteTarget.getTagCompetenze() != null ? utenteTarget.getTagCompetenze() : "Nessuna competenza specificata";
         profiloPanel.add(new HTML("<p style='color: #555; text-align: center;'>" + tagCompetenze + "</p>"));
 
+        // Sezione Tag di livello e recensione
+        profiloPanel.add(new HTML("<hr style='width:80%; margin:15px 0;'/>"));
+
+        Label lblCaricamentoStats = new Label("Caricamento statistiche...");
+        profiloPanel.add(lblCaricamentoStats);
+
+        profiloService.ottieniStatistiche(utenteTarget.getUsername(), new AsyncCallback<StatisticheUtente>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                lblCaricamentoStats.setText("Statistiche non disponibili.");
+            }
+
+            @Override
+            public void onSuccess(StatisticheUtente stats) {
+                lblCaricamentoStats.setText("");
+
+                // Livello e scambi
+                profiloPanel.add(new HTML(
+                        "<p style='text-align:center; font-size:18px;'>" + stats.getLivello() + "</p>" +
+                                "<p style='text-align:center; color:#555;'>Scambi completati: " + stats.getScambiCompletati() + "</p>" +
+                                "<p style='text-align:center; color:#555;'>Media recensioni: " +
+                                 stats.getMediaRecensioni() + " / 5</p>"
+                ));
+
+                // Tag assegnati dai Decorator
+                if (!stats.getTag().isEmpty()) {
+                    HorizontalPanel tagPanel = new HorizontalPanel();
+                    tagPanel.setSpacing(5);
+                    for (String tag : stats.getTag()) {
+                        tagPanel.add(new HTML(
+                                "<span style='background:#1b263b; color:white; padding:3px 8px;" +
+                                        "border-radius:12px; font-size:12px;'>" + tag + "</span>"
+                        ));
+                    }
+                    profiloPanel.add(tagPanel);
+                }
+
+                popup.center(); // ricalcola dimensioni popup
+            }
+        });
+
+
         // Storico scambi
         profiloPanel.add(new HTML("<hr style='width: 80%; margin: 30px 0 15px 0;' />"));
 
         // Bottone per mostrare lo storico degli scambi
         Button btnMostraStorico = new Button("Visualizza Storico Scambi");
         btnMostraStorico.getElement().setId("btn-mostra-storico");
-        
+
         VerticalPanel storicoContainer = new VerticalPanel();
         storicoContainer.setWidth("80%");
         storicoContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);

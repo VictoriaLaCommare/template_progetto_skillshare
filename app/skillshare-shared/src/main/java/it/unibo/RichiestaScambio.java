@@ -1,8 +1,12 @@
 package it.unibo;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class RichiestaScambio implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String idRichiesta;
     private String idAnnuncio;
     private String richiedente;
@@ -10,7 +14,20 @@ public class RichiestaScambio implements Serializable {
     private StatoRichiesta stato;
     private boolean confermataTerminazioneRichiedente = false;
     private boolean confermataTerminazioneRicevente = false;
+
     private Recensione recensione;
+    private boolean recensioneInviataRichiedente = false;
+    private boolean recensioneInviataRicevente = false;
+
+    // true se questo utente ha già lasciato la sua recensione
+    public boolean isRecensioneInviata(String nomeutente) {
+        return nomeutente.equals(richiedente) ? recensioneInviataRichiedente : recensioneInviataRicevente;
+    }
+
+    public void setRecensioneInviata(String nomeutente) {
+        if (nomeutente.equals(richiedente)) recensioneInviataRichiedente = true;
+        else recensioneInviataRicevente = true;
+    }
 
     @SuppressWarnings("unused")
     private RichiestaScambio() {

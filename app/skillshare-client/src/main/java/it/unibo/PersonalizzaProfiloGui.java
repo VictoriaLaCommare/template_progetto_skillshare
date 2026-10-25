@@ -33,9 +33,27 @@ public class PersonalizzaProfiloGui {
     public void mostra(Utente utenteLoggato) {
         VerticalPanel panel = new VerticalPanel();
         panel.setSpacing(10);
+        panel.setWidth("90%");                                                     
+        panel.getElement().getStyle().setProperty("margin", "20px auto");          
+        panel.add(new AppNavbar(utenteLoggato, "profilo"));                      
 
         panel.add(new HTML("<h1 style=\"background-color:rgb(0,100,100);color:rgb(0,0,255);\"> <em>Personalizza il tuo Profilo</em></h1> <p>Aggiorna i tuoi dati per farti conoscere meglio dalla community!</p>\n"));
 
+        //Bottone per passare alla vista di visualizzazione del proprio profilo
+        Button btnVisualizzaProfilo = new Button("👀 Visualizza il mio profilo pubblico");
+        btnVisualizzaProfilo.getElement().setId("btn-vai-a-visualizza-profilo");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("color", "#ffffff");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("padding", "8px 15px");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("borderRadius", "4px");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("cursor", "pointer");
+        
+        btnVisualizzaProfilo.addClickHandler(event -> {
+            //Apre il popup/vista del profilo passando l'utente loggato e il proprio username
+            new ProfiloUtenteGUI().mostra(utenteLoggato, utenteLoggato.getUsername());
+        });
+
+        panel.add(btnVisualizzaProfilo);
 
         //Inseriamo la bio in una TextArea
         TextArea txtBio = new TextArea();

@@ -1,6 +1,5 @@
 package it.unibo;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 public class AppNavbar extends Composite {
@@ -76,7 +75,8 @@ public class AppNavbar extends Composite {
         // 7. Profilo
         Button btnProfilo = creaPannelloStileLink("👤 Profilo");
         btnProfilo.getElement().setId("nav-btn-profilo"); 
-        btnProfilo.addClickHandler(event -> Window.alert("Utente loggato: " + utenteLoggato.getNome() + " " + utenteLoggato.getCognome()));
+        if ("profilo".equals(paginaAttiva)) evidenziaBottone(btnProfilo);
+        btnProfilo.addClickHandler(event -> new ProfiloUtenteGUI().mostra(utenteLoggato, utenteLoggato.getUsername()));
 
         // 8. Logout
         Button btnLogout = creaPannelloStileLink("↩️ Logout");

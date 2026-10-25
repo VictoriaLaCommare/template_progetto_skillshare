@@ -38,7 +38,7 @@ public class ProfiloUtenteGUI {
             public void onFailure(Throwable caught) {
                 lblStato.setText("Errore nel caricamento del profilo: " + caught.getMessage());
                 lblStato.getElement().getStyle().setColor("red");
-                aggiungiTastoChiudi(mainPanel, popup);
+                aggiungiTastoChiudi(mainPanel, popup, utenteLoggato, null);
             }
 
             @Override
@@ -46,12 +46,12 @@ public class ProfiloUtenteGUI {
                 lblStato.setText(""); // Rimuovi il messaggio di caricamento
                 if (utenteTarget == null) {
                     mainPanel.add(new Label("Profilo non trovato."));
-                    aggiungiTastoChiudi(mainPanel, popup);
+                    aggiungiTastoChiudi(mainPanel, popup, utenteLoggato, null);
                     popup.center();
                     return;
                 }
 
-                costruisciProfiloPanel(mainPanel, utenteTarget, popup);
+                costruisciProfiloPanel(mainPanel, utenteTarget, popup, utenteLoggato);
 
                 popup.center();
             }
@@ -62,7 +62,7 @@ public class ProfiloUtenteGUI {
         popup.center();
     }
 
-    private void costruisciProfiloPanel(VerticalPanel profiloPanel, Utente utenteTarget, PopupPanel popup) {
+    private void costruisciProfiloPanel(VerticalPanel profiloPanel, Utente utenteTarget, PopupPanel popup, Utente utenteLoggato) {
 
         // Foto profilo
         String urlFoto = utenteTarget.getImmagineProfilo();
@@ -147,7 +147,7 @@ public class ProfiloUtenteGUI {
         profiloPanel.add(btnMostraStorico);
         profiloPanel.add(storicoContainer);
 
-        aggiungiTastoChiudi(profiloPanel, popup);
+        aggiungiTastoChiudi(profiloPanel, popup, utenteLoggato, utenteTarget);
 
         btnMostraStorico.addClickHandler(event -> {
             btnMostraStorico.setEnabled(false);
@@ -215,14 +215,37 @@ public class ProfiloUtenteGUI {
         });
     }
 
-    private void aggiungiTastoChiudi(VerticalPanel panel, PopupPanel popup) {
+    private void aggiungiTastoChiudi(VerticalPanel panel, PopupPanel popup, Utente utenteLoggato, Utente utenteTarget) {
+        HorizontalPanel bottoniPanel = new HorizontalPanel();
+        bottoniPanel.setSpacing(10);
+        bottoniPanel.getElement().getStyle().setProperty("marginTop", "15px");
+
+        // Se l'utente visualizzato è l'utente loggato, mostriamo anche il tasto per andare alla modifica
+        if (utenteLoggato != null && utenteTarget != null && utenteLoggato.getMail().equals(utenteTarget.getMail())) {
+            Button btnModifica = new Button("✏️ Modifica Profilo");
+            btnModifica.getElement().setId("btn-vai-a-modifica-profilo");
+            btnModifica.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
+            btnModifica.getElement().getStyle().setProperty("color", "#ffffff");
+            btnModifica.getElement().getStyle().setProperty("padding", "6px 15px");
+            btnModifica.getElement().getStyle().setProperty("cursor", "pointer");
+            btnModifica.getElement().getStyle().setProperty("borderRadius", "4px");
+            
+            btnModifica.addClickHandler(event -> {
+                popup.hide(); // Chiude il popup attuale
+                new PersonalizzaProfiloGui().mostra(utenteLoggato); // Apre la schermata di personalizzazione
+            });
+            bottoniPanel.add(btnModifica);
+        }
+
         Button btnChiudi = new Button("Chiudi");
         btnChiudi.addClickHandler(event -> popup.hide());
         btnChiudi.getElement().setId("btn-chiudi-profilo");
-        btnChiudi.getElement().getStyle().setProperty("marginTop", "15px");
         btnChiudi.getElement().getStyle().setProperty("padding", "6px 20px");
         btnChiudi.getElement().getStyle().setProperty("cursor", "pointer");
-        panel.add(btnChiudi);
+        bottoniPanel.add(btnChiudi);
+
+        panel.add(bottoniPanel);
+        panel.setCellHorizontalAlignment(bottoniPanel, HasHorizontalAlignment.ALIGN_CENTER);
     }
     
 }

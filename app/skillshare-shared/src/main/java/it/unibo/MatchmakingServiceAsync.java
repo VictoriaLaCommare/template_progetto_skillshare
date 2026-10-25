@@ -9,5 +9,7 @@ public interface MatchmakingServiceAsync {
     
     void salvaProfilo(String mailUtente, String mailProfiloSalvato, AsyncCallback<Boolean> callback);
 
+    void rimuoviProfilo(String mailUtente, String mailProfiloRimosso, AsyncCallback<Boolean> callback);
+
     void getProfiliSalvati(String mailUtente, AsyncCallback<List<String>> callback);
 }

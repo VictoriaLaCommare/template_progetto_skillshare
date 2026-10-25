@@ -106,4 +106,29 @@ public class MatchmakingServiceImplTest {
         //Verifica che il messaggio di errore sia quello previsto
         assertEquals("Non puoi salvare il tuo stesso profilo", exception.getMessage());
     }
+
+    @Test
+    void testRimuoviProfilo_Successo() throws Exception {
+        // Preparazione: Anna salva il profilo di Marco
+        matchmakingService.salvaProfilo("anna@unibo.it", "marco@unibo.it");
+        
+        // Esecuzione: Anna deseleziona il profilo di Marco
+        Boolean risultato = matchmakingService.rimuoviProfilo("anna@unibo.it", "marco@unibo.it");
+        
+        // Verifica: Il metodo deve restituire true
+        assertTrue(risultato, "La rimozione deve restituire true");
+
+        // Verifica: Marco non deve più essere nella lista dei salvati di Anna
+        List<String> salvati = matchmakingService.getProfiliSalvati("anna@unibo.it");
+        assertFalse(salvati.contains("marco@unibo.it"), "Il profilo di Marco non deve più essere tra i salvati");
+    }
+
+    @Test
+    void testRimuoviProfilo_NonSalvato() throws Exception {
+        // Esecuzione: Anna prova a rimuovere Luigi, ma non lo ha mai salvato
+        Boolean risultato = matchmakingService.rimuoviProfilo("anna@unibo.it", "luigi@unibo.it");
+        
+        // Verifica: Il metodo deve gestire la situazione senza errori e restituire false
+        assertFalse(risultato, "La rimozione di un profilo non salvato deve restituire false");
+    }
 }

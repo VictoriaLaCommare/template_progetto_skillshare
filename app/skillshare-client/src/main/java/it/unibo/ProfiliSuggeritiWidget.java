@@ -122,10 +122,9 @@ public class ProfiliSuggeritiWidget extends Composite {
         if (giaSalvato) {
             btnSalva.setText("✅ Salvato");
             btnSalva.getElement().getStyle().setProperty("background", "#2e7d32");
-            btnSalva.setEnabled(false);
         }
 
-        btnSalva.addClickHandler(event -> salvaProfiloPreferito(profilo.getMail(), btnSalva));
+        btnSalva.addClickHandler(event -> gestisciToggleProfilo(profilo.getMail(), btnSalva));
 
         cardMatch.add(infoUtente);
         cardMatch.setCellWidth(infoUtente, "80%");
@@ -135,25 +134,54 @@ public class ProfiliSuggeritiWidget extends Composite {
         return cardMatch;
     }
 
-    private void salvaProfiloPreferito(String mailProfiloDaSalvare, Button bottone) {
+    private void gestisciToggleProfilo(String mailProfiloTarget, Button bottone) {
         bottone.setEnabled(false);
-        bottone.setText("⏳ Salvataggio...");
+        boolean isGiaSalvato = bottone.getText().contains("Salvato");
 
-        matchmakingService.salvaProfilo(mailUtenteLoggato, mailProfiloDaSalvare, new AsyncCallback<Boolean>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                bottone.setEnabled(true);
-                bottone.setText("⭐ Salva Profilo");
-                Window.alert("Errore durante il salvataggio: " + caught.getMessage());
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                if (result) {
+        if (isGiaSalvato) {
+            // L'utente è già salvato -> Dobbiamo rimuoverlo
+            bottone.setText("⏳ Rimozione...");
+            
+            matchmakingService.rimuoviProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    bottone.setEnabled(true);
                     bottone.setText("✅ Salvato");
-                    bottone.getElement().getStyle().setProperty("background", "#2e7d32"); // Diventa verde
+                    Window.alert("Errore durante la rimozione: " + caught.getMessage());
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(Boolean result) {
+                    bottone.setEnabled(true);
+                    if (result) {
+                        // Torna allo stato iniziale
+                        bottone.setText("⭐ Salva Profilo");
+                        bottone.getElement().getStyle().setProperty("background", "#1b263b");
+                    }
+                }
+            });
+        } else {
+            // L'utente non è salvato -> Dobbiamo salvarlo
+            bottone.setText("⏳ Salvataggio...");
+            
+            matchmakingService.salvaProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    bottone.setEnabled(true);
+                    bottone.setText("⭐ Salva Profilo");
+                    Window.alert("Errore durante il salvataggio: " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(Boolean result) {
+                    bottone.setEnabled(true);
+                    if (result) {
+                        // Cambia in stato salvato
+                        bottone.setText("✅ Salvato");
+                        bottone.getElement().getStyle().setProperty("background", "#2e7d32");
+                    }
+                }
+            });
+        }
     }
 }

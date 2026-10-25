@@ -136,6 +136,38 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
         }
     }
 
+    @Override
+    public Boolean rimuoviProfilo(String mailUtente, String mailProfiloRimosso) throws Exception {
+        initDb(); 
+        
+        if (mailUtente == null || mailUtente.isEmpty()) {
+            throw new Exception("Mail utente non valida");
+        }
+        if (mailProfiloRimosso == null || mailProfiloRimosso.isEmpty()) {
+            throw new Exception("Mail del profilo da rimuovere non valida");
+        }
+
+        try {
+            // Recupera la lista dei profili salvati dalla mappa delle preferenze
+            ArrayList<String> salvati = preferenzeDB.get(mailUtente);
+            
+            if (salvati != null && salvati.contains(mailProfiloRimosso)) {
+                salvati.remove(mailProfiloRimosso);
+                
+                //Aggiorna la lista nel database e conferma la transazione
+                preferenzeDB.put(mailUtente, salvati);
+                DatabaseCore.commit();
+                return true;
+            }
+            
+            return false; //Il profilo non era tra i salvati
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Errore durante la rimozione del profilo", e);
+        }
+    }
+
     private Set<String> normalizzaTag(String tag) {
         Set<String> risultato = new LinkedHashSet<>();
         if (tag == null) {

@@ -40,7 +40,7 @@ public class PubblicaAnnunciGui {
         VerticalPanel panel = new VerticalPanel();
         panel.setSpacing(15);
         panel.setWidth("100%");
-        panel.getElement().getStyle().setProperty("margin", "20px auto");
+        //panel.getElement().getStyle().setProperty("margin", "20px auto");
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         // Aggiungiamo la Navbar centralizzata in cima

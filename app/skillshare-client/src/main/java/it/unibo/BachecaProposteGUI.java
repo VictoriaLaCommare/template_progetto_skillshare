@@ -20,7 +20,6 @@ public class BachecaProposteGUI {
         VerticalPanel pannelloPrincipale = new VerticalPanel();
         pannelloPrincipale.setSpacing(15);
         pannelloPrincipale.setWidth("100%");
-        pannelloPrincipale.getElement().getStyle().setProperty("margin", "20px auto");
         pannelloPrincipale.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         
         // Aggiungiamo la Navbar centralizzata in cima

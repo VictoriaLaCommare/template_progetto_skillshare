@@ -108,8 +108,8 @@ public class ProfiliSuggeritiWidget extends Composite {
         );
         infoUtente.setWidth("100%");
 
-        Button btnSalva = new Button("⭐ Salva Profilo");
-        btnSalva.getElement().getStyle().setProperty("background", "#1b263b");
+        Button btnSalva = new Button("🤍");
+        btnSalva.getElement().getStyle().setProperty("background", "#ffffff00");
         btnSalva.getElement().getStyle().setProperty("color", "#ffffff");
         btnSalva.getElement().getStyle().setProperty("border", "none");
         btnSalva.getElement().getStyle().setProperty("padding", "8px 15px");
@@ -120,8 +120,8 @@ public class ProfiliSuggeritiWidget extends Composite {
 
         // Profilo già salvato in precedenza: lo mostro subito come tale
         if (giaSalvato) {
-            btnSalva.setText("✅ Salvato");
-            btnSalva.getElement().getStyle().setProperty("background", "#2e7d32");
+            btnSalva.setText("❤️");
+            btnSalva.getElement().getStyle().setProperty("background", "#ffffff00");
         }
 
         btnSalva.addClickHandler(event -> gestisciToggleProfilo(profilo.getMail(), btnSalva));
@@ -136,17 +136,17 @@ public class ProfiliSuggeritiWidget extends Composite {
 
     private void gestisciToggleProfilo(String mailProfiloTarget, Button bottone) {
         bottone.setEnabled(false);
-        boolean isGiaSalvato = bottone.getText().contains("Salvato");
+        boolean isGiaSalvato = bottone.getText().contains("❤️");
 
         if (isGiaSalvato) {
             // L'utente è già salvato -> Dobbiamo rimuoverlo
-            bottone.setText("⏳ Rimozione...");
+            //bottone.setText("⏳ Rimozione...");
             
             matchmakingService.rimuoviProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     bottone.setEnabled(true);
-                    bottone.setText("✅ Salvato");
+                    bottone.setText("❤️");
                     Window.alert("Errore durante la rimozione: " + caught.getMessage());
                 }
 
@@ -155,20 +155,20 @@ public class ProfiliSuggeritiWidget extends Composite {
                     bottone.setEnabled(true);
                     if (result) {
                         // Torna allo stato iniziale
-                        bottone.setText("⭐ Salva Profilo");
-                        bottone.getElement().getStyle().setProperty("background", "#1b263b");
+                        bottone.setText("🤍");
+                        bottone.getElement().getStyle().setProperty("background", "#ffffff00");
                     }
                 }
             });
         } else {
             // L'utente non è salvato -> Dobbiamo salvarlo
-            bottone.setText("⏳ Salvataggio...");
+            //bottone.setText("⏳ Salvataggio...");
             
             matchmakingService.salvaProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     bottone.setEnabled(true);
-                    bottone.setText("⭐ Salva Profilo");
+                    bottone.setText("🤍");
                     Window.alert("Errore durante il salvataggio: " + caught.getMessage());
                 }
 
@@ -177,8 +177,8 @@ public class ProfiliSuggeritiWidget extends Composite {
                     bottone.setEnabled(true);
                     if (result) {
                         // Cambia in stato salvato
-                        bottone.setText("✅ Salvato");
-                        bottone.getElement().getStyle().setProperty("background", "#2e7d32");
+                        bottone.setText("❤️");
+                        bottone.getElement().getStyle().setProperty("background", "##ffffff00");
                     }
                 }
             });

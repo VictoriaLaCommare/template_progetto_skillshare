@@ -19,6 +19,7 @@ public class LeMieChatGUI {
         mainContainer.setWidth("90%");
         mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP); 
+        mainContainer.setSpacing(0);
 
         mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");

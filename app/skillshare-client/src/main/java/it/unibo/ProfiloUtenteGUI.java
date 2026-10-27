@@ -23,6 +23,7 @@ public class ProfiloUtenteGUI {
         mainPanel.setSpacing(15);
         mainPanel.setWidth("380px");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        mainPanel.setSpacing(0);
 
         // Titolo del profilo
         HTML titolo = new HTML("<h3 style='margin: 0; color: #1b263b; border-bottom: 2px solid #1b263b; padding-bottom: 10px; width: 100%; text-align: center;'>Profilo di " + targetUsername + "</h3>");
@@ -92,7 +93,7 @@ public class ProfiloUtenteGUI {
         profiloPanel.add(new HTML("<p style='color: #555; text-align: center;'>" + tagCompetenze + "</p>"));
 
         // Sezione Tag di livello e recensione
-        profiloPanel.add(new HTML("<hr style='width:80%; margin:15px 0;'/>"));
+        //profiloPanel.add(new HTML("<hr style='width:80%; margin:15px 0;'/>"));
 
         Label lblCaricamentoStats = new Label("Caricamento statistiche...");
         profiloPanel.add(lblCaricamentoStats);
@@ -134,7 +135,7 @@ public class ProfiloUtenteGUI {
 
 
         // Storico scambi
-        profiloPanel.add(new HTML("<hr style='width: 80%; margin: 30px 0 15px 0;' />"));
+        profiloPanel.add(new HTML("<hr style='width: 80%; margin: 10px 0 10px 0;' />"));
 
         // Bottone per mostrare lo storico degli scambi
         Button btnMostraStorico = new Button("Visualizza Storico Scambi");
@@ -225,7 +226,7 @@ public class ProfiloUtenteGUI {
             Button btnModifica = new Button("✏️ Modifica Profilo");
             btnModifica.getElement().setId("btn-vai-a-modifica-profilo");
             btnModifica.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-            btnModifica.getElement().getStyle().setProperty("color", "#ffffff");
+            btnModifica.getElement().getStyle().setProperty("color", "#000000");
             btnModifica.getElement().getStyle().setProperty("padding", "6px 15px");
             btnModifica.getElement().getStyle().setProperty("cursor", "pointer");
             btnModifica.getElement().getStyle().setProperty("borderRadius", "4px");

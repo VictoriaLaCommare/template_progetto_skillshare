@@ -160,8 +160,21 @@ public class GestisciRichiesteGUI {
                 buttonPanel.add(btnRifiuta);
                 break;
             }
+            case "rifiutata": {
+                String testoRifiuto = sonoRichiedente ? "Richiesta Annullata" : "Richiesta Rifiutata";
+                buttonPanel.add(new HTML(
+                        "<span style=\"color: red; font-weight: bold;\">" + testoRifiuto + "</span>"
+                ));
+                break;
+            }
             case "accettata": // Stesso comportamento
             case "in attesa di conferma dall'altro utente": {
+                if (stato.equals("accettata")) {
+                    buttonPanel.add(new HTML(
+                        "<span style=\"color: #28a745; font-weight: bold; margin-right: 10px;\">Richiesta Accettata!</span>"
+                    ));
+                }
+                
                 //controllo per capire se l'utente corrente ha già impostato la terminazione della richiesta
                 //sonoRichiedente e !sonoRichiedente sono mutualmente esclusivi quindi ci si ritrova sempre in uno solo dei due rami
                 boolean UtenteCorrenteHaGiaConfermato = (sonoRichiedente && req.isConfermataTerminazioneRichiedente())

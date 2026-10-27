@@ -40,7 +40,7 @@ public class AppNavbar extends Composite {
         btnBacheca.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
         
         // 2. Cerca / Proposte
-        Button btnProposte = creaPannelloStileLink("🔍 Cerca / Scambi");
+        Button btnProposte = creaPannelloStileLink("🔍 Cerca");
         btnProposte.getElement().setId("nav-btn-proposte"); 
         if ("ricerca".equals(paginaAttiva)) evidenziaBottone(btnProposte);
         btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));

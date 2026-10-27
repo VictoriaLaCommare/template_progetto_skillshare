@@ -31,19 +31,35 @@ public class PersonalizzaProfiloGui {
 
     //Riceviamo l'utente attualmente loggato -> precondizione casi d'uso
     public void mostra(Utente utenteLoggato) {
-        VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(10);
-        panel.setWidth("90%");                                                     
-        panel.getElement().getStyle().setProperty("margin", "20px auto");          
-        panel.add(new AppNavbar(utenteLoggato, "profilo"));                      
+        VerticalPanel mainContainer = new VerticalPanel();
+        mainContainer.setWidth("90%");
+        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
+        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        mainContainer.setSpacing(0);
 
-        panel.add(new HTML("<h1 style=\"background-color:rgb(0,100,100);color:rgb(0,0,255);\"> <em>Personalizza il tuo Profilo</em></h1> <p>Aggiorna i tuoi dati per farti conoscere meglio dalla community!</p>\n"));
+        VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.setWidth("100%");
+        mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        mainPanel.setSpacing(15);
+        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
+
+        if (utenteLoggato != null) {
+            mainPanel.add(new AppNavbar(utenteLoggato, "profilo"));
+        }
+
+        HTML titolo = new HTML(
+            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
+            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Personalizza il tuo Profilo</h1>" +
+            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Aggiorna i tuoi dati per farti conoscere meglio dalla community!</p>" +
+            "</div>"
+        );
+        mainPanel.add(titolo);
 
         //Bottone per passare alla vista di visualizzazione del proprio profilo
         Button btnVisualizzaProfilo = new Button("👀 Visualizza il mio profilo pubblico");
         btnVisualizzaProfilo.getElement().setId("btn-vai-a-visualizza-profilo");
         btnVisualizzaProfilo.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("color", "#ffffff");
+        btnVisualizzaProfilo.getElement().getStyle().setProperty("color", "#000000");
         btnVisualizzaProfilo.getElement().getStyle().setProperty("padding", "8px 15px");
         btnVisualizzaProfilo.getElement().getStyle().setProperty("borderRadius", "4px");
         btnVisualizzaProfilo.getElement().getStyle().setProperty("cursor", "pointer");
@@ -53,7 +69,7 @@ public class PersonalizzaProfiloGui {
             new ProfiloUtenteGUI().mostra(utenteLoggato, utenteLoggato.getUsername());
         });
 
-        panel.add(btnVisualizzaProfilo);
+        mainPanel.add(btnVisualizzaProfilo);
 
         //Inseriamo la bio in una TextArea
         TextArea txtBio = new TextArea();
@@ -154,14 +170,16 @@ public class PersonalizzaProfiloGui {
         });
 
         //Aggiunta righe al pannello centrale
-        panel.add(rowBio);
-        panel.add(rowFoto);
-        panel.add(rowTag);
-        panel.add(btnSalva);
-        panel.add(lblMessaggio);
+        mainPanel.add(rowBio);
+        mainPanel.add(rowFoto);
+        mainPanel.add(rowTag);
+        mainPanel.add(btnSalva);
+        mainPanel.add(lblMessaggio);
+
+        mainContainer.add(mainPanel);
 
         //Stampo a schermo pulendo quello che c'era prima
         RootPanel.get().clear();
-        RootPanel.get().add(panel);
+        RootPanel.get().add(mainContainer);
     }
 }

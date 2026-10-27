@@ -16,7 +16,8 @@ public class CreaWishlistGUI {
         VerticalPanel mainContainer = new VerticalPanel();
         mainContainer.setWidth("90%");
         mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
-        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP); 
+        mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        mainContainer.setSpacing(0);
 
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");

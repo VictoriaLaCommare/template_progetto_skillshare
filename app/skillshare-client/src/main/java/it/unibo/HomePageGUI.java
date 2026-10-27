@@ -152,14 +152,53 @@ public class HomePageGUI {
 
         for (int i = 0; i < numeroDaMostrare; i++) {
             Annuncio a = annunci.get(i);
-            HTML cardAnnuncio = new HTML(
-                "<div style=\"background: #f8f9fa; border-left: 4px solid #1b263b; padding: 12px 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);\">" +
-                "<b style=\"font-size: 16px; color: #1b263b;\">" + a.getTitolo() + "</b> <span style=\"color: #666; font-size: 13px;\">(Autore: " + a.getAutoreUsername() + ")</span><br/>" +
-                "<span style=\"color: #333;\"><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span><br/>" +
-                "<p style=\"margin: 5px 0 0 0; color: #555; font-size: 14px;\"><em>" + a.getDescrizione() + "</em></p>" +
-                "</div>"
-            );
-            container.add(cardAnnuncio);
+
+            HorizontalPanel cardWrapper = new HorizontalPanel();
+            cardWrapper.setWidth("100%");
+            cardWrapper.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            cardWrapper.getElement().getStyle().setProperty("background", "#f8f9fa");
+            cardWrapper.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b");
+            cardWrapper.getElement().getStyle().setProperty("padding", "12px 15px");
+            cardWrapper.getElement().getStyle().setProperty("marginBottom", "8px");
+            cardWrapper.getElement().getStyle().setProperty("borderRadius", "4px");
+            cardWrapper.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.05)");
+
+            VerticalPanel textPanel = new VerticalPanel();
+            textPanel.setSpacing(2);
+            textPanel.setWidth("100%");
+
+            HTML lblTitolo = new HTML("<b style=\"font-size: 16px; color: #1b263b;\">" + a.getTitolo() + "</b>");
+            HTML lblCompetenze = new HTML("<span style=\"color: #333;\"><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span>");
+            HTML lblDescrizione = new HTML("<p style=\"margin: 4px 0 0 0; color: #555; font-size: 14px;\"><em>" + a.getDescrizione() + "</em></p>");
+
+            textPanel.add(lblTitolo);
+            textPanel.add(lblCompetenze);
+            textPanel.add(lblDescrizione);
+
+            Button btnAutore = new Button("👤 " + a.getAutoreUsername());
+            btnAutore.getElement().setId("link-profilo-" + a.getAutoreUsername());
+            btnAutore.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
+            btnAutore.getElement().getStyle().setProperty("color", "#000000");
+            btnAutore.getElement().getStyle().setProperty("border", "none");
+            btnAutore.getElement().getStyle().setProperty("padding", "6px 12px");
+            btnAutore.getElement().getStyle().setProperty("borderRadius", "4px");
+            btnAutore.getElement().getStyle().setProperty("cursor", "pointer");
+            btnAutore.getElement().getStyle().setProperty("fontWeight", "bold");
+            btnAutore.getElement().getStyle().setProperty("whiteSpace", "nowrap");
+
+            btnAutore.addClickHandler(e -> {
+                new ProfiloUtenteGUI().mostra(null, a.getAutoreUsername());
+            });
+
+            cardWrapper.add(textPanel);
+            cardWrapper.setCellWidth(textPanel, "80%");
+            
+            cardWrapper.add(btnAutore);
+            cardWrapper.setCellWidth(btnAutore, "20%");
+            cardWrapper.setCellHorizontalAlignment(btnAutore, HasHorizontalAlignment.ALIGN_RIGHT);
+
+            // Aggiungiamo alla lista della pagina SOLO il wrapper completo
+            container.add(cardWrapper);
         }
 
         // Se ci sono più annunci di quelli mostrati, aggiungi il pulsante "Vedi tutti"
@@ -180,7 +219,6 @@ public class HomePageGUI {
             btnVediTutti.getElement().getStyle().setProperty("margin", "10px auto");
 
             btnVediTutti.addClickHandler(event -> popolaListaAnnunciInPagina(container, annunci, annunci.size()));
-            
             
             panelBtnWrapper.add(btnVediTutti);
             

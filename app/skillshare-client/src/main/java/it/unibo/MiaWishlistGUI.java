@@ -19,6 +19,7 @@ public class MiaWishlistGUI {
         mainContainer.setWidth("90%");
         mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        mainContainer.setSpacing(0);
 
         VerticalPanel mainPanel = new VerticalPanel();
         mainPanel.setWidth("100%");
@@ -31,8 +32,8 @@ public class MiaWishlistGUI {
         }
 
         HTML titolo = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">La mia Wishlist</h1>" +
+            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
+            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">La Mia Wishlist</h1>" +
             "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Tutti i servizi che hai richiesto</p>" +
             "</div>"
         );
@@ -49,19 +50,21 @@ public class MiaWishlistGUI {
         btnAggiungi.getElement().getStyle().setProperty("fontWeight", "bold");
         btnAggiungi.getElement().getStyle().setProperty("cursor", "pointer");
         btnAggiungi.addClickHandler(event -> new CreaWishlistGUI().mostra(utenteLoggato));
-        mainPanel.add(btnAggiungi);
 
         // Contenitore delle card, riempito dopo la risposta del server
         VerticalPanel listaPanel = new VerticalPanel();
         listaPanel.getElement().setId("lista-wishlist");
         listaPanel.setWidth("50%");
         listaPanel.setSpacing(10);
+        listaPanel.setHorizontalAlignment(HasAutoHorizontalAlignment.ALIGN_CENTER);
 
         Label lblStato = new Label("Caricamento...");
         lblStato.getElement().getStyle().setProperty("fontWeight", "bold");
         listaPanel.add(lblStato);
 
         mainPanel.add(listaPanel);
+        mainPanel.add(btnAggiungi);
+
         mainContainer.add(mainPanel);
 
         RootPanel.get().clear();

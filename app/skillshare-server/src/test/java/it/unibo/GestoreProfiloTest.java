@@ -37,6 +37,7 @@ public class GestoreProfiloTest{
 
     @BeforeEach
     public void setUp() throws Exception{
+        DatabaseUtente.resetPerTest();
         // Inizializzazione finta del web server
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getServerInfo()).thenReturn("MockServer/1.0");
@@ -54,8 +55,8 @@ public class GestoreProfiloTest{
 
         //Preparazione dell'utente di test 
         utenteDiTest = new Utente("Ludovica", "Govoni");
-        utenteDiTest.setMail("ludovica.govoni@gmail.com");
-        utenteDiTest.setUsername("govonsx");
+        utenteDiTest.setMail("ludovica.govoni@gmail.com" + System.currentTimeMillis());
+        utenteDiTest.setUsername("govonsx" + System.currentTimeMillis());
         utenteDiTest.setBio("Nel tempo libero creo capi all'uncinetto");
         utenteDiTest.setTagCompetenze("Uncinetto, Maglia, Ricamo");
     }
@@ -105,6 +106,9 @@ public class GestoreProfiloTest{
     void testOttieniStoricoScambi_ConDati() throws Exception {
         
         GestoreRichiesteServiceImpl gestoreRichieste = new GestoreRichiesteServiceImpl();
+        utenteDiTest.setUsername("govonsx");
+        gestoreProfilo.aggiornaProfilo(utenteDiTest);
+
         
         // Creazione di 3 richieste diverse.
         RichiestaScambio req1 = new RichiestaScambio("", "annuncio1", "govonsx", "mario_rossi");

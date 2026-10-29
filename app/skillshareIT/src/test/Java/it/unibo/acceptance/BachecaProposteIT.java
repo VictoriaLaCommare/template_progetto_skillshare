@@ -83,7 +83,6 @@ public class BachecaProposteIT {
         // 3. Verifichiamo che la tabella delle proposte sia visibile
         assertTrue(bachecaPage.isTabellaVisibile(), "La tabella delle proposte dovrebbe essere visibile dopo la pubblicazione di un annuncio.");
         assertFalse(bachecaPage.isMessaggioVuotoVisibile(), "Il messaggio 'nessuna proposta' non dovrebbe essere visibile dopo la pubblicazione di un annuncio.");
-
     }
 
     @Test
@@ -139,9 +138,6 @@ public class BachecaProposteIT {
             BachecaPropostePage bachecaRientrata = new BachecaPropostePage(driver, TIMEOUT);
             assertTrue(bachecaRientrata.isTabellaVisibile(), "La bacheca dovrebbe essere visibile");
 
-            // La tabella viene disegnata con il bottone e sistemata solo quando arriva la risposta del server.
-            // Si aspetta la scritta prima di tentare il clic: da lì lo stato è definitivo, altrimenti
-            // il test potrebbe cliccare il bottone nell'attimo in cui esiste ancora e inviare una seconda richiesta.
             wait.until(ExpectedConditions.visibilityOfElementLocated(etichettaAttesa));
 
             // WHEN: tenta di inviare una seconda richiesta per lo stesso annuncio
@@ -158,8 +154,6 @@ public class BachecaProposteIT {
         }
     }
 
-    // Elimina l'annuncio con l'utente che lo ha pubblicato: gli altri IT cliccano il primo
-    // "Richiedi Scambio" della bacheca e non devono trovarsi annunci lasciati da questo test
     private void eliminaAnnuncioDi(String email, String password, String titolo) {
         try {
             RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT);
@@ -174,7 +168,75 @@ public class BachecaProposteIT {
                 annunciPage.eliminaAnnuncio(titolo);
             }
         } catch (Exception ignored) {
-            // Pulizia best effort: se il test si è interrotto la sessione può essere in qualsiasi stato
+            // Pulizia best effort
+        }
+    }
+
+    @Test
+    @DisplayName("Verifica filtraggio annunci consigliati tramite il pulsante 'Per Te' nei Filtri Avanzati")
+    void testFiltraggioAnnunciPerTe() {
+        WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+        RegistrazionePage regPage = new RegistrazionePage(driver, TIMEOUT);
+
+        String id = String.valueOf(System.currentTimeMillis());
+        String userMario = "mario_" + id;
+        String emailMario = userMario + "@test.com";
+        String userLuigi = "luigi_" + id;
+        String emailLuigi = userLuigi + "@test.com";
+        String userWario = "wario_" + id;
+        String emailWario = userWario + "@test.com";
+        String password = "passwordSicura123";
+
+        String titoloMario = "Corso Java " + id;
+        String titoloLuigi = "Pizza Napoletana " + id;
+
+        try {
+            // Logout dall'utente registrato di default nel @BeforeEach
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+
+            // 1. Mario pubblica un annuncio con competenza offerta "Informatica"
+            regPage.apri(BASE_URL).vaiAlFormRegistrazione();
+            regPage.compila("Mario", "Rossi", userMario, emailMario, "01/01/2000", password).registrati();
+            regPage.compilaLogin(emailMario, password).accedi();
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
+            new GestoreAnnunciPage(driver, TIMEOUT)
+                    .compila(titoloMario, "Insegno Java base", "Informatica", "Inglese").pubblica();
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+
+            // 2. Luigi pubblica un annuncio con competenza offerta "Cucina"
+            regPage.apri(BASE_URL).vaiAlFormRegistrazione();
+            regPage.compila("Luigi", "Verdi", userLuigi, emailLuigi, "01/01/1995", password).registrati();
+            regPage.compilaLogin(emailLuigi, password).accedi();
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
+            new GestoreAnnunciPage(driver, TIMEOUT)
+                    .compila(titoloLuigi, "Insegno impasti", "Cucina", "Spagnolo").pubblica();
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
+
+            // 3. Wario accede e aggiunge "Informatica" in Wishlist
+            regPage.apri(BASE_URL).vaiAlFormRegistrazione();
+            regPage.compila("Wario", "Bros", userWario, emailWario, "01/01/1990", password).registrati();
+            regPage.compilaLogin(emailWario, password).accedi();
+
+            WishlistPage wishlistPage = new WishlistPage(driver, TIMEOUT);
+            wishlistPage.apriDallaNavbar();
+            wishlistPage.compila("Informatica", "Java","Desidero imparare Informatica",false);
+
+            // 4. Navigazione in Bacheca e filtro "Per Te"
+            wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
+            BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
+
+            bachecaPage.cliccaAnnunciPerTe();
+
+            // 5. Asserzioni
+            assertTrue(bachecaPage.isAnnuncioPresenteInTabella(titoloMario),
+                    "L'annuncio di Mario deve apparire nei risultati 'Per Te'.");
+
+            assertFalse(bachecaPage.isAnnuncioPresenteInTabella(titoloLuigi),
+                    "L'annuncio di Luigi NON deve apparire nei risultati 'Per Te'.");
+
+        } finally {
+            eliminaAnnuncioDi(emailMario, password, titoloMario);
+            eliminaAnnuncioDi(emailLuigi, password, titoloLuigi);
         }
     }
 }

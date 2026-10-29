@@ -131,9 +131,7 @@ public class WishlistServiceImplTest {
                 "Con mail vuota il salvataggio deve fallire");
     }
 
-    // =========================================================================
     // getWishlistUtente
-    // =========================================================================
 
     @Test
     @DisplayName("Get Wishlist: utente senza wishlist riceve una lista vuota, non null")

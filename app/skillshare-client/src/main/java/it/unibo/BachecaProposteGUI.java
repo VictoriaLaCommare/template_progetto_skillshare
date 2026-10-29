@@ -118,10 +118,15 @@ public class BachecaProposteGUI {
 
         Button btnEseguiRicerca = new Button("Cerca");
         btnEseguiRicerca.getElement().setId("btn-esegui-ricerca");
+        //ricerca per preferiti
+        Button btnAnnunciPerTe = new Button("❤️ Per Te");
+        btnAnnunciPerTe.getElement().setId("btn-annunci-per-te");
+
         Button btnAnnulla = new Button("Annulla");
         btnAnnulla.getElement().setId("btn-annulla");
 
         panelBottoni.add(btnEseguiRicerca);
+        panelBottoni.add(btnAnnunciPerTe);
         panelBottoni.add(btnAnnulla);
         layoutFiltri.add(panelBottoni);
 
@@ -144,6 +149,25 @@ public class BachecaProposteGUI {
                 @Override
                 public void onSuccess(List<Annuncio> risultati) {
                     pannelloFiltri.hide();
+                    lblStato.setText("");
+                    popolaTabella(risultati, pannelloAnnunci, utenteLoggato);
+                }
+            });
+        });
+
+        btnAnnunciPerTe.addClickHandler(event -> {
+            pannelloFiltri.hide();
+            lblStato.setText("Caricamento annunci consigliati...");
+
+            rpcService.ottieniAnnunciPreferiti(utenteLoggato.getUsername(), new AsyncCallback<List<Annuncio>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    lblStato.setText("");
+                    Window.alert("Errore nel recupero degli annunci personalizzati: " + caught.getMessage());
+                }
+
+                @Override
+                public void onSuccess(List<Annuncio> risultati) {
                     lblStato.setText("");
                     popolaTabella(risultati, pannelloAnnunci, utenteLoggato);
                 }
@@ -182,7 +206,7 @@ public class BachecaProposteGUI {
         tabellaAnnunci.setHTML(0, 2, "<b>Descrizione</b>");
         tabellaAnnunci.setHTML(0, 3, "<b>Competenza Offerta</b>");
         tabellaAnnunci.setHTML(0, 4, "<b>Competenza Richiesta</b>");
-        tabellaAnnunci.setHTML(0,5, "<b>Azione</b>");
+        tabellaAnnunci.setHTML(0, 5, "<b>Azione</b>");
 
         tabellaAnnunci.getRowFormatter().getElement(0).getStyle().setProperty("backgroundColor","#1b263b");
         tabellaAnnunci.getRowFormatter().getElement(0).getStyle().setProperty("color","white");
@@ -195,7 +219,7 @@ public class BachecaProposteGUI {
 
         int riga = 1;
         for (Annuncio annuncio : listaProposte) {
-            final int rigaCorrente = riga;                // copia di riga, usabile dentro la lambda di onSucces
+            final int rigaCorrente = riga;                // copia di riga, usabile dentro la lambda di onSuccess
             rigaPerAnnuncio.put(annuncio.getId(), riga);
 
             tabellaAnnunci.setText(riga, 0, annuncio.getTitolo());

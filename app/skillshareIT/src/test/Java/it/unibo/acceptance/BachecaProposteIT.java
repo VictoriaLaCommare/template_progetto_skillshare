@@ -54,6 +54,7 @@ public class BachecaProposteIT {
         try {
             // 1. Rimozione dell'annuncio creato durante il test
             GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
+            annunciPage.apriMieiAnnunci();
             if (annunciPage.isAnnuncioPresente("Annuncio di Test Selenium")) {
                 annunciPage.eliminaAnnuncio("Annuncio di Test Selenium");
             }
@@ -219,7 +220,8 @@ public class BachecaProposteIT {
 
             WishlistPage wishlistPage = new WishlistPage(driver, TIMEOUT);
             wishlistPage.apriDallaNavbar();
-            wishlistPage.compila("Informatica", "Java","Desidero imparare Informatica",false);
+            wishlistPage.vaiAlFormAggiunta();
+            wishlistPage.compila("Informatica", "Java","Desidero imparare Informatica");
 
             // 4. Navigazione in Bacheca e filtro "Per Te"
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();

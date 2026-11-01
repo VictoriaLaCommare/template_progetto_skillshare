@@ -37,11 +37,10 @@ public class WishlistPage {
 
     //Form
 
-    public WishlistPage compila(String servizio, String tag, String descrizione, boolean pubblica) {
+    public WishlistPage compila(String servizio, String tag, String descrizione) {
         scrivi(By.id("txt-servizio"), servizio);
         scrivi(By.id("txt-tag"), tag);
         scrivi(By.id("txt-descrizione"), descrizione);
-        impostaVisibilita(pubblica);
         return this;
     }
 
@@ -93,13 +92,5 @@ public class WishlistPage {
         WebElement campo = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         campo.clear();
         campo.sendKeys(testo);
-    }
-
-    private void impostaVisibilita(boolean pubblica) {
-        WebElement input = wait.until(
-                ExpectedConditions.elementToBeClickable(By.cssSelector("#chk-pubblica input")));
-        if (input.isSelected() != pubblica) {
-            input.click();
-        }
     }
 }

@@ -1,0 +1,131 @@
+.main-panel-home {
+    width: 90%;
+    margin: 20px auto;
+    border-spacing: 0px;
+    padding: 30px;
+    font-family: Segoe UI, "Tahoma", sans-serif;
+}
+
+.banner-home div {
+    background-color: #1b263b;
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.banner-home h1 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    color: #ffffff;
+}
+
+.banner-home p {
+    margin: 0;
+    font-size: 16px;
+    color: #e0e0e0;
+}
+
+.buttonPanel-home {
+    border-spacing: 35px;
+    margin: 20px auto 10px auto;
+}
+
+.panelAccediRegistrati-home {
+    border-spacing: 6px;
+}
+
+.lblInfo-home div {
+    color: #1b263b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.lblInvito-home div {
+    text-align: center; 
+    margin: 10px 0 25px 0; 
+    font-size: 15px; 
+    color: #1b263b; 
+    font-weight: 500;
+}
+
+.titoloSezione-home h3 {
+    color: #1b263b; 
+    border-bottom: 2px solid #1b263b; 
+    padding-bottom: 5px; 
+    width: 100%; 
+    text-align: left;
+}
+
+.cardWrapper-home {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-left: 4px solid #1b263b;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.textPanel-home {
+    border-spacing: 2px;
+    width: 100%;
+}
+
+.lbl-home .lbltitolo{
+    font-size: 16px; 
+    color: #1b263b;
+}
+
+.lbl-home .contenitore{
+    color: #333;
+}
+
+.lbl-home .lbldescrizione{
+    margin: 4px 0 0 0; 
+    color: #555;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+.btnAutore-home {
+    background-color: #1b263b;
+    color: #000000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.panelBtnWrapper-home {
+    width: 100%;
+}
+
+.btnVedi-home {
+    background-color: transparent;
+    color: #1b263b;
+    border: 2px solid #1b263b;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 10px auto;
+}
+
+.btnPrincipale-home{
+    background-color: #1b263b !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    border-radius: 6px !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+

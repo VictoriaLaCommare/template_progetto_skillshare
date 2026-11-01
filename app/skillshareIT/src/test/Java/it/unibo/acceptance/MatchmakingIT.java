@@ -60,7 +60,7 @@ public class MatchmakingIT {
         // 1. Aggiungiamo un servizio in wishlist con un tag
         WishlistPage wishlist = new WishlistPage(driver, TIMEOUT);
         wishlist.apriDallaNavbar().vaiAlFormAggiunta();
-        wishlist.compila("Corso Java", "Programmazione", "Studio avanzato", true).aggiungi();
+        wishlist.compila("Corso Java", "Programmazione", "Studio avanzato").aggiungi();
         wishlist.messaggioContiene("aggiunto");
 
         // 2. Riapriamo la wishlist per visualizzare il widget del matchmaking

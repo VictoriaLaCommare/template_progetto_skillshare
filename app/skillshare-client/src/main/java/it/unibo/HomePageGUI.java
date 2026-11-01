@@ -13,36 +13,33 @@ import java.util.List;
 public class HomePageGUI {
 
     private final GestoreAutenticazioneAsync rpcService = GWT.create(GestoreAutenticazione.class);
-    private static final String COLORE_ERRORE = "2px solid #e53935";
 
     private VerticalPanel mainPanel;
 
     private void evidenzia(Widget w, boolean valido) {
         if (valido) {
-            w.getElement().getStyle().clearProperty("border");
+            w.removeStyleName("input-errore");
         } else {
-            w.getElement().getStyle().setProperty("border", COLORE_ERRORE);
+            w.addStyleName("input-errore");
         }
     }
 
     private void mostraErrore(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("red");
+        lbl.removeStyleName("testo-successo");
+        lbl.addStyleName("testo-errore");
         lbl.setText(testo);
     }
 
     private void mostraSuccesso(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("green");
+        lbl.removeStyleName("testo-errore");
+        lbl.addStyleName("testo-successo");
         lbl.setText(testo);
     }
 
     public void mostra() {
         mainPanel = new VerticalPanel();
-        mainPanel.setWidth("90%");
+        mainPanel.addStyleName("main-panel-home");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.getElement().getStyle().setProperty("margin", "20px auto");
-        mainPanel.setSpacing(0);
-        mainPanel.getElement().getStyle().setProperty("padding", "30px");
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
 
         mostraLandingPage();
 
@@ -56,43 +53,45 @@ public class HomePageGUI {
 
         // 1. Banner di benvenuto
         HTML banner = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);\">" +
-            "<h1 style=\"margin: 0 0 10px 0; font-size: 28px; color: #ffffff;\">Benvenuto in SkillShare!</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0e0e0;\">La piattaforma ideale per condividere le tue competenze e trovare aiuto nella community.</p>" +
+            "<div>" +
+            "<h1>Benvenuto in SkillShare!</h1>" +
+            "<p>La piattaforma ideale per condividere le tue competenze e trovare aiuto nella community.</p>" +
             "</div>"
         );
+        banner.addStyleName("banner-home");
         mainPanel.add(banner);
 
         // 2. Pannello con i pulsanti Accedi e Registrati
         HorizontalPanel buttonPanel = new HorizontalPanel();
-        buttonPanel.setSpacing(35);
-        buttonPanel.getElement().getStyle().setProperty("margin", "20px auto 10px auto");
+        buttonPanel.addStyleName("buttonPanel-home");
 
         // --- BLOCCO ACCEDI ---
         VerticalPanel panelAccedi = new VerticalPanel();
-        panelAccedi.setSpacing(6);
+        panelAccedi.addStyleName("panelAccediRegistrati-home");
         panelAccedi.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         Button btnVaiLogin = new Button("Accedi");
         btnVaiLogin.getElement().setId("btn-vai-login");
-        estilsaPulsantePrincipale(btnVaiLogin, "#1b263b");
+        btnVaiLogin.addStyleName("btnPrincipale-home");
         btnVaiLogin.addClickHandler(event -> mostraFormLogin());
 
-        HTML lblInfoAccedi = new HTML("<div style=\"color: #1b263b; font-size: 14px; font-weight: 600;\">Se sei già registrato</div>");      
+        HTML lblInfoAccedi = new HTML("<div>Se sei già registrato</div>");
+        lblInfoAccedi.addStyleName("lblInfo-home");
         panelAccedi.add(lblInfoAccedi);
         panelAccedi.add(btnVaiLogin);
         
         // --- BLOCCO REGISTRATI ---
         VerticalPanel panelRegistra = new VerticalPanel();
-        panelRegistra.setSpacing(6);
+        panelRegistra.addStyleName("panelAccediRegistrati-home");
         panelRegistra.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         
         Button btnVaiRegistra = new Button("Registrati");
         btnVaiRegistra.getElement().setId("btn-vai-registra");
-        estilsaPulsantePrincipale(btnVaiRegistra, "#1b263b");
+        btnVaiRegistra.addStyleName("btnPrincipale-home");
         btnVaiRegistra.addClickHandler(event -> mostraFormRegistrazione());
 
-        HTML lblInfoRegistra = new HTML("<div style=\"color: #1b263b; font-size: 14px; font-weight: 600;\">Se sei un nuovo utente</div>");       
+        HTML lblInfoRegistra = new HTML("<div>Se sei un nuovo utente</div>");   
+        lblInfoRegistra.addStyleName("lblInfo-home");
         panelRegistra.add(lblInfoRegistra);
         panelRegistra.add(btnVaiRegistra);
 
@@ -102,19 +101,20 @@ public class HomePageGUI {
 
         // 3. Testo esplicativo sotto i pulsanti
         HTML lblInvito = new HTML(
-            "<div style=\"text-align: center; margin: 10px 0 25px 0; font-size: 15px; color: #1b263b; font-weight: 500;\">" +
+            "<div>" +
             "Per pubblicare, gestire o chiedere gli scambi, entra nella community registrandoti o accedendo." +
             "</div>"
         );
+        lblInvito.addStyleName("lblInvito-home");
         mainPanel.add(lblInvito);
 
         // 4. Sezione Anteprima Annunci Pubblici con tasto "Vedi tutti"
-        HTML titoloSezione = new HTML("<h3 style=\"color: #1b263b; border-bottom: 2px solid #1b263b; padding-bottom: 5px; width: 100%; text-align: left;\">Ultimi Annunci Pubblici</h3>");
+        HTML titoloSezione = new HTML("<h3>Ultimi Annunci Pubblici</h3>");
+        titoloSezione.addStyleName("titoloSezione-home");
         mainPanel.add(titoloSezione);
 
         VerticalPanel panelListaAnteprima = new VerticalPanel();
-        panelListaAnteprima.setSpacing(8);
-        panelListaAnteprima.setWidth("100%");
+        panelListaAnteprima.addStyleName("panelListaAnteprima");
         panelListaAnteprima.add(new Label("Caricamento annunci in corso..."));
         
         mainPanel.add(panelListaAnteprima);
@@ -154,37 +154,25 @@ public class HomePageGUI {
             Annuncio a = annunci.get(i);
 
             HorizontalPanel cardWrapper = new HorizontalPanel();
-            cardWrapper.setWidth("100%");
+            cardWrapper.addStyleName("cardWrapper-home");
             cardWrapper.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-            cardWrapper.getElement().getStyle().setProperty("background", "#f8f9fa");
-            cardWrapper.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b");
-            cardWrapper.getElement().getStyle().setProperty("padding", "12px 15px");
-            cardWrapper.getElement().getStyle().setProperty("marginBottom", "8px");
-            cardWrapper.getElement().getStyle().setProperty("borderRadius", "4px");
-            cardWrapper.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.05)");
 
             VerticalPanel textPanel = new VerticalPanel();
-            textPanel.setSpacing(2);
-            textPanel.setWidth("100%");
+            textPanel.addStyleName("textPanel-home");
 
-            HTML lblTitolo = new HTML("<b style=\"font-size: 16px; color: #1b263b;\">" + a.getTitolo() + "</b>");
-            HTML lblCompetenze = new HTML("<span style=\"color: #333;\"><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span>");
-            HTML lblDescrizione = new HTML("<p style=\"margin: 4px 0 0 0; color: #555; font-size: 14px;\"><em>" + a.getDescrizione() + "</em></p>");
+            HTML lblTitolo = new HTML("<b class='lbltitolo'>" + a.getTitolo() + "</b>");
+            HTML lblCompetenze = new HTML("<span class='contenitore'><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span>");
+            HTML lblDescrizione = new HTML("<p class='lbldescrizione'><em>" + a.getDescrizione() + "</em></p>");
+            lblTitolo.addStyleName("lbl-home");
+            lblCompetenze.addStyleName("lbl-home");
+            lblDescrizione.addStyleName("lbl-home");
 
             textPanel.add(lblTitolo);
             textPanel.add(lblCompetenze);
             textPanel.add(lblDescrizione);
 
             Button btnAutore = new Button("👤 " + a.getAutoreUsername());
-            btnAutore.getElement().setId("link-profilo-" + a.getAutoreUsername());
-            btnAutore.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-            btnAutore.getElement().getStyle().setProperty("color", "#000000");
-            btnAutore.getElement().getStyle().setProperty("border", "none");
-            btnAutore.getElement().getStyle().setProperty("padding", "6px 12px");
-            btnAutore.getElement().getStyle().setProperty("borderRadius", "4px");
-            btnAutore.getElement().getStyle().setProperty("cursor", "pointer");
-            btnAutore.getElement().getStyle().setProperty("fontWeight", "bold");
-            btnAutore.getElement().getStyle().setProperty("whiteSpace", "nowrap");
+            btnAutore.addStyleName("btnAutore-home");
 
             btnAutore.addClickHandler(e -> {
                 new ProfiloUtenteGUI().mostra(null, a.getAutoreUsername());
@@ -203,20 +191,13 @@ public class HomePageGUI {
 
         // Se ci sono più annunci di quelli mostrati, aggiungi il pulsante "Vedi tutti"
         HorizontalPanel panelBtnWrapper = new HorizontalPanel();
-        panelBtnWrapper.setWidth("100%");
+        panelBtnWrapper.addStyleName("panelBtnWrapper-home");
         panelBtnWrapper.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         if (annunci.size() > limiteIniziale) {
             Button btnVediTutti = new Button("↓ Vedi tutti gli annunci (" + annunci.size() + ")");
             btnVediTutti.getElement().setId("btn-vedi-tutti");
-            btnVediTutti.getElement().getStyle().setProperty("backgroundColor", "transparent");
-            btnVediTutti.getElement().getStyle().setProperty("color", "#1b263b");
-            btnVediTutti.getElement().getStyle().setProperty("border", "2px solid #1b263b");
-            btnVediTutti.getElement().getStyle().setProperty("padding", "8px 20px");
-            btnVediTutti.getElement().getStyle().setProperty("borderRadius", "4px");
-            btnVediTutti.getElement().getStyle().setProperty("cursor", "pointer");
-            btnVediTutti.getElement().getStyle().setProperty("fontWeight", "bold");
-            btnVediTutti.getElement().getStyle().setProperty("margin", "10px auto");
+            btnVediTutti.addStyleName("btnVedi-home");
 
             btnVediTutti.addClickHandler(event -> popolaListaAnnunciInPagina(container, annunci, annunci.size()));
             
@@ -226,14 +207,7 @@ public class HomePageGUI {
         } else if (annunci.size() > 3 && limiteIniziale >= annunci.size()){
             Button btnRiduci = new Button("↑ Riduci lista");
             btnRiduci.getElement().setId("btn-riduci");
-            btnRiduci.getElement().getStyle().setProperty("backgroundColor", "transparent");
-            btnRiduci.getElement().getStyle().setProperty("color", "#1b263b");
-            btnRiduci.getElement().getStyle().setProperty("border", "2px solid #1b263b");
-            btnRiduci.getElement().getStyle().setProperty("padding", "8px 20px");
-            btnRiduci.getElement().getStyle().setProperty("borderRadius", "4px");
-            btnRiduci.getElement().getStyle().setProperty("cursor", "pointer");
-            btnRiduci.getElement().getStyle().setProperty("fontWeight", "bold");
-            btnRiduci.getElement().getStyle().setProperty("margin", "10px auto");
+            btnRiduci.addStyleName("btnVedi-home");
 
             btnRiduci.addClickHandler(event -> popolaListaAnnunciInPagina(container, annunci, 3));
             
@@ -241,19 +215,6 @@ public class HomePageGUI {
             
             container.add(panelBtnWrapper);
         }
-    }
-
-    private void estilsaPulsantePrincipale(Button btn, String colore) {
-        btn.getElement().getStyle().setProperty("backgroundColor", colore + " !important");
-        btn.getElement().getStyle().setProperty("color", "#ffffff !important");
-        btn.getElement().getStyle().setProperty("border", "none !important");
-        btn.getElement().getStyle().setProperty("padding", "12px 30px !important");
-        btn.getElement().getStyle().setProperty("borderRadius", "6px !important");
-        btn.getElement().getStyle().setProperty("fontSize", "16px !important");
-        btn.getElement().getStyle().setProperty("cursor", "pointer !important");
-        btn.getElement().getStyle().setProperty("fontWeight", "bold !important");
-        btn.getElement().getStyle().setProperty("backgroundImage", "none !important");
-        btn.getElement().getStyle().setProperty("boxShadow", "none !important");
     }
 
     // REGISTRAZIONE 
@@ -271,9 +232,9 @@ public class HomePageGUI {
         txtNome.getElement().setPropertyString("placeholder", "Nome");
         txtNome.getElement().setId("reg-nome");
         Label errNome = new Label();
-        errNome.getElement().getStyle().setColor("red");
+        errNome.addStyleName("testo-errore");
         HorizontalPanel rowNome = new HorizontalPanel();
-        rowNome.setSpacing(5);
+        rowNome.addStyleName("form-row");
         rowNome.add(txtNome);
         rowNome.add(errNome);
 
@@ -282,9 +243,9 @@ public class HomePageGUI {
         txtCognome.getElement().setPropertyString("placeholder", "Cognome");
         txtCognome.getElement().setId("reg-cognome");
         Label errCognome = new Label();
-        errCognome.getElement().getStyle().setColor("red");
+        errCognome.addStyleName("testo-errore");
         HorizontalPanel rowCognome = new HorizontalPanel();
-        rowCognome.setSpacing(5);
+        rowCognome.addStyleName("form-row");
         rowCognome.add(txtCognome);
         rowCognome.add(errCognome);
 
@@ -293,9 +254,9 @@ public class HomePageGUI {
         txtUser.getElement().setPropertyString("placeholder", "Username");
         txtUser.getElement().setId("reg-username");
         Label errUser = new Label();
-        errUser.getElement().getStyle().setColor("red");
+        errUser.addStyleName("testo-errore");
         HorizontalPanel rowUser = new HorizontalPanel();
-        rowUser.setSpacing(5);
+        rowUser.addStyleName("form-row");
         rowUser.add(txtUser);
         rowUser.add(errUser);
 
@@ -304,9 +265,9 @@ public class HomePageGUI {
         txtMail.getElement().setPropertyString("placeholder", "Email");
         txtMail.getElement().setId("reg-mail");
         Label errMail = new Label();
-        errMail.getElement().getStyle().setColor("red");
+        errMail.addStyleName("testo-errore");
         HorizontalPanel rowMail = new HorizontalPanel();
-        rowMail.setSpacing(5);
+        rowMail.addStyleName("form-row");
         rowMail.add(txtMail);
         rowMail.add(errMail);
 
@@ -321,9 +282,9 @@ public class HomePageGUI {
         dateNascitaBox.getElement().setPropertyString("placeholder", "Data di nascita (gg/mm/aaaa)");
         dateNascitaBox.getElement().setId("reg-data");
         Label errData = new Label();
-        errData.getElement().getStyle().setColor("red");
+        errData.addStyleName("testo-errore");
         HorizontalPanel rowData = new HorizontalPanel();
-        rowData.setSpacing(5);
+        rowData.addStyleName("form-row");
         rowData.add(dateNascitaBox);
         rowData.add(errData);
 
@@ -332,9 +293,9 @@ public class HomePageGUI {
         txtPass.getElement().setPropertyString("placeholder", "Password");
         txtPass.getElement().setId("reg-password");
         Label errPass = new Label();
-        errPass.getElement().getStyle().setColor("red");
+        errPass.addStyleName("testo-errore");
         HorizontalPanel rowPass = new HorizontalPanel();
-        rowPass.setSpacing(5);
+        rowPass.addStyleName("form-row");
         rowPass.add(txtPass);
         rowPass.add(errPass);
 
@@ -482,7 +443,7 @@ public class HomePageGUI {
         errLoginMail.getElement().getStyle().setColor("red");
         errLoginMail.getElement().setId("login-mail-error");
         HorizontalPanel rowLoginMail = new HorizontalPanel();
-        rowLoginMail.setSpacing(5);
+        rowLoginMail.addStyleName("form-row");
         rowLoginMail.add(txtLoginMail);
         rowLoginMail.add(errLoginMail);
 
@@ -493,7 +454,7 @@ public class HomePageGUI {
         errLoginPassword.getElement().getStyle().setColor("red");
         errLoginPassword.getElement().setId("login-password-error");
         HorizontalPanel rowLoginPassword = new HorizontalPanel();
-        rowLoginPassword.setSpacing(5);
+        rowLoginPassword.addStyleName("form-row");
         rowLoginPassword.add(txtLoginPassword);
         rowLoginPassword.add(errLoginPassword);
 

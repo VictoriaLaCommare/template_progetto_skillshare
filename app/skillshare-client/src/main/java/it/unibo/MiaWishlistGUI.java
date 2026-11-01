@@ -16,50 +16,41 @@ public class MiaWishlistGUI {
         this.utenteLoggato = utente;
 
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("90%");
-        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        mainContainer.setSpacing(0);
+        mainContainer.addStyleName("mainContainer");
 
         VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.setWidth("100%");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(15);
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
+        mainPanel.addStyleName("pannelloPrincipale");
 
         if (utenteLoggato != null) {
             mainPanel.add(new AppNavbar(utenteLoggato, "wishlist"));
         }
 
         HTML titolo = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">La Mia Wishlist</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Tutti i servizi che hai richiesto</p>" +
+            "<div>" +
+            "<h1>La Mia Wishlist</h1>" +
+            "<p>Tutti i servizi che hai richiesto</p>" +
             "</div>"
         );
+        titolo.addStyleName("stylePannello");
+
         mainPanel.add(titolo);
 
         //Collegamento all'interfaccia per aggiungere servizi alla wishlist
         Button btnAggiungi = new Button("➕ Aggiungi servizio");
         btnAggiungi.getElement().setId("btn-vai-aggiungi-servizio");
-        btnAggiungi.getElement().getStyle().setProperty("background", "#ffffff");
-        btnAggiungi.getElement().getStyle().setProperty("color", "#1b263b");
-        btnAggiungi.getElement().getStyle().setProperty("border", "2px solid #1b263b");
-        btnAggiungi.getElement().getStyle().setProperty("padding", "10px 20px");
-        btnAggiungi.getElement().getStyle().setProperty("borderRadius", "4px");
-        btnAggiungi.getElement().getStyle().setProperty("fontWeight", "bold");
-        btnAggiungi.getElement().getStyle().setProperty("cursor", "pointer");
+        btnAggiungi.addStyleName("btnAggiungi-wishlist");
         btnAggiungi.addClickHandler(event -> new CreaWishlistGUI().mostra(utenteLoggato));
 
         // Contenitore delle card, riempito dopo la risposta del server
         VerticalPanel listaPanel = new VerticalPanel();
         listaPanel.getElement().setId("lista-wishlist");
-        listaPanel.setWidth("50%");
-        listaPanel.setSpacing(10);
         listaPanel.setHorizontalAlignment(HasAutoHorizontalAlignment.ALIGN_CENTER);
+        listaPanel.addStyleName("listaPanel-wishlist");
 
         Label lblStato = new Label("Caricamento...");
-        lblStato.getElement().getStyle().setProperty("fontWeight", "bold");
+        lblStato.addStyleName("lbl-wishlist");
         listaPanel.add(lblStato);
 
         mainPanel.add(listaPanel);
@@ -78,7 +69,7 @@ public class MiaWishlistGUI {
             @Override
             public void onFailure(Throwable caught) {
                 lblStato.setText("Errore nel caricamento: " + caught.getMessage());
-                lblStato.getElement().getStyle().setProperty("color", "red");
+                lblStato.addStyleName("testo-errore");
             }
 
             @Override
@@ -88,7 +79,7 @@ public class MiaWishlistGUI {
                 if (wishlist == null || wishlist.isEmpty()) {
                     Label vuoto = new Label("Wishlist vuota.");
                     vuoto.getElement().setId("msg-wishlist-vuota");
-                    vuoto.getElement().getStyle().setProperty("fontWeight", "bold");
+                    vuoto.addStyleName("lbl-wishlist");
                     listaPanel.add(vuoto);
                     return;
                 }
@@ -96,7 +87,7 @@ public class MiaWishlistGUI {
                 for(ServizioRichiesto w : wishlist){
                     //Crea contenitore per raggruppare la wishlist e i suoi suggerimenti
                     VerticalPanel bloccoWishlist = new VerticalPanel();
-                    bloccoWishlist.setWidth("100%");
+                    bloccoWishlist.addStyleName("larghezzaMax");
                     
                     // Aggiunge la tua card originale
                     bloccoWishlist.add(creaCard(w));
@@ -117,18 +108,17 @@ public class MiaWishlistGUI {
         String servizio = SafeHtmlUtils.htmlEscape(w.getNomeServizio());
         String tag = SafeHtmlUtils.htmlEscape(w.getTagCompetenza());
         String descrizione = SafeHtmlUtils.htmlEscape(w.getDescrizione());
-        String visibilita = w.isPubblica() ? "Pubblica" : "Privata";
-        String coloreBadge = w.isPubblica() ? "#2e7d32" : "#757575";
 
         HTML card = new HTML(
-            "<div style=\"background-color: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);\">" +
-            "<h3 style=\"margin: 0 0 8px 0; color: #1b263b;\">" + servizio + "</h3>" +
-            "<span style=\"display: inline-block; background-color: #1b263b; color: #ffffff; padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-right: 6px;\">" + tag + "</span>" +
-            "<span style=\"display: inline-block; background-color: " + coloreBadge + "; color: #ffffff; padding: 2px 10px; border-radius: 12px; font-size: 12px;\">" + visibilita + "</span>" +
-            "<p style=\"margin: 12px 0 0 0; color: #333333;\">" + descrizione + "</p>" +
+            "<div class='contenitore'>" +
+            "<h3 class='titolo'>" + servizio + "</h3>" +
+            "<span class='tag'>" + tag + "</span>" +
+            "<p class='paragrafo'>" + descrizione + "</p>" +
             "</div>"
         );
-        card.setWidth("100%");
+        //card.setWidth("100%");
+        card.addStyleName("card-wishlist");
+        card.addStyleName("larghezzaMax");
         card.addStyleName("card-servizio");
         return card;
     }

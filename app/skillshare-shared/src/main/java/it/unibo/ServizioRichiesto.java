@@ -5,15 +5,13 @@ public class ServizioRichiesto implements Serializable {
     private String nomeServizio;
     private String tagCompetenza;
     private String descrizione;
-    private boolean isPubblica; 
     
     public ServizioRichiesto(){}
 
-    public ServizioRichiesto(String nomeServizio, String tagCompetenza, String descrizione, boolean isPubblica){
+    public ServizioRichiesto(String nomeServizio, String tagCompetenza, String descrizione){
     this.nomeServizio = nomeServizio;
     this.tagCompetenza = tagCompetenza;
     this.descrizione = descrizione;
-    this.isPubblica = isPubblica;
     }
 
     public String getNomeServizio() {
@@ -38,14 +36,6 @@ public class ServizioRichiesto implements Serializable {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
-    }
-
-    public boolean isPubblica() {
-        return isPubblica;
-    }
-
-    public void setPubblica(boolean isPubblica) {
-        this.isPubblica = isPubblica;
     }
 }
 

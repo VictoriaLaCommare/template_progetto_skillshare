@@ -1,0 +1,129 @@
+.btnVisualizzaProfilo-personalizzaProfilo {
+    background-color: #1b263b;
+    color: #000000;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.txtBio-personalizzaProfilo {
+    width: 300px;
+    resize: vertical;
+    box-sizing: border-box;
+    min-height: 100px !important;
+    max-height: 300px !important;
+}
+
+.popup-personalizzaProfilo {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.mainPanel-personalizzaProfilo {
+    border-spacing: 0px;
+    width: 380px;
+}
+
+.titoloPopup-personalizzaProfilo {
+    margin: 0;
+    color: #1b263b;
+    border-bottom: 2px solid #1b263b;
+    padding-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.imgProfilo-personalizzaProfilo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 100px;
+}
+
+.info-personalizzaProfilo .Utente {
+    margin: 5px 0;
+    color: #1b263b
+}
+
+.info-personalizzaProfilo .Username,
+.info-personalizzaProfilo .Email {
+    margin: 5px 0;
+    color: #666;
+}
+
+.bio-personalizzaProfilo {
+    font-style: italic;
+    color: #555;
+    text-align: center;
+}
+
+.tagCompetenze-personalizzaProfilo,
+.tagCompetenze-personalizzaProfilo .statiticheP {
+    color: #555;
+    text-align: center;
+}
+
+.tagCompetenze-personalizzaProfilo .livello{
+    text-align: center;
+    font-size: 18px;
+}
+
+.tagPanel-personalizzaProfilo {
+    background:#1b263b;
+    color:white;
+    padding: 3px 8px;
+    border-radius:12px;
+    font-size:12px;
+}
+
+.lineaOrizzontale-personalizzaProfilo {
+    width: 80%;
+    margin: 10px 0 10px 0;
+}
+
+.storicoContainer-personalizzaProfilo {
+    width: 80%;
+}
+
+.lblVuoto-personalizzaProfilo {
+    color: #666;
+    font-style: italic;
+}
+
+.tabellaStorico-personalizzaProfilo {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.headTabellaStorico-personalizzaProfilo {
+    background-color: #1b263b;
+    color: white;
+}
+
+.borderBottonCorpoTabella-personalizzaProfilo {
+    border-bottom: 1px solid #ddd;
+}
+
+.bottoniContainer-personalizzaProfilo {
+    margin-top: 15px;
+    border-spacing: 10px;
+}
+
+.bottoniPanel-personalizzaProfilo {
+    background-color: #1b263b;
+    color: #000000;
+    padding: 6px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btnChiudi-personalizzaProfilo {
+    padding: 6px 20px;
+    cursor: pointer;
+}

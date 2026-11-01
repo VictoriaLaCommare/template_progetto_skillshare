@@ -1,0 +1,145 @@
+.formPanel-wishlist {
+    width: 50%;
+    border-spacing: 10px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lbl-wishlist {
+    font-weight: bold;
+}
+
+.txtDescrizione-wishlist {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+}
+
+.lblMessaggio-wishlist {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btnAggiungiWishlist-wishlist {
+    background: #ffffff;
+    color: #1b263b;
+    padding: 10px 20px;
+    border: 2px solid #1b263b;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btnAggiungi-wishlist {
+    background: #ffffff;
+    color: #1b263b;
+    border: 2px solid #1b263b;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.listaPanel-wishlist {
+    width: 50%;
+    border-spacing: 10px;
+}
+
+.card-wishlist .contenitore {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-wishlist .titolo {
+    margin: 0 0 8px 0;
+    color: #1b263b;
+}
+
+.card-wishlist .tag {
+    display: inline-block;
+    background-color: #1b263b;
+    color: #ffffff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-right: 6px;
+}
+
+.card-wishlist .paragrafo {
+    margin: 12px 0 0 0; 
+    color: #333333;
+}
+
+.mainContainer-wishlist {
+    width: 100%;
+    border-spacing: 5px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    padding-left: 20px;
+    border-left: 4px solid #1b263b;
+}
+
+.titoloCardSuggeriti-wishlist {
+    margin: 0 0 10px 0;
+    color: #1b263b;
+    font-size: 16px;
+}
+
+.lblStato-wishlist {
+    font-style: italic;
+    color: #757575;
+}
+
+.txtNessunRisultato-wishlist {
+    margin: 0;
+    font-size: 14px;
+    color: #757575;
+}
+
+.cardMatch-wishlist {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.txtinfoUtente-wishlist .contenitore {
+    flex-grow: 1;
+}
+
+.txtinfoUtente-wishlist .titolo {
+    margin: 0 0 4px 0;
+    color: #1b263b;
+    font-size: 15px;
+}
+
+.txtinfoUtente-wishlist .competenze {
+    margin: 0;
+    font-size: 13px;
+    color: #555555;
+}
+
+.btnSfondoTrasparente-wishlist {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.btnCuoreBianco-wishlist {
+    background: transparent !important;
+    color: #ffffff;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}

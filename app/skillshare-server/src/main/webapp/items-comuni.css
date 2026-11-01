@@ -1,0 +1,68 @@
+.input-errore {
+    border: 2px solid #e53935 !important;
+}
+
+.testo-errore {
+    color: red !important;
+}
+
+.testo-successo {
+    color: green !important;
+}
+
+.form-row {
+    border-spacing: 5px;
+}
+
+.mainContainer {
+    width: 90% !important;
+    margin: 20px auto !important;
+    border-spacing: 0 !important;
+}
+
+.pannelloPrincipale {
+    width: 100%;
+    border-spacing: 15px;
+}
+
+.stylePannello div {
+    background-color: #1b263b;
+    color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    margin-bottom: 25px;
+}
+
+.stylePannello h1 {
+    margin: 0 0 8px 0;
+    color: #ffffff;
+    font-size: 28px;
+}
+
+.stylePannello p {
+    margin: 0;
+    font-size: 16px;
+    color: #e0f2f1;
+}
+
+.larghezzaMax {
+    width: 100% !important;
+}
+
+.larghezzaBox {
+    width: 300px;
+    box-sizing: border-box;
+}
+
+.panelListaAnteprima{
+    border-spacing: 8px;
+    width: 100%;
+}
+
+.contenitoreLista {
+    width: 100%;
+    border-spacing: 10px;
+}

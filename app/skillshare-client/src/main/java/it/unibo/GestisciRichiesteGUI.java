@@ -17,16 +17,12 @@ public class GestisciRichiesteGUI {
         this.utenteLoggato = utente;
 
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("90%");
-        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        mainContainer.setSpacing(0);
+        mainContainer.addStyleName("mainContainer");
 
         mainPanel = new VerticalPanel();
-        mainPanel.setWidth("100%");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(15);
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
+        mainPanel.addStyleName("pannelloPrincipale");
 
         // Aggiungiamo la navbar centralizzata in cima
         if (utenteLoggato != null) {
@@ -35,18 +31,19 @@ public class GestisciRichiesteGUI {
 
         // Intestazione allineata nello stile a "I Miei Annunci"
         HTML titolo = new HTML(
-                "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-                        "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Richieste Ricevute</h1>" +
-                        "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Gestisci le richieste di scambio in sospeso e le chat attive</p>" +
-                        "</div>"
+            "<div>" +
+            "<h1>Richieste Ricevute</h1>" +
+            "<p>Gestisci le richieste di scambio in sospeso e le chat attive</p>" +
+            "</div>"
         );
+        titolo.addStyleName("stylePannello");
+
         mainPanel.add(titolo);
 
         // Contenitore per la lista delle richieste
         VerticalPanel listaRichiestePanel = new VerticalPanel();
-        listaRichiestePanel.setWidth("100%");
         listaRichiestePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        listaRichiestePanel.setSpacing(10);
+        listaRichiestePanel.addStyleName("contenitoreLista");
         mainPanel.add(listaRichiestePanel);
 
         // Caricamento asincrono dal DB
@@ -67,7 +64,10 @@ public class GestisciRichiesteGUI {
             @Override
             public void onFailure(Throwable caught) {
                 container.clear();
-                container.add(new HTML("<div style=\"color: red; text-align: center;\">Errore di comunicazione col server: " + caught.getMessage() + "</div>"));
+                HTML erroreDiComunicazione = new HTML("<div>Errore di comunicazione col server: " + caught.getMessage() + "</div>");
+                erroreDiComunicazione.addStyleName("erroreDiComunicazione-richiesteRicevute");
+                container.add(erroreDiComunicazione);
+
             }
 
             @Override
@@ -86,13 +86,7 @@ public class GestisciRichiesteGUI {
 
     private Widget creaCardRichiesta(RichiestaScambio req, VerticalPanel container) {
         VerticalPanel card = new VerticalPanel();
-        card.setWidth("100%");
-        card.getElement().getStyle().setProperty("backgroundColor", "#f8f9fa");
-        card.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b");
-        card.getElement().getStyle().setProperty("padding", "15px");
-        card.getElement().getStyle().setProperty("marginBottom", "12px");
-        card.getElement().getStyle().setProperty("borderRadius", "4px");
-        card.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.05)");
+        card.addStyleName("cardRichieste-richiesteRicevute");
 
         // Controlli per il ruolo dell'utente loggato e della sua controparte
         boolean sonoRichiedente = utenteLoggato.getUsername().equals(req.getRichiedente());
@@ -100,15 +94,16 @@ public class GestisciRichiesteGUI {
         String stato = req.getStato().toLowerCase();
 
         HTML info = new HTML(
-                "<b style=\"font-size: 16px; color: #1b263b;\">Richiesta da: " + req.getRichiedente() + "</b><br/>" +
-                        "<span style=\"color: #555; font-size: 14px;\">Riferimento Annuncio ID: " + req.getIdAnnuncio() + "</span>"
+            "<b class='richiesta'>Richiesta da: " + req.getRichiedente() + "</b><br/>" +
+            "<span class='id'>Riferimento Annuncio ID: " + req.getIdAnnuncio() + "</span>"
         );
+        info.addStyleName("infoCard-richiesteRicevute");
+
         card.add(info);
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
-        buttonPanel.setSpacing(10);
         buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        buttonPanel.getElement().getStyle().setProperty("marginTop", "10px");
+        buttonPanel.addStyleName("buttonPanel-richiesteRicevute");
 
         // Utilizzo dello switch per la gestione dei diversi stati della richiesta
         switch (stato) {
@@ -162,17 +157,17 @@ public class GestisciRichiesteGUI {
             }
             case "rifiutata": {
                 String testoRifiuto = sonoRichiedente ? "Richiesta Annullata" : "Richiesta Rifiutata";
-                buttonPanel.add(new HTML(
-                        "<span style=\"color: red; font-weight: bold;\">" + testoRifiuto + "</span>"
-                ));
+                HTML rifiutoHTML = new HTML("<span>" + testoRifiuto + "</span>");
+                rifiutoHTML.addStyleName("testoRifiutoHTML-richiesteRicevute");
+                buttonPanel.add(rifiutoHTML);
                 break;
             }
             case "accettata": // Stesso comportamento
             case "in attesa di conferma dall'altro utente": {
                 if (stato.equals("accettata")) {
-                    buttonPanel.add(new HTML(
-                        "<span style=\"color: #28a745; font-weight: bold; margin-right: 10px;\">Richiesta Accettata!</span>"
-                    ));
+                    HTML textrichiestaAccettata = new HTML("<span>Richiesta Accettata!</span>");
+                    textrichiestaAccettata.addStyleName("testoRichiestaAccettata-richiesteRicevute");
+                    buttonPanel.add(textrichiestaAccettata);
                 }
                 
                 //controllo per capire se l'utente corrente ha già impostato la terminazione della richiesta
@@ -200,18 +195,20 @@ public class GestisciRichiesteGUI {
                     );
                     buttonPanel.add(btnTermina);
                 } else {
-                    buttonPanel.add(new HTML(
-                            "<span style=\"color: LightSlateGray;\">In attesa della conferma dell'altro utente...</span>"
-                    ));
+                    HTML messaggioAttesa = new HTML("<span>In attesa della conferma dell'altro utente...</span>");
+                    messaggioAttesa.addStyleName("messaggioAttesa-richiesteRicevute");
+                    buttonPanel.add(messaggioAttesa);
                 }
                 break;
             }
             case "completato": {
-                buttonPanel.add(new HTML(
-                        "<span style=\"color: purple;\">Richiesta Completata</span>"
-                ));
+                HTML richiestaCompletata = new HTML("<span>Richiesta Completata</span>");
+                richiestaCompletata.addStyleName("textRichiestaCompletata-richiesteRicevute");
+                buttonPanel.add(richiestaCompletata);
                 if (req.isRecensioneInviata(utenteLoggato.getUsername())) {
-                    buttonPanel.add(new HTML("<span style=\"color: SeaGreen;\">✓ Recensione inviata</span>"));
+                    HTML recensioneInviata =new HTML("<span>✓ Recensione inviata</span>");
+                    recensioneInviata.addStyleName("textRecensioneInviata-richiesteRicevute");
+                    buttonPanel.add(recensioneInviata);
                     break;
                 }
 
@@ -229,25 +226,22 @@ public class GestisciRichiesteGUI {
                 VerticalPanel formRecensione = new VerticalPanel();
                 formRecensione.setVisible(false);
                 formRecensione.setSpacing(8);
-                formRecensione.getElement().getStyle().setProperty("marginTop", "10px");
-                formRecensione.getElement().getStyle().setProperty("padding", "12px");
-                formRecensione.getElement().getStyle().setProperty("backgroundColor", "#ffffff");
-                formRecensione.getElement().getStyle().setProperty("border", "1px solid #ddd");
-                formRecensione.getElement().getStyle().setProperty("borderRadius", "4px");
+                formRecensione.addStyleName("formRecensione-richiesteRicevute");
 
-                formRecensione.add(new HTML("<b style=\"color:MidnightBlue;\">Valuta " + controparte + ":</b>"));
+                HTML titoloValuta = new HTML("<b>Valuta " + controparte + ":</b>");
+                titoloValuta.addStyleName("titoloValuta-richiesteRicevute");
+                formRecensione.add(titoloValuta);
 
                 // Cinque stelle cliccabili
                 HorizontalPanel stellePanel = new HorizontalPanel();
-                stellePanel.setSpacing(4);
+                stellePanel.addStyleName("stellePanel-richiesteRicevute");
+                //stellePanel.setSpacing(4);
                 Label[] stelle = new Label[5];
 
                 for (int i = 0; i < 5; i++) {
                     final int valore = i + 1; // valore 1-5 catturato dalla lambda
                     stelle[i] = new Label("☆");
-                    stelle[i].getElement().getStyle().setProperty("fontSize", "28px");
-                    stelle[i].getElement().getStyle().setProperty("cursor", "pointer");
-                    stelle[i].getElement().getStyle().setProperty("color", "Silver");
+                    stelle[i].addStyleName("stellaStyle-richiesteRicevute");
 
                     stelle[i].addClickHandler(event -> {
                         valutazioneSelezionata[0] = valore; // salvo il valore cliccato
@@ -256,8 +250,11 @@ public class GestisciRichiesteGUI {
                         for (int j = 0; j < 5; j++) {
                             boolean evidenziata = j < valore;
                             stelle[j].setText(evidenziata ? "★" : "☆");
-                            stelle[j].getElement().getStyle()
-                                    .setProperty("color", evidenziata ? "Gold" : "Silver");
+                            if (evidenziata) {
+                                stelle[j].addStyleName("stella-evidenziata-richiesteRicevute");
+                                } else {
+                                    stelle[j].removeStyleName("stella-evidenziata-richiesteRicevute");
+                                }
                         }
                     });
 
@@ -268,9 +265,9 @@ public class GestisciRichiesteGUI {
                 //Commento facoltativo
                 formRecensione.add(new Label("Commento (opzionale):"));
                 TextArea txtCommento = new TextArea();
-                txtCommento.setWidth("100%");
                 txtCommento.setVisibleLines(3);
                 txtCommento.getElement().setPropertyString("placeholder", "Scrivi un commento...");
+                txtCommento.addStyleName("txtCommento-richiesteRicevute");
                 formRecensione.add(txtCommento);
 
                 //Invio recensione
@@ -284,6 +281,8 @@ public class GestisciRichiesteGUI {
                         Window.alert("Seleziona almeno una stella prima di inviare.");
                         return;
                     }
+
+                    btnInvia.setEnabled(false);
 
                     // Costruisco la recensione con i valori inseriti dall'utente
                     Recensione recensione = Recensione.creaRecensione();
@@ -322,7 +321,7 @@ public class GestisciRichiesteGUI {
                         txtCommento.setValue("");
                         for (Label stella : stelle) {
                             stella.setText("☆");
-                            stella.getElement().getStyle().setProperty("color", "Silver");
+                            stella.removeStyleName("stella-evidenziata-richiesteRicevute");
                         }
                     }
                 });
@@ -339,13 +338,7 @@ public class GestisciRichiesteGUI {
     }
 
     private void estilsaPulsante(Button btn, String coloreBase) {
-        btn.getElement().getStyle().setProperty("backgroundColor", coloreBase + " !important");
-        btn.getElement().getStyle().setProperty("color", "#ffffff !important");
-        btn.getElement().getStyle().setProperty("border", "none !important");
-        btn.getElement().getStyle().setProperty("padding", "8px 20px !important");
-        btn.getElement().getStyle().setProperty("borderRadius", "4px !important");
-        btn.getElement().getStyle().setProperty("cursor", "pointer !important");
-        btn.getElement().getStyle().setProperty("fontWeight", "bold !important");
-        btn.getElement().getStyle().setProperty("boxShadow", "none !important");
+        btn.getElement().getStyle().setProperty("backgroundColor", coloreBase);
+        btn.addStyleName("btn-base-richieste-richiesteRicevute");
     }
 }

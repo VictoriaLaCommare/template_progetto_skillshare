@@ -12,21 +12,15 @@ public class ProfiloUtenteGUI {
         
         final PopupPanel popup = new PopupPanel(false);
         popup.setGlassEnabled(true);
-
-        popup.getElement().getStyle().setProperty("backgroundColor", "#ffffff");
-        popup.getElement().getStyle().setProperty("border", "none");
-        popup.getElement().getStyle().setProperty("borderRadius", "12px");
-        popup.getElement().getStyle().setProperty("padding", "20px");
-        popup.getElement().getStyle().setProperty("boxShadow", "0 8px 16px rgba(0,0,0,0.2)");
+        popup.addStyleName("popup-personalizzaProfilo");
         
         VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.setSpacing(15);
-        mainPanel.setWidth("380px");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(0);
+        mainPanel.addStyleName("mainPanel-personalizzaProfilo");
 
         // Titolo del profilo
-        HTML titolo = new HTML("<h3 style='margin: 0; color: #1b263b; border-bottom: 2px solid #1b263b; padding-bottom: 10px; width: 100%; text-align: center;'>Profilo di " + targetUsername + "</h3>");
+        HTML titolo = new HTML("<h3>Profilo di " + targetUsername + "</h3>");
+        titolo.addStyleName("titoloPopup-personalizzaProfilo");
         mainPanel.add(titolo);
 
         // Test di attesa per la risposta dal server
@@ -38,7 +32,7 @@ public class ProfiloUtenteGUI {
             @Override
             public void onFailure(Throwable caught) {
                 lblStato.setText("Errore nel caricamento del profilo: " + caught.getMessage());
-                lblStato.getElement().getStyle().setColor("red");
+                lblStato.addStyleName("testo-errore");
                 aggiungiTastoChiudi(mainPanel, popup, utenteLoggato, null);
             }
 
@@ -58,7 +52,7 @@ public class ProfiloUtenteGUI {
             }
         });
 
-        // Inserimento del contenutore nel popup e centratura
+        // Inserimento del contenitore nel popup e centratura
         popup.setWidget(mainPanel);
         popup.center();
     }
@@ -66,11 +60,11 @@ public class ProfiloUtenteGUI {
     private void costruisciProfiloPanel(VerticalPanel profiloPanel, Utente utenteTarget, PopupPanel popup, Utente utenteLoggato) {
 
         // Foto profilo
+        profiloPanel.add(new HTML("<br/>"));
         String urlFoto = utenteTarget.getImmagineProfilo();
         if (urlFoto != null && !urlFoto.trim().isEmpty()) {
             Image imgProfilo = new Image(urlFoto);
-            imgProfilo.setWidth("150px");
-            imgProfilo.getElement().getStyle().setProperty("borderRadius", "50%");
+            imgProfilo.addStyleName("imgProfilo-personalizzaProfilo");
             profiloPanel.add(imgProfilo);
         } else {
             Label lblNoFoto = new Label("Nessuna foto disponibile");
@@ -79,22 +73,25 @@ public class ProfiloUtenteGUI {
 
 
         // Nome e Cognome
-        HTML info = new HTML("<h2 style='margin 5px 0; color: #1b263b;'>" + utenteTarget.getNome() + " " + utenteTarget.getCognome() + "</h2>" + 
-                             "<p style='margin: 5px 0; color: #666;'>Username: " + utenteTarget.getUsername() + "</p>" +
-                             "<p style='margin: 5px 0; color: #666;'>Email: " + utenteTarget.getMail() + "</p>");
+        HTML info = new HTML("<h2 class='Utente'>" + utenteTarget.getNome() + " " + utenteTarget.getCognome() + "</h2>" + 
+                             "<p class='Username'>Username: " + utenteTarget.getUsername() + "</p>" +
+                             "<p class='Email'>Email: " + utenteTarget.getMail() + "</p>");
+        info.addStyleName("info-personalizzaProfilo");
         profiloPanel.add(info);
 
         // Bio
         String bio = utenteTarget.getBio() != null ? utenteTarget.getBio() : "Nessuna bio disponibile";
-        profiloPanel.add(new HTML("<p style='font-style: italic; color: #555; text-align: center;'>" + bio + "</p>"));
+        HTML htmlBio = new HTML("<p>" + bio + "</p>");
+        htmlBio.addStyleName("bio-personalizzaProfilo");
+        profiloPanel.add(htmlBio);
 
         // Tag Competenze
         String tagCompetenze = utenteTarget.getTagCompetenze() != null ? utenteTarget.getTagCompetenze() : "Nessuna competenza specificata";
-        profiloPanel.add(new HTML("<p style='color: #555; text-align: center;'>" + tagCompetenze + "</p>"));
+        HTML htmlTagCompetenze = new HTML("<p>" + tagCompetenze + "</p>");
+        htmlTagCompetenze.addStyleName("tagCompetenze-personalizzaProfilo");
+        profiloPanel.add(htmlTagCompetenze);
 
         // Sezione Tag di livello e recensione
-        //profiloPanel.add(new HTML("<hr style='width:80%; margin:15px 0;'/>"));
-
         Label lblCaricamentoStats = new Label("Caricamento statistiche...");
         profiloPanel.add(lblCaricamentoStats);
 
@@ -109,22 +106,20 @@ public class ProfiloUtenteGUI {
                 lblCaricamentoStats.setText("");
 
                 // Livello e scambi
-                profiloPanel.add(new HTML(
-                        "<p style='text-align:center; font-size:18px;'>" + stats.getLivello() + "</p>" +
-                                "<p style='text-align:center; color:#555;'>Scambi completati: " + stats.getScambiCompletati() + "</p>" +
-                                "<p style='text-align:center; color:#555;'>Media recensioni: " +
-                                 stats.getMediaRecensioni() + " / 5</p>"
-                ));
+                HTML statistiche = new HTML("<p class='livello'>" + stats.getLivello() + "</p>" +
+                                            "<p class='statiticheP'>Scambi completati: " + stats.getScambiCompletati() + "</p>" +
+                                            "<p class='statiticheP'>Media recensioni: " + stats.getMediaRecensioni() + " / 5</p>");
+                statistiche.addStyleName("tagCompetenze-personalizzaProfilo");
+                profiloPanel.add(statistiche);
 
                 // Tag assegnati dai Decorator
                 if (!stats.getTag().isEmpty()) {
                     HorizontalPanel tagPanel = new HorizontalPanel();
                     tagPanel.setSpacing(5);
                     for (String tag : stats.getTag()) {
-                        tagPanel.add(new HTML(
-                                "<span style='background:#1b263b; color:white; padding:3px 8px;" +
-                                        "border-radius:12px; font-size:12px;'>" + tag + "</span>"
-                        ));
+                        HTML htmlTag = new HTML("<span>" + tag + "</span>");
+                        htmlTag.addStyleName("tagPanel-personalizzaProfilo");
+                        tagPanel.add(htmlTag);
                     }
                     profiloPanel.add(tagPanel);
                 }
@@ -135,17 +130,21 @@ public class ProfiloUtenteGUI {
 
 
         // Storico scambi
-        profiloPanel.add(new HTML("<hr style='width: 80%; margin: 10px 0 10px 0;' />"));
+        HTML lineaOrizzontale = new HTML("<hr/>");
+        lineaOrizzontale.addStyleName("lineaOrizzontale-personalizzaProfilo");
+        profiloPanel.add(lineaOrizzontale);
 
         // Bottone per mostrare lo storico degli scambi
         Button btnMostraStorico = new Button("Visualizza Storico Scambi");
         btnMostraStorico.getElement().setId("btn-mostra-storico");
 
         VerticalPanel storicoContainer = new VerticalPanel();
-        storicoContainer.setWidth("80%");
+        //storicoContainer.setWidth("80%");
+        storicoContainer.addStyleName("storicoContainer-personalizzaProfilo");
         storicoContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
         profiloPanel.add(btnMostraStorico);
+        profiloPanel.add(new HTML("<br/>"));
         profiloPanel.add(storicoContainer);
 
         aggiungiTastoChiudi(profiloPanel, popup, utenteLoggato, utenteTarget);
@@ -173,8 +172,7 @@ public class ProfiloUtenteGUI {
                     if (storico == null || storico.isEmpty()) {
                         Label lblVuoto = new Label("Nessuno scambio passato");
                         lblVuoto.getElement().setId("msg-storico-vuoto");
-                        lblVuoto.getElement().getStyle().setProperty("color", "#666");
-                        lblVuoto.getElement().getStyle().setProperty("fontStyle", "italic");
+                        lblVuoto.addStyleName("lblVuoto-personalizzaProfilo");
                         storicoContainer.add(lblVuoto);
                         popup.center();
                         return; // Fine.
@@ -183,20 +181,15 @@ public class ProfiloUtenteGUI {
                     // Creazione della tabella per mostrare lo storico
                     FlexTable tabellaStorico = new FlexTable();
                     tabellaStorico.getElement().setId("tabella-storico");
-                    tabellaStorico.setWidth("100%");
                     tabellaStorico.setCellPadding(8);
-                    tabellaStorico.getElement().getStyle().setProperty("borderCollapse", "collapse");
-                    tabellaStorico.getElement().getStyle().setProperty("fontFamily", "sans-serif");
-                    tabellaStorico.getElement().getStyle().setProperty("borderRadius", "12px");
-                    tabellaStorico.getElement().getStyle().setProperty("overflow", "hidden");
+                    tabellaStorico.addStyleName("tabellaStorico-personalizzaProfilo");
                     
                     // Intestazioni della tabella
                     tabellaStorico.setHTML(0, 0, "<b>ID Annuncio</b>");
                     tabellaStorico.setHTML(0, 1, "<b>Richiedente</b>");
                     tabellaStorico.setHTML(0, 2, "<b>Ricevente</b>");
                     tabellaStorico.setHTML(0, 3, "<b>Stato</b>");
-                    tabellaStorico.getRowFormatter().getElement(0).getStyle().setProperty("backgroundColor", "#1b263b");
-                    tabellaStorico.getRowFormatter().getElement(0).getStyle().setProperty("color", "white");
+                    tabellaStorico.getRowFormatter().addStyleName(0, "headTabellaStorico-personalizzaProfilo");
 
                     // Corpo della tabella con i dati dello storico
                     int riga = 1;
@@ -205,7 +198,7 @@ public class ProfiloUtenteGUI {
                         tabellaStorico.setText(riga, 1, req.getRichiedente());
                         tabellaStorico.setText(riga, 2, req.getRicevente());
                         tabellaStorico.setText(riga, 3, req.getStato());
-                        tabellaStorico.getRowFormatter().getElement(riga).getStyle().setProperty("borderBottom", "1px solid #ddd");
+                        tabellaStorico.getRowFormatter().addStyleName(riga, "borderBottonCorpoTabella-personalizzaProfilo");
                         riga++;
                     }
                     storicoContainer.add(tabellaStorico);
@@ -218,18 +211,13 @@ public class ProfiloUtenteGUI {
 
     private void aggiungiTastoChiudi(VerticalPanel panel, PopupPanel popup, Utente utenteLoggato, Utente utenteTarget) {
         HorizontalPanel bottoniPanel = new HorizontalPanel();
-        bottoniPanel.setSpacing(10);
-        bottoniPanel.getElement().getStyle().setProperty("marginTop", "15px");
+        bottoniPanel.addStyleName("bottoniContainer-personalizzaProfilo");
 
         // Se l'utente visualizzato è l'utente loggato, mostriamo anche il tasto per andare alla modifica
         if (utenteLoggato != null && utenteTarget != null && utenteLoggato.getMail().equals(utenteTarget.getMail())) {
             Button btnModifica = new Button("✏️ Modifica Profilo");
             btnModifica.getElement().setId("btn-vai-a-modifica-profilo");
-            btnModifica.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-            btnModifica.getElement().getStyle().setProperty("color", "#000000");
-            btnModifica.getElement().getStyle().setProperty("padding", "6px 15px");
-            btnModifica.getElement().getStyle().setProperty("cursor", "pointer");
-            btnModifica.getElement().getStyle().setProperty("borderRadius", "4px");
+            btnModifica.addStyleName("bottoniPanel-personalizzaProfilo");
             
             btnModifica.addClickHandler(event -> {
                 popup.hide(); // Chiude il popup attuale
@@ -241,8 +229,7 @@ public class ProfiloUtenteGUI {
         Button btnChiudi = new Button("Chiudi");
         btnChiudi.addClickHandler(event -> popup.hide());
         btnChiudi.getElement().setId("btn-chiudi-profilo");
-        btnChiudi.getElement().getStyle().setProperty("padding", "6px 20px");
-        btnChiudi.getElement().getStyle().setProperty("cursor", "pointer");
+        btnChiudi.addStyleName("btnChiudi-personalizzaProfilo");
         bottoniPanel.add(btnChiudi);
 
         panel.add(bottoniPanel);

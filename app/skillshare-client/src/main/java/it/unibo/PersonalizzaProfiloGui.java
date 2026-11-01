@@ -9,60 +9,53 @@ public class PersonalizzaProfiloGui {
     //Collegamento con il backend
     private final GestoreProfiloAsync rpcService = GWT.create(GestoreProfilo.class);
     
-    private static final String COLORE_ERRORE = "2px solid #e53935";
-
     private void evidenzia(Widget w, boolean valido) {
         if (valido) {
-            w.getElement().getStyle().clearProperty("border");
+            w.removeStyleName("input-errore");
         } else {
-            w.getElement().getStyle().setProperty("border", COLORE_ERRORE);
+            w.addStyleName("input-errore");
         }
     }
 
     private void mostraErrore(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("red");
+        lbl.removeStyleName("testo-successo");
+        lbl.addStyleName("testo-errore");
         lbl.setText(testo);
     }
 
     private void mostraSuccesso(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("green");
+        lbl.removeStyleName("testo-errore");
+        lbl.addStyleName("testo-successo");
         lbl.setText(testo);
     }
 
     //Riceviamo l'utente attualmente loggato -> precondizione casi d'uso
     public void mostra(Utente utenteLoggato) {
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("90%");
-        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        mainContainer.setSpacing(0);
+        mainContainer.addStyleName("mainContainer");
 
         VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.setWidth("100%");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(15);
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
+        mainPanel.addStyleName("pannelloPrincipale");
 
         if (utenteLoggato != null) {
             mainPanel.add(new AppNavbar(utenteLoggato, "profilo"));
         }
 
         HTML titolo = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Personalizza il tuo Profilo</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Aggiorna i tuoi dati per farti conoscere meglio dalla community!</p>" +
+            "<div>" +
+            "<h1>Personalizza il tuo Profilo</h1>" +
+            "<p>Aggiorna i tuoi dati per farti conoscere meglio dalla community!</p>" +
             "</div>"
         );
+        titolo.addStyleName("stylePannello");
+
         mainPanel.add(titolo);
 
         //Bottone per passare alla vista di visualizzazione del proprio profilo
         Button btnVisualizzaProfilo = new Button("👀 Visualizza il mio profilo pubblico");
-        btnVisualizzaProfilo.getElement().setId("btn-vai-a-visualizza-profilo");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("color", "#000000");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("padding", "8px 15px");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("borderRadius", "4px");
-        btnVisualizzaProfilo.getElement().getStyle().setProperty("cursor", "pointer");
+        btnVisualizzaProfilo.addStyleName("btnVisualizzaProfilo-personalizzaProfilo");
         
         btnVisualizzaProfilo.addClickHandler(event -> {
             //Apre il popup/vista del profilo passando l'utente loggato e il proprio username
@@ -76,13 +69,13 @@ public class PersonalizzaProfiloGui {
         txtBio.getElement().setPropertyString("placeholder", "Scrivi una breve bio su di te...");
         txtBio.getElement().setId("prof-bio");
         txtBio.setVisibleLines(4);
-        txtBio.setWidth("300px");
+        txtBio.addStyleName("txtBio-personalizzaProfilo");
         if (utenteLoggato.getBio() != null) txtBio.setText(utenteLoggato.getBio()); // Pre-compiliamo se esiste già
         
         Label errBio = new Label();
-        errBio.getElement().getStyle().setColor("red");
+        errBio.addStyleName("testo-errore");
         HorizontalPanel rowBio = new HorizontalPanel();
-        rowBio.setSpacing(5);
+        rowBio.addStyleName("form-row");
         rowBio.add(txtBio);
         rowBio.add(errBio);
 
@@ -90,14 +83,14 @@ public class PersonalizzaProfiloGui {
         TextBox txtFoto = new TextBox();
         txtFoto.getElement().setPropertyString("placeholder", "URL della tua foto profilo");
         txtFoto.getElement().setId("prof-foto");
-        txtFoto.setWidth("300px");
+        txtFoto.addStyleName("larghezzaBox");
         // Se avete aggiunto il campo foto in Utente.java, decommenta la riga sotto:
         if (utenteLoggato.getImmagineProfilo() != null) txtFoto.setText(utenteLoggato.getImmagineProfilo());
         
         Label errFoto = new Label();
-        errFoto.getElement().getStyle().setColor("red");
+        errFoto.addStyleName("testo-errore");
         HorizontalPanel rowFoto = new HorizontalPanel();
-        rowFoto.setSpacing(5);
+        rowFoto.addStyleName("form-row");
         rowFoto.add(txtFoto);
         rowFoto.add(errFoto);
 
@@ -105,13 +98,13 @@ public class PersonalizzaProfiloGui {
         TextBox txtTag = new TextBox();
         txtTag.getElement().setPropertyString("placeholder", "Competenze");
         txtTag.getElement().setId("prof-tag");
-        txtTag.setWidth("300px");
+        txtTag.addStyleName("larghezzaBox");
         if (utenteLoggato.getTagCompetenze() != null) txtTag.setText(utenteLoggato.getTagCompetenze());
         
         Label errTag = new Label();
-        errTag.getElement().getStyle().setColor("red");
+        errTag.addStyleName("testo-errore");
         HorizontalPanel rowTag = new HorizontalPanel();
-        rowTag.setSpacing(5);
+        rowTag.addStyleName("form-row");
         rowTag.add(txtTag);
         rowTag.add(errTag);
 

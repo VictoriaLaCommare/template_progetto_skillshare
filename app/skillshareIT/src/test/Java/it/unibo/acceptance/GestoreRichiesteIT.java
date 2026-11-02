@@ -34,13 +34,14 @@ public class GestoreRichiesteIT {
     static void chiudiBrowser() {
         if (driver != null) {
             driver.quit();
+            driver = null;
         }
     }
 
     @AfterEach
     void puliziaAnnunci() {
         try {
-            if (emailUtente1 != null) {
+            if (emailUtente1 != null && driver != null) {
                 RegistrazionePage registrazionePage = new RegistrazionePage(driver, TIMEOUT);
                 registrazionePage.apri(BASE_URL);
                 WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
@@ -63,6 +64,20 @@ public class GestoreRichiesteIT {
         } catch (Exception ignored) {
         }
     }
+
+    @BeforeEach
+    void assicuraDriverValido() {
+        // Controllo di sicurezza: se per qualsiasi motivo la sessione è terminata viene riavviata
+        if (driver == null) {
+            ChromeOptions options = new ChromeOptions();
+            if (!"false".equalsIgnoreCase(System.getProperty("headless", "true"))){
+                options.addArguments("--headless=new");
+            }
+            driver = new ChromeDriver(options);
+            driver.manage().window().maximize();
+        }
+    }
+
 
     @Test
     @DisplayName("Gestione Richieste (UC09): Visualizzazione e Accettazione richieste ricevute")

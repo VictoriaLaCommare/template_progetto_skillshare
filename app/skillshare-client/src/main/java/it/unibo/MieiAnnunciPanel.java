@@ -25,34 +25,30 @@ public class MieiAnnunciPanel extends Composite {
     public MieiAnnunciPanel(Utente usernameCorrente, Runnable onTornaIndietro) {
         this.usernameCorrente = usernameCorrente;
 
-        mainPanel.setWidth("90%");
-        mainPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);  // <-- FIX: Evita il salto verticale
-        mainPanel.getElement().getStyle().setProperty("margin", "20px auto");
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
-        mainPanel.setSpacing(0);
+        mainPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        mainPanel.addStyleName("mainContainer");
 
         VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(15);
-        panel.setWidth("100%");
-        panel.getElement().getStyle().setProperty("margin", "20px auto");
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        panel.addStyleName("pannelloPrincipale");
         
         // Aggiungiamo la Navbar centralizzata in cima se l'utente è loggato
         if (usernameCorrente != null) {
-            panel.add(new AppNavbar(usernameCorrente, "miei_annunci")); // <-- FIX: Uso della AppNavbar unificata
+            panel.add(new AppNavbar(usernameCorrente, "miei_annunci"));
         }
 
         HTML bannerMieiAnnunci = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px;\">I Miei Annunci</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Da qui puoi visualizzare, modificare o eliminare esclusivamente i post che hai pubblicato.</p>" +
+            "<div>" +
+            "<h1>I Miei Annunci</h1>" +
+            "<p>Da qui puoi visualizzare, modificare o eliminare esclusivamente i post che hai pubblicato.</p>" +
             "</div>"
         );
+        bannerMieiAnnunci.addStyleName("stylePannello");
+
         panel.add(bannerMieiAnnunci);
 
-        listaContainer.setWidth("100%");
         listaContainer.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        listaContainer.setSpacing(10);
+        listaContainer.addStyleName("contenitoreLista");
         panel.add(listaContainer);
 
         mainPanel.add(panel);
@@ -98,26 +94,21 @@ public class MieiAnnunciPanel extends Composite {
     // Disegna visivamente la scheda (card) per ogni singolo annuncio
     private VerticalPanel creaCardAnnuncio(final Annuncio annuncio) {
         VerticalPanel card = new VerticalPanel();
-        card.setStyleName("annuncio-card");
-        
-        card.setWidth("100%");
-        card.getElement().getStyle().setProperty("backgroundColor", "#f8f9fa");
-        card.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b");
-        card.getElement().getStyle().setProperty("padding", "15px");
-        card.getElement().getStyle().setProperty("borderRadius", "6px");
-        card.getElement().getStyle().setProperty("boxShadow", "0 2px 4px rgba(0,0,0,0.05)");
-        card.getElement().getStyle().setProperty("boxSizing", "border-box");
+        card.addStyleName("annuncio-card");
+        card.addStyleName("card-mieiAnnunci ");
 
         HTML testoAnnuncio = new HTML(
-            "<b style=\"font-size: 18px; color: #1b263b;\">" + annuncio.getTitolo() + "</b><br/>" +
-            "<div style=\"margin-top: 5px; color: #333; font-size: 14px;\"><b>Offre:</b> <span style=\\\"color: #333;\\\">" + annuncio.getCompetenzaOfferta() + "</span> | " +
-            "<b>Richiede:</b> <span style=\\\"color: #333;\\\">" + annuncio.getCompetenzaRichiesta() + "</span></div>" +
-            "<p style=\"margin: 10px 0 15px 0; color: #555; font-size: 15px;\"><em>" + annuncio.getDescrizione() + "</em></p>"
+            "<b class='annuncio-titolo'>" + annuncio.getTitolo() + "</b><br/>" +
+            "<div class='annuncio-contenitore'><b>Offre:</b> <span class='annuncio-2riga'>" + annuncio.getCompetenzaOfferta() + "</span> | " +
+            "<b>Richiede:</b> <span>" + annuncio.getCompetenzaRichiesta() + "</span></div>" +
+            "<p class='annuncio-descrizione'><em>" + annuncio.getDescrizione() + "</em></p>"
         );
+        testoAnnuncio.addStyleName("testoAnnuncio-mieiAnnunci");
+
         card.add(testoAnnuncio);
 
         HorizontalPanel btnPanel = new HorizontalPanel();
-        btnPanel.setSpacing(10);
+        btnPanel.addStyleName("distanzaBottoni-mieiAnnunci");
 
         // Bottone Modifica con ID univoco basato sull'ID dell'annuncio
         Button btnModifica = new Button("Modifica");
@@ -145,11 +136,11 @@ public class MieiAnnunciPanel extends Composite {
         dialogBox.setGlassEnabled(true); // Scura lo sfondo dietro la finestra
 
         VerticalPanel dialogContents = new VerticalPanel();
-        dialogContents.setSpacing(15);
+        dialogContents.addStyleName("panelElimina-Spacing-mieiAnnunci");
         dialogContents.add(new Label("Sei sicuro di voler eliminare questo annuncio?"));
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
-        buttonPanel.setSpacing(10);
+        buttonPanel.addStyleName("distanzaBottoni-mieiAnnunci");
 
         // Bottone Sì: procede con l'eliminazione
         Button btnSi = new Button("Sì", new ClickHandler() {
@@ -207,20 +198,24 @@ public class MieiAnnunciPanel extends Composite {
         dialogBox.setGlassEnabled(true); 
 
         VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(10);
+        panel.addStyleName("panelModifica-Spacing-mieiAnnunci");
 
         final TextBox txtTitolo = new TextBox();
         txtTitolo.setText(annuncio.getTitolo());
+        txtTitolo.addStyleName("txtbox-modifica-mieiAnnunci");
         
         final TextArea txtDescrizione = new TextArea();
         txtDescrizione.setText(annuncio.getDescrizione());
         txtDescrizione.setVisibleLines(3);
+        txtDescrizione.addStyleName("textarea-modifica-mieiAnnunci");
 
         final TextBox txtOfferta = new TextBox();
         txtOfferta.setText(annuncio.getCompetenzaOfferta());
+        txtOfferta.addStyleName("txtbox-modifica-mieiAnnunci");
 
         final TextBox txtRichiesta = new TextBox();
         txtRichiesta.setText(annuncio.getCompetenzaRichiesta());
+        txtRichiesta.addStyleName("txtbox-modifica-mieiAnnunci");
 
         panel.add(new Label("Titolo:"));
         panel.add(txtTitolo);
@@ -232,7 +227,7 @@ public class MieiAnnunciPanel extends Composite {
         panel.add(txtRichiesta);
 
         HorizontalPanel btnPanel = new HorizontalPanel();
-        btnPanel.setSpacing(10);
+        btnPanel.addStyleName("distanzaBottoni-mieiAnnunci");
 
         Button btnSalva = new Button("Salva Modifiche", new ClickHandler() {
             @Override

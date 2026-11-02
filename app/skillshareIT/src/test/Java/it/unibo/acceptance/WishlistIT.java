@@ -79,7 +79,7 @@ public class WishlistIT {
         WishlistPage wishlist = new WishlistPage(driver, TIMEOUT);
 
         wishlist.apriDallaNavbar().vaiAlFormAggiunta();
-        wishlist.compila("Javascript", "Programmazione", "Aiuto con le promise", true).aggiungi();
+        wishlist.compila("Javascript", "Programmazione", "Aiuto con le promise").aggiungi();
 
         assertTrue(wishlist.messaggioContiene("aggiunto"),
             "Il sistema deve notificare il successo");
@@ -93,24 +93,6 @@ public class WishlistIT {
         assertTrue(testo.contains("Javascript"), "La card deve mostrare il servizio");
         assertTrue(testo.contains("Programmazione"), "La card deve mostrare il tag");
         assertTrue(testo.contains("Aiuto con le promise"), "La card deve mostrare la descrizione");
-        assertTrue(testo.contains("Pubblica"), "La card deve mostrare la visibilità scelta");
-    }
-
-    @Test
-    @DisplayName("Wishlist (UC14): la visibilità privata viene salvata e mostrata")
-    void testServizioPrivato() {
-        WishlistPage wishlist = new WishlistPage(driver, TIMEOUT);
-
-        wishlist.apriDallaNavbar().vaiAlFormAggiunta();
-        wishlist.compila("Chitarra", "Musica", "Lezioni base", false).aggiungi();
-        wishlist.messaggioContiene("aggiunto");
-
-        wishlist.apriDallaNavbar();
-        List<WebElement> cards = wishlist.getCards();
-
-        assertEquals(1, cards.size());
-        assertTrue(cards.get(0).getText().contains("Privata"),
-                "Il servizio deve risultare privato");
     }
 
     @Test

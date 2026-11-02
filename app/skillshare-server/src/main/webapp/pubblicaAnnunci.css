@@ -1,0 +1,40 @@
+.card-annuncio-pubblicaAnnunci div{
+    background-color: #f8f9fa;
+    border-left: 4px solid #1b263b;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card-annuncio-pubblicaAnnunci .titolo-annuncio-pubblicaAnnunci {
+    font-size: 16px;
+    color: #1b263b;
+}
+
+.card-annuncio-pubblicaAnnunci .autore-annuncio-pubblicaAnnunci {
+    color: #666;
+    font-size: 13px;
+}
+
+.card-annuncio-pubblicaAnnunci .competenze-offerte-pubblicaAnnunci {
+    color: #333;
+}
+
+.card-annuncio-pubblicaAnnunci .descrizione-annuncio-pubblicaAnnunci {
+    margin: 5px 0 0 0;
+    color: #555;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+.txtDescrizione-pubblicaAnnunci {
+    width: 300px;
+    resize: vertical;
+    box-sizing: border-box;
+    min-height: 100px !important;
+    max-height: 300px !important;
+}

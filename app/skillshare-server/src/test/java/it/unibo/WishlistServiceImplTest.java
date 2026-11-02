@@ -26,7 +26,7 @@ public class WishlistServiceImplTest {
     public void testAggiungiServizio_Successo() throws Exception {
         WishlistServiceImpl servizio = new WishlistServiceImpl();
         String mail = "wl_successo@test.it";
-        ServizioRichiesto nuovo = new ServizioRichiesto("Javascript", "Programmazione", "Aiuto con le promise", true);
+        ServizioRichiesto nuovo = new ServizioRichiesto("Javascript", "Programmazione", "Aiuto con le promise");
 
         Boolean esito = servizio.aggiungiServizio(mail, nuovo);
 
@@ -39,20 +39,6 @@ public class WishlistServiceImplTest {
         assertEquals("Javascript", salvato.getNomeServizio());
         assertEquals("Programmazione", salvato.getTagCompetenza());
         assertEquals("Aiuto con le promise", salvato.getDescrizione());
-        assertTrue(salvato.isPubblica(), "La visibilità pubblica deve essere conservata");
-    }
-
-    @Test
-    @DisplayName("Aggiungi Servizio: la visibilità privata viene conservata")
-    public void testAggiungiServizio_VisibilitaPrivata() throws Exception {
-        WishlistServiceImpl servizio = new WishlistServiceImpl();
-        String mail = "wl_privata@test.it";
-
-        servizio.aggiungiServizio(mail, new ServizioRichiesto("Chitarra", "Musica", "Lezioni base", false));
-
-        ArrayList<ServizioRichiesto> wishlist = servizio.getWishlistUtente(mail);
-        assertEquals(1, wishlist.size());
-        assertFalse(wishlist.get(0).isPubblica(), "Il servizio privato non deve diventare pubblico");
     }
 
     @Test
@@ -61,9 +47,9 @@ public class WishlistServiceImplTest {
         WishlistServiceImpl servizio = new WishlistServiceImpl();
         String mail = "wl_multi@test.it";
 
-        servizio.aggiungiServizio(mail, new ServizioRichiesto("Java", "Programmazione", "Primo", true));
-        servizio.aggiungiServizio(mail, new ServizioRichiesto("Inglese", "Lingue", "Secondo", false));
-        servizio.aggiungiServizio(mail, new ServizioRichiesto("Cucina", "Hobby", "Terzo", true));
+        servizio.aggiungiServizio(mail, new ServizioRichiesto("Java", "Programmazione", "Primo"));
+        servizio.aggiungiServizio(mail, new ServizioRichiesto("Inglese", "Lingue", "Secondo"));
+        servizio.aggiungiServizio(mail, new ServizioRichiesto("Cucina", "Hobby", "Terzo"));
 
         ArrayList<ServizioRichiesto> wishlist = servizio.getWishlistUtente(mail);
 
@@ -80,8 +66,8 @@ public class WishlistServiceImplTest {
         String mailA = "wl_utenteA@test.it";
         String mailB = "wl_utenteB@test.it";
 
-        servizio.aggiungiServizio(mailA, new ServizioRichiesto("ServizioA", "TagA", "DescA", true));
-        servizio.aggiungiServizio(mailB, new ServizioRichiesto("ServizioB", "TagB", "DescB", true));
+        servizio.aggiungiServizio(mailA, new ServizioRichiesto("ServizioA", "TagA", "DescA"));
+        servizio.aggiungiServizio(mailB, new ServizioRichiesto("ServizioB", "TagB", "DescB"));
 
         ArrayList<ServizioRichiesto> wishlistA = servizio.getWishlistUtente(mailA);
         ArrayList<ServizioRichiesto> wishlistB = servizio.getWishlistUtente(mailB);
@@ -98,7 +84,7 @@ public class WishlistServiceImplTest {
         String mail = "wl_persistenza@test.it";
 
         new WishlistServiceImpl().aggiungiServizio(mail,
-                new ServizioRichiesto("Fotografia", "Arte", "Ritratti", true));
+                new ServizioRichiesto("Fotografia", "Arte", "Ritratti"));
 
         // Una nuova istanza simula una nuova richiesta al server: i dati devono essere nel DB
         ArrayList<ServizioRichiesto> wishlist = new WishlistServiceImpl().getWishlistUtente(mail);
@@ -107,9 +93,7 @@ public class WishlistServiceImplTest {
         assertEquals("Fotografia", wishlist.get(0).getNomeServizio());
     }
 
-    // =========================================================================
     // aggiungiServizio: casi limite sulla mail
-    // =========================================================================
 
     @Test
     @DisplayName("Aggiungi Servizio: mail nulla lancia un'eccezione")
@@ -117,7 +101,7 @@ public class WishlistServiceImplTest {
         WishlistServiceImpl servizio = new WishlistServiceImpl();
 
         assertThrows(Exception.class,
-                () -> servizio.aggiungiServizio(null, new ServizioRichiesto("X", "Y", "Z", true)),
+                () -> servizio.aggiungiServizio(null, new ServizioRichiesto("X", "Y", "Z")),
                 "Con mail nulla il salvataggio deve fallire");
     }
 
@@ -127,13 +111,11 @@ public class WishlistServiceImplTest {
         WishlistServiceImpl servizio = new WishlistServiceImpl();
 
         assertThrows(Exception.class,
-                () -> servizio.aggiungiServizio("", new ServizioRichiesto("X", "Y", "Z", true)),
+                () -> servizio.aggiungiServizio("", new ServizioRichiesto("X", "Y", "Z")),
                 "Con mail vuota il salvataggio deve fallire");
     }
 
-    // =========================================================================
     // getWishlistUtente
-    // =========================================================================
 
     @Test
     @DisplayName("Get Wishlist: utente senza wishlist riceve una lista vuota, non null")

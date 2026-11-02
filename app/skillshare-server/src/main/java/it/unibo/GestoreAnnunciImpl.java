@@ -192,4 +192,71 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
 
         return risultatiFiltrati;
     }
+
+    @Override
+    public List<Annuncio> ottieniAnnunciPreferiti(String username) throws Exception {
+        List<Annuncio> risultatiFiltrati = new ArrayList<>();
+
+        try {
+            DB db = DatabaseCore.getDB();
+
+            // Recupero la mail dell'utente tramite l'Indice Secondario
+            Utente utenteCorrente = DatabaseUtente.getUtenteByUsername(username);
+            if (utenteCorrente == null) return risultatiFiltrati;
+            String mailUtente = utenteCorrente.getMail();
+
+            //Recupero i profili a cui ho lasciato il cuore
+            HTreeMap<String, List<String>> mappaPreferiti = (HTreeMap<String, List<String>>) db.hashMap("preferenze_match").createOrOpen();
+            List<String> profiliCuore = mappaPreferiti.getOrDefault(mailUtente, new ArrayList<>());
+
+            //Recupero i tag/servizi desiderati dalla Wishlist
+            HTreeMap<String, List<ServizioRichiesto>> mappaWishlist = (HTreeMap<String, List<ServizioRichiesto>>) db.hashMap("wishlist_servizi").createOrOpen();
+            List<ServizioRichiesto> miaWishlist = mappaWishlist.getOrDefault(mailUtente, new ArrayList<>());
+
+            // Estraggo solo i nomi delle competenze desiderate per un controllo più veloce
+            List<String> competenzeDesiderate = new ArrayList<>();
+            for (ServizioRichiesto s : miaWishlist) {
+                if (s.getTagCompetenza() != null) {
+                    competenzeDesiderate.add(s.getTagCompetenza().toLowerCase().trim());
+                }
+            }
+
+            //Scorro gli annunci e filtro escludendo i miei stessi annunci
+            List<Annuncio> tuttiGliAnnunci = ottieniTuttiGliAnnunci();
+
+            for (Annuncio annuncio : tuttiGliAnnunci) {
+
+                if (annuncio.getAutoreUsername().equals(username)) continue;//
+
+                boolean autoreTraIPreferiti = profiliCuore.contains(annuncio.getAutoreUsername());
+
+                boolean competenzaInWishlist = isCompetenzaInWishlist(annuncio, competenzeDesiderate);
+
+                // Se l'autore ha il cuore OPPURE la competenza è in wishlist, lo aggiungo al feed
+                if (autoreTraIPreferiti || competenzaInWishlist) {
+                    risultatiFiltrati.add(annuncio);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return risultatiFiltrati;
+    }
+
+    private static boolean isCompetenzaInWishlist(Annuncio annuncio, List<String> competenzeDesiderate) {
+        boolean competenzaInWishlist = false;
+        if (annuncio.getCompetenzaOfferta() != null) {
+            String compOfferta = annuncio.getCompetenzaOfferta().toLowerCase().trim();
+            // Controllo se l'offerta dell'annuncio contiene o corrisponde a un tag in wishlist
+            for (String desiderata : competenzeDesiderate) {
+                if (compOfferta.contains(desiderata)) {
+                    competenzaInWishlist = true;
+                    break;
+                }
+            }
+        }
+        return competenzaInWishlist;
+    }
 }

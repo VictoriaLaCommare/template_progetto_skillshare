@@ -1,0 +1,55 @@
+.pannelloFiltri-bacheca {
+    background-color: #ffffff !important;
+    z-index: 9999 !important;
+    border: 3px solid #1b263b !important;
+    padding: 15px !important;
+    border-radius: 8px !important;
+}
+
+.layoutFiltri-bacheca {
+    background-color: #ffffff;
+}
+
+.layoutFiltri-bacheca h3 {
+    margin-top: 0; 
+    color: #1b263b;
+}
+
+.tabellaAnnunci-bacheca {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tabella-header-bacheca {
+    background-color: #1b263b;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.tabella-riga-dispari-bacheca td,
+.tabella-riga-pari-bacheca td {
+    text-align: center;
+    border-bottom: 1px solid #dddddd;
+}
+
+.tabella-riga-pari-bacheca td{
+    background-color: #f9f9f9 !important;
+}
+
+.messaggioDiAttesa {
+    color: LightSlateGray;
+    font-style: italic;
+}
+
+.breakDescrizione-bacheca {
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+.bottone-filtri-bacheca {
+    margin-bottom: 10px;
+}

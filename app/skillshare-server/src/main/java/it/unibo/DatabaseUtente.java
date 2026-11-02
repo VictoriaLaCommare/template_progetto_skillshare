@@ -139,4 +139,21 @@ public class DatabaseUtente {
 
         return true;
     }
+
+    /**
+     * Recupera il profilo di un utente dato il suo username.
+     */
+    public static Utente getUtenteByUsername(String username) {
+        if (username == null) {
+            return null;
+        }
+        
+        // Scorre tutti gli utenti presenti nella mappa per trovare la corrispondenza con l'username
+        for (Utente u : getUtenti().values()) {
+            if (u != null && username.equals(u.getUsername())) {
+                return u;
+            }
+        }
+        return null;
+    }
 }

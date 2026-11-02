@@ -70,6 +70,8 @@ public class AutenticatoreProxyTest {
     @DisplayName("Login con credenziali corrette restituisce l'utente")
     public void effettuaLogin_credenzialiCorrette_deveTornareUtente() throws Exception {
         // Arrange: Registriamo l'utente nel sistema
+        utenteValido.setMail("login" + System.currentTimeMillis() + "@mail.com");
+
         proxy.registraUtente(utenteValido);
 
         // Act: Tentiamo il login
@@ -84,6 +86,7 @@ public class AutenticatoreProxyTest {
     @DisplayName("Login con password errata restituisce null")
     public void effettuaLogin_passwordErrata_deveTornareNull() throws Exception {
         // Arrange: Registriamo l'utente
+        utenteValido.setMail("errata" + System.currentTimeMillis() + "@mail.com");
         proxy.registraUtente(utenteValido);
 
         // Act: Tentiamo il login con password sbagliata

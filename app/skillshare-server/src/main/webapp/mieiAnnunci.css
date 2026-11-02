@@ -1,0 +1,62 @@
+.contenitoreLista {
+    width: 100%;
+    border-spacing: 10px;
+}
+
+.card-mieiAnnunci {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-left: 4px solid #1b263b;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.testoAnnuncio-mieiAnnunci .annuncio-titolo {
+    font-size: 18px;
+    color: #1b263b;
+}
+
+.testoAnnuncio-mieiAnnunci .annuncio-contenitore, 
+.testoAnnuncio-mieiAnnunci .annuncio-2riga {
+    color: #333;
+}
+
+.testoAnnuncio-mieiAnnunci .annuncio-contenitore {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.testoAnnuncio-mieiAnnunci .annuncio-descrizione {
+    margin: 10px 0 15px 0;
+    color: #555;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    font-size: 15px;
+}
+
+.distanzaBottoni-mieiAnnunci {
+    border-spacing: 10px;
+}
+
+.panelElimina-Spacing-mieiAnnunci{
+    border-spacing: 15px;
+}
+
+.panelModifica-Spacing-mieiAnnunci {
+    border-spacing: 10px;
+}
+
+.txtbox-modifica-mieiAnnunci, .textarea-modifica-mieiAnnunci {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.textarea-modifica-mieiAnnunci {
+    resize: vertical !important;
+    max-width: 100%;
+    min-height: 60px !important;
+    max-height: 200px !important;
+}
+

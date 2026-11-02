@@ -16,32 +16,30 @@ public class LeMieChatGUI {
         this.utenteLoggato = utente;
         
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("90%");
-        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP); 
+        mainContainer.addStyleName("mainContainer");
 
         mainPanel = new VerticalPanel();
-        mainPanel.setWidth("100%");
         mainPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        mainPanel.setSpacing(15);
-        mainPanel.getElement().getStyle().setProperty("fontFamily", "Segoe UI, Tahoma, sans-serif");
+        mainPanel.addStyleName("pannelloPrincipale");
 
         if (utenteLoggato != null) {
             mainPanel.add(new AppNavbar(utenteLoggato, "chat"));
         }
 
         HTML titolo = new HTML(
-            "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-            "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: bold;\">Le Mie Chat Attive</h1>" +
-            "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Comunica con gli utenti per i tuoi scambi approvati</p>" +
+            "<div>" +
+            "<h1>Le Mie Chat Attive</h1>" +
+            "<p>Comunica con gli utenti per i tuoi scambi approvati</p>" +
             "</div>"
         );
+        titolo.addStyleName("stylePannello");
+
         mainPanel.add(titolo);
 
         VerticalPanel listaChatPanel = new VerticalPanel();
-        listaChatPanel.setWidth("100%");
         listaChatPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER); 
-        listaChatPanel.setSpacing(10);
+        listaChatPanel.addStyleName("contenitoreLista");
         mainPanel.add(listaChatPanel);
 
         caricaChatAttive(listaChatPanel);
@@ -58,7 +56,9 @@ public class LeMieChatGUI {
         richiesteService.ottieniTutteLeRichieste(utenteLoggato.getUsername(), new AsyncCallback<List<RichiestaScambio>>() {
             @Override
             public void onFailure(Throwable caught) {
-                container.add(new HTML("<div style=\"color: red;\">Errore di comunicazione: " + caught.getMessage() + "</div>"));
+                HTML erroreDiComunicazione = new HTML("<div>Errore di comunicazione: " + caught.getMessage() + "</div>");
+                erroreDiComunicazione.addStyleName("testo-errore");
+                container.add(erroreDiComunicazione);
             }
 
             @Override
@@ -84,28 +84,22 @@ public class LeMieChatGUI {
 
     private Widget creaCardChat(RichiestaScambio req) {
         HorizontalPanel card = new HorizontalPanel();
-        card.setWidth("100%");
         card.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        card.getElement().getStyle().setProperty("backgroundColor", "#f8f9fa");
-        card.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b"); 
-        card.getElement().getStyle().setProperty("padding", "15px");
-        card.getElement().getStyle().setProperty("marginBottom", "12px");
-        card.getElement().getStyle().setProperty("borderRadius", "4px");
-        card.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.05)");
+        card.addStyleName("cardChat-lemiechat");
 
         String interlocutore = utenteLoggato.getUsername().equals(req.getRichiedente()) ? req.getRicevente() : req.getRichiedente();
 
         HTML info = new HTML(
-            "<b style=\"font-size: 16px; color: #1b263b;\">Scambio con: " + interlocutore + "</b><br/>" +
-            "<span style=\"color: #555; font-size: 14px;\">Riferimento Annuncio #" + req.getIdAnnuncio() + "</span>"
+            "<b class='titoloScambio'>Scambio con: " + interlocutore + "</b><br/>" +
+            "<span class='riferimentoAnnuncio'>Riferimento Annuncio #" + req.getIdAnnuncio() + "</span>"
         );
+        info.addStyleName("infoCard-lemiechat");
         
         Button btnApriChat = new Button("💬 Apri Chat");
         btnApriChat.addClickHandler(event -> apriPopupChat(req, interlocutore));
 
         card.add(info);
         card.add(btnApriChat);
-        card.setCellWidth(info, "80%");
         card.setCellHorizontalAlignment(btnApriChat, HasHorizontalAlignment.ALIGN_RIGHT);
 
         return card;
@@ -119,12 +113,11 @@ public class LeMieChatGUI {
 
         chatDialog.setWidth("100%");
 
-        VerticalPanel dialogLayout = new VerticalPanel();
-        dialogLayout.setWidth("100%");
-        dialogLayout.setSpacing(10); 
+        VerticalPanel dialogLayout = new VerticalPanel(); 
+        dialogLayout.addStyleName("contenitoreLista");
 
         ChatPanel chatPanel = new ChatPanel(req.getIdRichiesta(), utenteLoggato.getUsername());
-        chatPanel.setWidth("100%");
+        chatPanel.addStyleName("larghezzaMax");
 
         Button btnChiudi = new Button("X");
         btnChiudi.getElement().setId("chat-btn-chiudi");

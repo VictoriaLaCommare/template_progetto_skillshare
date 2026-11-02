@@ -34,33 +34,28 @@ public class ChatPanel extends Composite {
     }
 
     private void setupUI() {
-        mainPanel.setWidth("100%");
+        mainPanel.addStyleName("larghezzaMax");
 
-        scrollPanel.setSize("100%", "330px"); 
-        scrollPanel.getElement().getStyle().setProperty("border", "1px solid #cccccc");
-        scrollPanel.getElement().getStyle().setProperty("backgroundColor", "#ffffff");
+        scrollPanel.addStyleName("scrollPanel-chatpanel");
         
         scrollPanel.setWidget(messaggiContainer);
-        messaggiContainer.setWidth("100%");
-        messaggiContainer.setSpacing(5); 
+        messaggiContainer.addStyleName("messaggiContainer-chatpanel");
         messaggiContainer.getElement().setId("chat-messaggi-container");
 
         HorizontalPanel inputPanel = new HorizontalPanel();
-        inputPanel.setWidth("100%");
-        inputPanel.getElement().getStyle().setProperty("paddingTop", "10px");
+        inputPanel.addStyleName("inputPanel-chatpanel");
         
-        inputTextBox.setWidth("95%");
+        inputTextBox.addStyleName("inputTextBox-chatpanel");
         inputTextBox.getElement().setId("chat-input-messaggio");
 
-        inviaButton.setWidth("100%");
+        //inviaButton.setWidth("100%");
+        inviaButton.addStyleName("larghezzaMax");
         inviaButton.getElement().setId("chat-btn-invia");
         inviaButton.addClickHandler(event -> inviaMessaggio());
 
         inputPanel.add(inputTextBox);
-        inputPanel.setCellWidth(inputTextBox, "80%");
         inputPanel.add(inviaButton);
-        inputPanel.setCellWidth(inviaButton, "20%");
-
+        
         mainPanel.add(scrollPanel);
         mainPanel.add(inputPanel);
     }
@@ -98,8 +93,9 @@ public class ChatPanel extends Composite {
                 messaggiContainer.clear(); 
 
                 for (Messaggio m : storico) {
-                    String colore = m.getMittente().equals(utenteCorrente) ? "blue" : "green";
-                    HTML riga = new HTML("<b style='color:" + colore + "'>" + m.getMittente() + ":</b> " + m.getTesto());
+                    String colore = m.getMittente().equals(utenteCorrente) ? "chatmittente-chatpanel" : "chatdestinatario-chatpanel";
+                    HTML riga = new HTML("<b class='" + colore + "'>" + m.getMittente() + ":</b> " + m.getTesto());
+                    riga.addStyleName("riga-messaggio-chatpanel");
                     messaggiContainer.add(riga);
                 }
                 scrollPanel.scrollToBottom();

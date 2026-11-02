@@ -10,38 +10,35 @@ public class PubblicaAnnunciGui {
     //Collegamento con il backend degli annunci
     private final GestoreAnnunciAsync rpcService = GWT.create(GestoreAnnunci.class);
     
-    private static final String COLORE_ERRORE = "2px solid #e53935";
 
     private void evidenzia(Widget w, boolean valido) {
         if (valido) {
-            w.getElement().getStyle().clearProperty("border");
+            w.removeStyleName("input-errore");
         } else {
-            w.getElement().getStyle().setProperty("border", COLORE_ERRORE);
+            w.addStyleName("input-errore");
         }
     }
 
     private void mostraErrore(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("red");
+        lbl.removeStyleName("testo-successo");
+        lbl.addStyleName("testo-errore");
         lbl.setText(testo);
     }
 
     private void mostraSuccesso(Label lbl, String testo) {
-        lbl.getElement().getStyle().setColor("green");
+        lbl.removeStyleName("testo-errore");
+        lbl.addStyleName("testo-successo");
         lbl.setText(testo);
     }
 
     public void mostra(Utente utenteLoggato) {
         VerticalPanel mainContainer = new VerticalPanel();
-        mainContainer.setWidth("90%");
         mainContainer.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        mainContainer.getElement().getStyle().setProperty("margin", "20px auto");
-        mainContainer.setSpacing(0);
+        mainContainer.addStyleName("mainContainer");
 
         VerticalPanel panel = new VerticalPanel();
-        panel.setSpacing(15);
-        panel.setWidth("100%");
-        panel.getElement().getStyle().setProperty("margin", "20px auto");
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        panel.addStyleName("pannelloPrincipale");
 
         // Aggiungiamo la Navbar centralizzata in cima
         if (utenteLoggato != null) {
@@ -49,24 +46,25 @@ public class PubblicaAnnunciGui {
         }
 
         HTML bannerDashboard = new HTML(
-        "<div style=\"background-color: #1b263b; color: #ffffff; padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, sans-serif; margin-bottom: 25px;\">" +
-        "<h1 style=\"margin: 0 0 8px 0; color: #ffffff; font-size: 28px;\">Bacheca Annunci</h1>" +
-        "<p style=\"margin: 0; font-size: 16px; color: #e0f2f1;\">Condividi le tue competenze o cerca aiuto nella community!</p>" +
+        "<div>" +
+        "<h1>Bacheca Annunci</h1>" +
+        "<p>Condividi le tue competenze o cerca aiuto nella community!</p>" +
         "</div>"
         );
-        
+        bannerDashboard.addStyleName("stylePannello");
+
         panel.add(bannerDashboard);
 
         //Campo titolo
         TextBox txtTitolo = new TextBox();
         txtTitolo.getElement().setPropertyString("placeholder", "Titolo annuncio");
         txtTitolo.getElement().setId("annuncio-titolo");
-        txtTitolo.setWidth("300px");
+        txtTitolo.addStyleName("larghezzaBox");
         
         Label errTitolo = new Label();
-        errTitolo.getElement().getStyle().setColor("red");
+        errTitolo.addStyleName("testo-errore");
         HorizontalPanel rowTitolo = new HorizontalPanel();
-        rowTitolo.setSpacing(5);
+        rowTitolo.addStyleName("form-row");
         rowTitolo.add(txtTitolo);
         rowTitolo.add(errTitolo);
 
@@ -75,12 +73,12 @@ public class PubblicaAnnunciGui {
         txtDescrizione.getElement().setPropertyString("placeholder", "Descrizione dettagliata...");
         txtDescrizione.getElement().setId("annuncio-desc");
         txtDescrizione.setVisibleLines(4);
-        txtDescrizione.setWidth("300px");
+        txtDescrizione.addStyleName("txtDescrizione-pubblicaAnnunci");
         
         Label errDescrizione = new Label();
-        errDescrizione.getElement().getStyle().setColor("red");
+        errDescrizione.addStyleName("testo-errore");
         HorizontalPanel rowDescrizione = new HorizontalPanel();
-        rowDescrizione.setSpacing(5);
+        rowDescrizione.addStyleName("form-row");
         rowDescrizione.add(txtDescrizione);
         rowDescrizione.add(errDescrizione);
 
@@ -88,12 +86,12 @@ public class PubblicaAnnunciGui {
         TextBox txtOfferta = new TextBox();
         txtOfferta.getElement().setPropertyString("placeholder", "Competenza offerta");
         txtOfferta.getElement().setId("annuncio-offerta");
-        txtOfferta.setWidth("300px");
+        txtOfferta.addStyleName("larghezzaBox");
         
         Label errOfferta = new Label();
-        errOfferta.getElement().getStyle().setColor("red");
+        errOfferta.addStyleName("testo-errore");
         HorizontalPanel rowOfferta = new HorizontalPanel();
-        rowOfferta.setSpacing(5);
+        rowOfferta.addStyleName("form-row");
         rowOfferta.add(txtOfferta);
         rowOfferta.add(errOfferta);
 
@@ -101,12 +99,12 @@ public class PubblicaAnnunciGui {
         TextBox txtRichiesta = new TextBox();
         txtRichiesta.getElement().setPropertyString("placeholder", "Competenza richiesta");
         txtRichiesta.getElement().setId("annuncio-richiesta");
-        txtRichiesta.setWidth("300px");
+        txtRichiesta.addStyleName("larghezzaBox");
         
         Label errRichiesta = new Label();
         errRichiesta.getElement().getStyle().setColor("red");
         HorizontalPanel rowRichiesta = new HorizontalPanel();
-        rowRichiesta.setSpacing(5);
+        rowRichiesta.addStyleName("form-row");
         rowRichiesta.add(txtRichiesta);
         rowRichiesta.add(errRichiesta);
 
@@ -119,8 +117,7 @@ public class PubblicaAnnunciGui {
 
         //Pannello per la lista degli annunci esistenti
         VerticalPanel panelListaAnnunci = new VerticalPanel();
-        panelListaAnnunci.setSpacing(5);
-        panelListaAnnunci.setWidth("100%");
+        panelListaAnnunci.addStyleName("panelListaAnteprima");
         panelListaAnnunci.add(new Label("Caricamento annunci in corso..."));
         
         caricaAnnunci(panelListaAnnunci);
@@ -228,12 +225,13 @@ public class PubblicaAnnunciGui {
                 }
                 for (Annuncio a : annunci) {
                     HTML cardAnnuncio = new HTML(
-                        "<div style=\"background: #f8f9fa; border-left: 4px solid #1b263b; padding: 12px 15px; margin-bottom: 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); width: 100%; box-sizing: border-box;\">" +
-                        "<b style=\"font-size: 16px; color: #1b263b;\">" + a.getTitolo() + "</b> <span style=\"color: #666; font-size: 13px;\">(Autore: " + a.getAutoreUsername() + ")</span><br/>" +
-                        "<span style=\"color: #333;\"><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span><br/>" +
-                        "<p style=\"margin: 5px 0 0 0; color: #555; font-size: 14px;\"><em>" + a.getDescrizione() + "</em></p>" +
+                        "<div class='annuncio-card card-annuncio-pubblicaAnnunci'>" +
+                        "<b class='titolo-annuncio-pubblicaAnnunci'>" + a.getTitolo() + "</b> <span class='autore-annuncio-pubblicaAnnunci'>(Autore: " + a.getAutoreUsername() + ")</span><br/>" +
+                        "<span class='competenze-offerte-pubblicaAnnunci'><b>Offre:</b> " + a.getCompetenzaOfferta() + " | <b>Richiede:</b> " + a.getCompetenzaRichiesta() + "</span><br/>" +
+                        "<p class='descrizione-annuncio-pubblicaAnnunci'><em>" + a.getDescrizione() + "</em></p>" +
                         "</div>"
                     );
+                    cardAnnuncio.addStyleName("card-annuncio-pubblicaAnnunci");
                     container.add(cardAnnuncio);
                 }
             }

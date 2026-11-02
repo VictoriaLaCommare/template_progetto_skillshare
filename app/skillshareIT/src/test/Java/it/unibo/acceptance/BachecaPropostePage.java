@@ -20,6 +20,48 @@ public class BachecaPropostePage {
     @FindBy(id = "msg-nessuna-proposta")
     private WebElement messaggioVuoto;
 
+    @FindBy(id = "btn-filtri")
+    private WebElement btnFiltri;
+
+    @FindBy(id = "btn-annunci-per-te")
+    private WebElement btnAnnunciPerTe;
+
+    @FindBy(id = "msg-nessuna-proposta")
+    private WebElement msgNessunaProposta;
+
+    //Apri il popup della Ricerca Avanzata tramite il pulsante '🔍 Filtri Avanzati'
+    public void apriFiltriAvanzati() {
+        wait.until(ExpectedConditions.elementToBeClickable(btnFiltri)).click();
+    }
+
+
+     //Clicca sul pulsante '❤️ Per Te' all'interno del popup
+    public void cliccaAnnunciPerTe() {
+        apriFiltriAvanzati();
+        wait.until(ExpectedConditions.elementToBeClickable(btnAnnunciPerTe)).click();
+    }
+
+
+     //Verifica se un annuncio con un determinato titolo è presente nella tabella
+    public boolean isAnnuncioPresenteInTabella(String titoloCercato) {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
+            return tabellaProposte.getText().contains(titoloCercato);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+     //Verifica se viene mostrato il messaggio di assenza proposte
+    public boolean isMessaggioNessunaPropostaVisibile() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOf(msgNessunaProposta)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public BachecaPropostePage(WebDriver driver, Duration timeout) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, timeout);

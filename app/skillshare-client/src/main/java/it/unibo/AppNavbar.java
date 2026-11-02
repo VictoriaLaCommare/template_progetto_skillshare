@@ -6,22 +6,12 @@ public class AppNavbar extends Composite {
 
     public AppNavbar(Utente utenteLoggato, String paginaAttiva) {
         HorizontalPanel navbar = new HorizontalPanel();
-        navbar.setWidth("100%"); 
-        navbar.setSpacing(10);
-        navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);        
-        navbar.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        navbar.getElement().getStyle().setProperty("padding", "10px 20px");
-        navbar.getElement().getStyle().setProperty("boxShadow", "0 4px 8px rgba(0,0,0,0.15)");
-        navbar.getElement().getStyle().setProperty("borderRadius", "12px"); 
-        navbar.getElement().getStyle().setProperty("margin", "0 auto 20px auto");
-        navbar.getElement().getStyle().setProperty("boxSizing", "border-box");
+        navbar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        navbar.addStyleName("navbar-container");
 
         // Logo
         Label lblLogo = new Label("SkillShare");
-        lblLogo.getElement().getStyle().setProperty("color", "#ffffff");
-        lblLogo.getElement().getStyle().setProperty("fontSize", "20px");
-        lblLogo.getElement().getStyle().setProperty("fontWeight", "bold");
-        lblLogo.getElement().getStyle().setProperty("cursor", "pointer");
+        lblLogo.addStyleName("navbar-logo");
         lblLogo.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
         
         navbar.add(lblLogo);
@@ -29,7 +19,7 @@ public class AppNavbar extends Composite {
 
         // Pannello Menu
         HorizontalPanel menuPanel = new HorizontalPanel();
-        menuPanel.setSpacing(15);
+        menuPanel.addStyleName("navbar-menu");
         menuPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         menuPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
@@ -40,7 +30,7 @@ public class AppNavbar extends Composite {
         btnBacheca.addClickHandler(event -> new PubblicaAnnunciGui().mostra(utenteLoggato));
         
         // 2. Cerca / Proposte
-        Button btnProposte = creaPannelloStileLink("🔍 Cerca / Scambi");
+        Button btnProposte = creaPannelloStileLink("🔍 Cerca");
         btnProposte.getElement().setId("nav-btn-proposte"); 
         if ("ricerca".equals(paginaAttiva)) evidenziaBottone(btnProposte);
         btnProposte.addClickHandler(event -> new BachecaProposteGUI().mostra(utenteLoggato));
@@ -101,22 +91,12 @@ public class AppNavbar extends Composite {
 
     private Button creaPannelloStileLink(String testo) {
         Button btn = new Button(testo);
-        btn.getElement().getStyle().setProperty("backgroundColor", "#f0f2f5");
-        btn.getElement().getStyle().setProperty("color", "#1b263b");
-        btn.getElement().getStyle().setProperty("border", "none");
-        btn.getElement().getStyle().setProperty("padding", "6px 12px");
-        btn.getElement().getStyle().setProperty("borderRadius", "4px");
-        btn.getElement().getStyle().setProperty("fontSize", "13px");
-        btn.getElement().getStyle().setProperty("fontWeight", "bold");
-        btn.getElement().getStyle().setProperty("cursor", "pointer");
+        btn.addStyleName("nav-link");
         return btn;
     }
 
     private void evidenziaBottone(Button btn) {
         btn.setEnabled(false);
-        btn.getElement().getStyle().setProperty("backgroundColor", "#1b263b");
-        btn.getElement().getStyle().setProperty("color", "#6c757d");
-        btn.getElement().getStyle().setProperty("boxShadow", "inset 0 4px 6px rgba(0,0,0,0.4)");
-        btn.getElement().getStyle().setProperty("cursor", "default");
+        btn.addStyleName("nav-link-active");
     }
 }

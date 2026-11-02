@@ -22,21 +22,17 @@ public class ProfiliSuggeritiWidget extends Composite {
         this.tagRicercato = tagRicercato;
 
         mainContainer = new VerticalPanel();
-        mainContainer.setWidth("100%");
-        mainContainer.setSpacing(5);
-        mainContainer.getElement().getStyle().setProperty("marginTop", "10px");
-        mainContainer.getElement().getStyle().setProperty("marginBottom", "25px");
-        mainContainer.getElement().getStyle().setProperty("paddingLeft", "20px");
-        mainContainer.getElement().getStyle().setProperty("borderLeft", "4px solid #1b263b");
+        mainContainer.addStyleName("mainContainer-wishlist");
 
         HTML titolo = new HTML(
-            "<h4 style=\"margin: 0 0 10px 0; color: #1b263b; font-size: 16px;\">💡 Profili suggeriti per questa competenza:</h4>"
+            "<h4>💡 Profili suggeriti per questa competenza:</h4>"
         );
+        titolo.addStyleName("titoloCardSuggeriti-wishlist");
+
         mainContainer.add(titolo);
 
         Label lblStato = new Label("Ricerca profili compatibili...");
-        lblStato.getElement().getStyle().setProperty("fontStyle", "italic");
-        lblStato.getElement().getStyle().setProperty("color", "#757575");
+        lblStato.addStyleName("lblStato-wishlist");
         mainContainer.add(lblStato);
 
         initWidget(mainContainer);
@@ -50,7 +46,7 @@ public class ProfiliSuggeritiWidget extends Composite {
             @Override
             public void onFailure(Throwable caught) {
                 lblStato.setText("Errore nella ricerca dei profili: " + caught.getMessage());
-                lblStato.getElement().getStyle().setProperty("color", "red");
+                lblStato.addStyleName("testo-errore");
             }
 
             @Override
@@ -58,7 +54,8 @@ public class ProfiliSuggeritiWidget extends Composite {
                 mainContainer.remove(lblStato);
 
                 if (result == null || result.isEmpty()) {
-                    HTML nessunRisultato = new HTML("<p style=\"margin: 0; font-size: 14px; color: #757575;\"><i>Nessun profilo trovato al momento. Prova ad aggiungere un servizio con un tag di competenza diverso.</i></p>");
+                    HTML nessunRisultato = new HTML("<p><i>Nessun profilo trovato al momento. Prova ad aggiungere un servizio con un tag di competenza diverso.</i></p>");
+                    nessunRisultato.addStyleName("txtNessunRisultato-wishlist");
                     mainContainer.add(nessunRisultato);
                     return;
                 }
@@ -88,46 +85,32 @@ public class ProfiliSuggeritiWidget extends Composite {
 
     private HorizontalPanel creaCardProfilo(Utente profilo, boolean giaSalvato) {
         HorizontalPanel cardMatch = new HorizontalPanel();
-        cardMatch.setWidth("100%");
         cardMatch.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-        cardMatch.getElement().getStyle().setProperty("backgroundColor", "#ffffff");
-        cardMatch.getElement().getStyle().setProperty("padding", "15px");
-        cardMatch.getElement().getStyle().setProperty("borderRadius", "8px");
-        cardMatch.getElement().getStyle().setProperty("boxShadow", "0 1px 3px rgba(0,0,0,0.1)");
-        cardMatch.getElement().getStyle().setProperty("marginBottom", "8px");
-        cardMatch.getElement().getStyle().setProperty("border", "1px solid #e0e0e0");
+        cardMatch.addStyleName("cardMatch-wishlist");
 
         String nome = SafeHtmlUtils.htmlEscape(profilo.getNome() + " " + profilo.getCognome());
         String competenze = SafeHtmlUtils.htmlEscape(profilo.getTagCompetenze() != null ? profilo.getTagCompetenze() : "Nessuna");
 
         HTML infoUtente = new HTML(
-            "<div style=\"flex-grow: 1;\">" +
-            "<h4 style=\"margin: 0 0 4px 0; color: #1b263b; font-size: 15px;\">" + nome + "</h4>" +
-            "<p style=\"margin: 0; font-size: 13px; color: #555555;\">Competenze: <b>" + competenze + "</b></p>" +
+            "<div class='contenitore'>" +
+            "<h4 class='titolo'>" + nome + "</h4>" +
+            "<p class='competenze'>Competenze: <b>" + competenze + "</b></p>" +
             "</div>"
         );
-        infoUtente.setWidth("100%");
-
-        Button btnSalva = new Button("⭐ Salva Profilo");
-        btnSalva.getElement().getStyle().setProperty("background", "#1b263b");
-        btnSalva.getElement().getStyle().setProperty("color", "#ffffff");
-        btnSalva.getElement().getStyle().setProperty("border", "none");
-        btnSalva.getElement().getStyle().setProperty("padding", "8px 15px");
-        btnSalva.getElement().getStyle().setProperty("borderRadius", "4px");
-        btnSalva.getElement().getStyle().setProperty("cursor", "pointer");
-        btnSalva.getElement().getStyle().setProperty("fontWeight", "bold");
-        btnSalva.getElement().getStyle().setProperty("whiteSpace", "nowrap");
+        infoUtente.addStyleName("txtinfoUtente-wishlist");
+        infoUtente.addStyleName("larghezzaMax");
+        Button btnSalva = new Button("🤍");
+        btnSalva.addStyleName("btnCuoreBianco-wishlist");
 
         // Profilo già salvato in precedenza: lo mostro subito come tale
         if (giaSalvato) {
-            btnSalva.setText("✅ Salvato");
-            btnSalva.getElement().getStyle().setProperty("background", "#2e7d32");
+            btnSalva.setText("❤️");
+            btnSalva.addStyleName("btnSfondoTrasparente-wishlist");
         }
 
         btnSalva.addClickHandler(event -> gestisciToggleProfilo(profilo.getMail(), btnSalva));
 
         cardMatch.add(infoUtente);
-        cardMatch.setCellWidth(infoUtente, "80%");
         cardMatch.add(btnSalva);
         cardMatch.setCellHorizontalAlignment(btnSalva, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -136,17 +119,16 @@ public class ProfiliSuggeritiWidget extends Composite {
 
     private void gestisciToggleProfilo(String mailProfiloTarget, Button bottone) {
         bottone.setEnabled(false);
-        boolean isGiaSalvato = bottone.getText().contains("Salvato");
+        boolean isGiaSalvato = bottone.getText().contains("❤️");
 
         if (isGiaSalvato) {
             // L'utente è già salvato -> Dobbiamo rimuoverlo
-            bottone.setText("⏳ Rimozione...");
             
             matchmakingService.rimuoviProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     bottone.setEnabled(true);
-                    bottone.setText("✅ Salvato");
+                    bottone.setText("❤️");
                     Window.alert("Errore durante la rimozione: " + caught.getMessage());
                 }
 
@@ -155,20 +137,19 @@ public class ProfiliSuggeritiWidget extends Composite {
                     bottone.setEnabled(true);
                     if (result) {
                         // Torna allo stato iniziale
-                        bottone.setText("⭐ Salva Profilo");
-                        bottone.getElement().getStyle().setProperty("background", "#1b263b");
+                        bottone.setText("🤍");
+                        bottone.addStyleName("btnSfondoTrasparente-wishlist");
                     }
                 }
             });
         } else {
             // L'utente non è salvato -> Dobbiamo salvarlo
-            bottone.setText("⏳ Salvataggio...");
             
             matchmakingService.salvaProfilo(mailUtenteLoggato, mailProfiloTarget, new AsyncCallback<Boolean>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     bottone.setEnabled(true);
-                    bottone.setText("⭐ Salva Profilo");
+                    bottone.setText("🤍");
                     Window.alert("Errore durante il salvataggio: " + caught.getMessage());
                 }
 
@@ -177,8 +158,8 @@ public class ProfiliSuggeritiWidget extends Composite {
                     bottone.setEnabled(true);
                     if (result) {
                         // Cambia in stato salvato
-                        bottone.setText("✅ Salvato");
-                        bottone.getElement().getStyle().setProperty("background", "#2e7d32");
+                        bottone.setText("❤️");
+                        bottone.addStyleName("btnSfondoTrasparente-wishlist");
                     }
                 }
             });

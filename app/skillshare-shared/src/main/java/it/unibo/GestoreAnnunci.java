@@ -6,7 +6,7 @@ import java.util.List;
 
 @RemoteServiceRelativePath("annunci")
 public interface GestoreAnnunci extends RemoteService {
-    
+
     // Metodo per salvare un nuovo annuncio
     Boolean pubblicaAnnuncio(Annuncio annuncio) throws Exception;
     
@@ -20,4 +20,7 @@ public interface GestoreAnnunci extends RemoteService {
     Boolean eliminaAnnuncio(String id, String username) throws Exception;
 
     List<Annuncio> cercaAnnunci(String competenzaOfferta, String competenzaRichiesta, String keyword, String ordinamento) throws Exception;
+
+    // metodo per visualizzare annunci di utenti preferiti
+    List<Annuncio> ottieniAnnunciPreferiti(String username) throws Exception;
 }

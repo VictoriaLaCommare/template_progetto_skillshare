@@ -1,0 +1,96 @@
+.erroreDiComunicazione-richiesteRicevute {
+    color: red;
+    text-align: center;
+}
+
+.cardRichieste-richiesteRicevute {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-left: 4px solid #1b263b;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.infoCard-richiesteRicevute .richiesta{
+    font-size: 16px;
+    color: #1b263b;
+}
+.infoCard-richiesteRicevute .id{
+    color: #555;
+    font-size: 14px;
+}
+
+.buttonPanel-richiesteRicevute {
+    border-spacing: 10px;
+    margin-top: 10px;
+}
+
+.testoRifiutoHTML-richiesteRicevute {
+    color: red; 
+    font-weight: bold;
+}
+
+.testoRichiestaAccettata-richiesteRicevute {
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.messaggioAttesa-richiesteRicevute {
+    color: LightSlateGray;
+}
+
+.textRichiestaCompletata-richiesteRicevute {
+    color: purple;
+}
+
+.textRecensioneInviata-richiesteRicevute {
+    color: SeaGreen;
+}
+
+.formRecensione-richiesteRicevute {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 270px;
+}
+
+.titoloValuta-richiesteRicevute {
+     color:MidnightBlue;
+}
+
+.stellePanel-richiesteRicevute {
+    border-spacing: 4px;
+}
+
+.stellaStyle-richiesteRicevute {
+    font-size: 28px;
+    cursor: pointer;
+    color: silver;
+}
+
+.stella-evidenziata-richiesteRicevute {
+    color: gold;
+}
+
+.txtCommento-richiesteRicevute {
+    width: 100%;
+    resize: vertical;
+    box-sizing: border-box;
+    min-height: 50px !important;
+    max-height: 200px !important;
+}
+
+.btn-base-richieste-richiesteRicevute{
+    color: black !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    box-shadow: none !important;
+}

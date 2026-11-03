@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unchecked")
-public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService, SoggettoOsservabile {
+public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService, SoggettoOsservabile, AnnuncioObserver {
 
     //Lista osservatori
     private final List<OsservatoreScambio> osservatori;

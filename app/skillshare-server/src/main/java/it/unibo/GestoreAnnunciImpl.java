@@ -11,6 +11,30 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreAnnunci {
 
+<<<<<<< Updated upstream
+=======
+    //aggiunto pattern observer per gestire la corretta eliminazione degli annunci
+    // Lista degli osservatori per gli eventi sugli annunci
+    private static final List<AnnuncioObserver> osservatori = new ArrayList<>();
+
+    public static void aggiungiOsservatore(AnnuncioObserver o) {
+        osservatori.clear();
+        osservatori.add(o);
+    }
+
+    private void notificaEliminazione(String idAnnuncio) {
+        for (AnnuncioObserver o : osservatori) {
+            o.dopoAnnuncioEliminato(idAnnuncio);
+        }
+    }
+
+    // Metodo helper per estrarre l'accesso alla mappa annunci su MapDB
+    private HTreeMap<String, Annuncio> getMappaAnnunci() {
+        DB db = DatabaseCore.getDB();
+        return (HTreeMap<String, Annuncio>) db.hashMap("annunci", Serializer.STRING, Serializer.JAVA).createOrOpen();
+    }
+
+>>>>>>> Stashed changes
     @Override
     public Boolean pubblicaAnnuncio(Annuncio annuncio) throws Exception {
         // Recuperiamo l'istanza del database tramite la classe core
@@ -205,11 +229,11 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
             String mailUtente = utenteCorrente.getMail();
 
             //Recupero i profili a cui ho lasciato il cuore
-            HTreeMap<String, List<String>> mappaPreferiti = (HTreeMap<String, List<String>>) db.hashMap("preferenze_match").createOrOpen();
+            HTreeMap<String, List<String>> mappaPreferiti = (HTreeMap<String, List<String>>) db.hashMap("preferenze_match", Serializer.STRING, Serializer.JAVA).createOrOpen();
             List<String> profiliCuore = mappaPreferiti.getOrDefault(mailUtente, new ArrayList<>());
 
             //Recupero i tag/servizi desiderati dalla Wishlist
-            HTreeMap<String, List<ServizioRichiesto>> mappaWishlist = (HTreeMap<String, List<ServizioRichiesto>>) db.hashMap("wishlist_servizi").createOrOpen();
+            HTreeMap<String, List<ServizioRichiesto>> mappaWishlist = (HTreeMap<String, List<ServizioRichiesto>>) db.hashMap("wishlist_servizi", Serializer.STRING, Serializer.JAVA).createOrOpen();
             List<ServizioRichiesto> miaWishlist = mappaWishlist.getOrDefault(mailUtente, new ArrayList<>());
 
             // Estraggo solo i nomi delle competenze desiderate per un controllo più veloce

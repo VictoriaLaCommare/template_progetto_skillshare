@@ -44,8 +44,8 @@ public class AppNavbar extends Composite {
             RootPanel.get().add(new MieiAnnunciPanel(utenteLoggato, () -> new PubblicaAnnunciGui().mostra(utenteLoggato)));
         });
 
-        // 4. Richieste Ricevute
-        Button btnRichieste = creaPannelloStileLink("📥 Richieste Ricevute");
+        // 4. Richieste 
+        Button btnRichieste = creaPannelloStileLink("📥 Le Mie Richieste");
         btnRichieste.getElement().setId("nav-btn-richieste"); 
         if ("richieste".equals(paginaAttiva)) evidenziaBottone(btnRichieste);
         btnRichieste.addClickHandler(event -> new GestisciRichiesteGUI().mostra(utenteLoggato));

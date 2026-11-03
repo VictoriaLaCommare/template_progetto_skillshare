@@ -176,7 +176,7 @@ public class VisualizzaProfiloIT {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
         
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']")));
         
         WebElement btnAccetta = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[contains(., 'Accetta')]")

@@ -178,8 +178,11 @@ public class BachecaProposteGUI {
         pannelloAnnunci.clear();
 
         if (listaProposte == null || listaProposte.isEmpty()){
-            Label lblVuoto = new Label("Non ci sono proposte disponibili al momento.");
+            HTML spazio = new HTML("</br>");
+            Label lblVuoto = new Label( "Non ci sono proposte disponibili al momento.");
             lblVuoto.getElement().setId("msg-nessuna-proposta");
+            lblVuoto.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            pannelloAnnunci.add(spazio);
             pannelloAnnunci.add(lblVuoto);
             return;
         }

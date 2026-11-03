@@ -12,29 +12,25 @@ import java.util.UUID;
 @SuppressWarnings("unchecked")
 public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService, SoggettoOsservabile {
 
-    private final DB db = DatabaseCore.getDB();
     //Lista osservatori
     private final List<OsservatoreScambio> osservatori;
 
-    private final HTreeMap<String, RichiestaScambio> mappaRichieste = db.hashMap("richieste")
-            .keySerializer(Serializer.STRING)
-            .valueSerializer(Serializer.JAVA)
-
     private final HTreeMap<String, RichiestaScambio> getMappaRichieste() {
-            return(HTreeMap<String, RichiestaScambio>) DatabaseCore.getDB().hashMap("richieste")
+        DB db = DatabaseCore.getDB();
+        return (HTreeMap<String, RichiestaScambio>) db.hashMap("richieste")
             .keySerializer(Serializer.STRING) //id richiesta
             .valueSerializer(Serializer.JAVA)//oggetto richiesta
             .createOrOpen();
     }
+
     private boolean ReqInDb(String idRichiesta) {
         return getMappaRichieste().containsKey(idRichiesta);
     }
 
-    //---------------------------------------------------------------------
     public GestoreRichiesteServiceImpl() {
         //Registriamo subito il gestore della gamification come osservatore
         osservatori=new ArrayList<>();
-        aggiungiOsservatore(new GestoreLeveling(db));
+        aggiungiOsservatore(new GestoreLeveling(DatabaseCore.getDB()));
 
         // Registrazione come osservatore delle cancellazioni degli annunci
         GestoreAnnunciImpl.aggiungiOsservatore(this);

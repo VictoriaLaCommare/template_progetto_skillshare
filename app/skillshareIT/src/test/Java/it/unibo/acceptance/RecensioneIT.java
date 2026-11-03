@@ -236,7 +236,7 @@ public class RecensioneIT {
 
     private GestisciRichiestePage apriRichieste() {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']")));
         return new GestisciRichiestePage(driver, TIMEOUT);
     }
 

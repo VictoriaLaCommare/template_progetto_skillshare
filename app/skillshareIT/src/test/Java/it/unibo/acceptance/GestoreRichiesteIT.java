@@ -128,7 +128,7 @@ public class GestoreRichiesteIT {
         navBtnRichieste.click();
 
         WebElement bannerTitolo = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']"))
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']"))
         );
         assertNotNull(bannerTitolo, "Il titolo della schermata Le Mie Richieste deve essere visibile");
     }

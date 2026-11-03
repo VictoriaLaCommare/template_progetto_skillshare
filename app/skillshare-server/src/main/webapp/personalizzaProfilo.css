@@ -49,7 +49,8 @@
 }
 
 .info-personalizzaProfilo .Username,
-.info-personalizzaProfilo .Email {
+.info-personalizzaProfilo .Email, 
+.info-personalizzaProfilo .Data {
     margin: 5px 0;
     color: #666;
 }
@@ -58,6 +59,7 @@
     font-style: italic;
     color: #555;
     text-align: center;
+    margin: 15px 20px;
 }
 
 .tagCompetenze-personalizzaProfilo,

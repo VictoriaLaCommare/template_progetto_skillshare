@@ -119,7 +119,7 @@ public class ChatIT {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
         
         wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h1[text()='Richieste Ricevute']")
+            By.xpath("//h1[text()='Le Mie Richieste']")
         ));
         
         WebElement btnAccetta = wait.until(ExpectedConditions.elementToBeClickable(

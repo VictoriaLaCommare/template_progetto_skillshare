@@ -32,7 +32,7 @@ public class GestisciRichiesteGUI {
         // Intestazione allineata nello stile a "I Miei Annunci"
         HTML titolo = new HTML(
             "<div>" +
-            "<h1>Richieste Ricevute</h1>" +
+            "<h1>Le Mie Richieste</h1>" +
             "<p>Gestisci le richieste di scambio in sospeso e le chat attive</p>" +
             "</div>"
         );
@@ -93,8 +93,12 @@ public class GestisciRichiesteGUI {
         String controparte = sonoRichiedente ? req.getRicevente() : req.getRichiedente();
         String stato = req.getStato().toLowerCase();
 
+        String testoIntestazione = sonoRichiedente 
+            ? "Richiesta da: Te <br/> A: " + req.getRicevente() 
+            : "Richiesta da: " + req.getRichiedente();
+
         HTML info = new HTML(
-            "<b class='richiesta'>Richiesta da: " + req.getRichiedente() + "</b><br/>" +
+            "<b class='richiesta'>" + testoIntestazione + "</b><br/>" +
             "<span class='id'>Riferimento Annuncio ID: " + req.getIdAnnuncio() + "</span>"
         );
         info.addStyleName("infoCard-richiesteRicevute");

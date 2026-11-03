@@ -15,7 +15,6 @@ L'oggetto Observer concreto: reagisce agli eventi di completamento e recensione
 public class GestoreLeveling implements OsservatoreScambio {
 
     public GestoreLeveling(DB db) {
-
     }
     
     private HTreeMap<String, StatisticheUtente> getMappaStatistiche() {
@@ -24,8 +23,6 @@ public class GestoreLeveling implements OsservatoreScambio {
                 .valueSerializer(Serializer.JAVA)
                 .createOrOpen();
     }
-
-    //  privati
 
     private void aggiornaDopoScambio(String username) {
         StatisticheUtente s = getOrCreate(username);
@@ -36,8 +33,6 @@ public class GestoreLeveling implements OsservatoreScambio {
     private StatisticheUtente getOrCreate(String username) {
         return (StatisticheUtente) getMappaStatistiche().getOrDefault(username, new StatisticheUtente(username));
     }
-
-    // Observer 
 
     @Override
     public void DopoScambioCompletato(RichiestaScambio richiesta) {

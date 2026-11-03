@@ -133,7 +133,7 @@ public class BachecaProposteIT {
 
             // Esce dalla bacheca e ci rientra: lo stato viene riletto dal server
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']")));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']")));
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
 
             BachecaPropostePage bachecaRientrata = new BachecaPropostePage(driver, TIMEOUT);

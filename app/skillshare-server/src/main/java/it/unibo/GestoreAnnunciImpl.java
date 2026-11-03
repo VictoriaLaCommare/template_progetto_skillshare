@@ -16,6 +16,7 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
     private static final List<AnnuncioObserver> osservatori = new ArrayList<>();
 
     public static void aggiungiOsservatore(AnnuncioObserver o) {
+        osservatori.clear();
         osservatori.add(o);
     }
 
@@ -206,11 +207,11 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
             String mailUtente = utenteCorrente.getMail();
 
             //Recupero i profili a cui ho lasciato il cuore
-            HTreeMap<String, List<String>> mappaPreferiti = (HTreeMap<String, List<String>>) db.hashMap("preferenze_match").createOrOpen();
+            HTreeMap<String, List<String>> mappaPreferiti = (HTreeMap<String, List<String>>) db.hashMap("preferenze_match", Serializer.STRING, Serializer.JAVA).createOrOpen();
             List<String> profiliCuore = mappaPreferiti.getOrDefault(mailUtente, new ArrayList<>());
 
             //Recupero i tag/servizi desiderati dalla Wishlist
-            HTreeMap<String, List<ServizioRichiesto>> mappaWishlist = (HTreeMap<String, List<ServizioRichiesto>>) db.hashMap("wishlist_servizi").createOrOpen();
+            HTreeMap<String, List<ServizioRichiesto>> mappaWishlist = (HTreeMap<String, List<ServizioRichiesto>>) db.hashMap("wishlist_servizi", Serializer.STRING, Serializer.JAVA).createOrOpen();
             List<ServizioRichiesto> miaWishlist = mappaWishlist.getOrDefault(mailUtente, new ArrayList<>());
 
             // Estraggo solo i nomi delle competenze desiderate per un controllo più veloce

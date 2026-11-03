@@ -133,7 +133,7 @@ public class BachecaProposteIT {
 
             // Esce dalla bacheca e ci rientra: lo stato viene riletto dal server
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-richieste"))).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Richieste Ricevute']")));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Le Mie Richieste']")));
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
 
             BachecaPropostePage bachecaRientrata = new BachecaPropostePage(driver, TIMEOUT);
@@ -221,13 +221,19 @@ public class BachecaProposteIT {
             WishlistPage wishlistPage = new WishlistPage(driver, TIMEOUT);
             wishlistPage.apriDallaNavbar();
             wishlistPage.vaiAlFormAggiunta();
-            wishlistPage.compila("Informatica", "Java","Desidero imparare Informatica");
+            wishlistPage.compila("Informatica", "Informatica","Desidero imparare Informatica").aggiungi();
+            wishlistPage.messaggioContiene("aggiunto");
 
             // 4. Navigazione in Bacheca e filtro "Per Te"
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
             BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
+            assertTrue(bachecaPage.isTabellaVisibile());
 
             bachecaPage.cliccaAnnunciPerTe();
+
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.xpath("//*[contains(text(), '" + titoloLuigi + "')]")
+            ));
 
             // 5. Asserzioni
             assertTrue(bachecaPage.isAnnuncioPresenteInTabella(titoloMario),

@@ -3,6 +3,7 @@ package it.unibo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.List;
 
 public class ProfiloUtenteGUI {
@@ -71,10 +72,17 @@ public class ProfiloUtenteGUI {
             profiloPanel.add(lblNoFoto);
         }
 
+        String dataNascitaStr = null;
+        if (utenteTarget.getData() != null) {
+            // Usa il formattatore di GWT per renderla leggibile 
+            com.google.gwt.i18n.client.DateTimeFormat dtf = com.google.gwt.i18n.client.DateTimeFormat.getFormat("dd/MM/yyyy");
+            dataNascitaStr = dtf.format(utenteTarget.getData());
+        }
 
         // Nome e Cognome
         HTML info = new HTML("<h2 class='Utente'>" + utenteTarget.getNome() + " " + utenteTarget.getCognome() + "</h2>" + 
                              "<p class='Username'>Username: " + utenteTarget.getUsername() + "</p>" +
+                             "<p class='Data'> Data di Nascita: " + dataNascitaStr + "</p>" +
                              "<p class='Email'>Email: " + utenteTarget.getMail() + "</p>");
         info.addStyleName("info-personalizzaProfilo");
         profiloPanel.add(info);

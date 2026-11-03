@@ -40,6 +40,7 @@ public class GestoreProfiloReale implements GestoreProfilo {
             Utente utentePubblico = new Utente(u.getNome(), u.getCognome());
             utentePubblico.setUsername(u.getUsername());
             utentePubblico.setMail(u.getMail());
+            utentePubblico.setData(u.getData());
             utentePubblico.setBio(u.getBio());
             utentePubblico.setTagCompetenze(u.getTagCompetenze());
             utentePubblico.setImmagineProfilo(u.getImmagineProfilo());

@@ -21,13 +21,14 @@ public class AutenticatoreProxyTest {
 
     @BeforeEach
     public void setUp() {
+        DatabaseUtente.resetPerTest();
         GestorePassword passwordManager = new PasswordManager();
         GestoreAutenticazione autenticatoreReale = new AutenticatoreReale(passwordManager);
         proxy = new AutenticatoreProxy(autenticatoreReale);
 
         // utente valido
         utenteValido = new Utente("Mario", "Rossi");
-        utenteValido.setUsername("mario123");
+        utenteValido.setUsername("mario123" + + System.currentTimeMillis());
         utenteValido.setMail("mario@mail.com" + System.currentTimeMillis());
         utenteValido.setPassword("passwordSicura123");
         utenteValido.setData(new Date());

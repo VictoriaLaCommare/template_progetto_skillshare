@@ -8,16 +8,6 @@ import org.mapdb.Serializer;
 public class DatabaseUtente {
     private static DB dbCache;
     private static ConcurrentMap<String, Utente> utenti;
-<<<<<<< Updated upstream
-/**Quando serve la mappa getUtenti chiede a DatabaseCore.getDB() qua'è il DB attuale e lo confronta con quello che
- *ha in memoria (Cache). Se sono uguali ritorna immediatamnete utenti, se sono diversi perchè c'è stata un abilita
- * =zione/disabilitazione del TestMode che ha invocato close() e creato un nuovo DB, riapre la Mappa utenti nel DB
- *nuovo e si aggiorna la cache.
- *aumenta l'overhead e i tempi del sistema (anche se molto poco) ma è necessario per i test con maven che sennò fal
- * =liscono anche se il codice non presenta problemi (lanciando i test da Intellij i tets passavano sempre)
- * */
-    @SuppressWarnings("unchecked")
-=======
     private static ConcurrentMap<String, String> indiceUsername;
     /**Quando serve la mappa getUtenti chiede a DatabaseCore.getDB() qua'è il DB attuale e lo confronta con quello che
      *ha in memoria (Cache). Se sono uguali ritorna immediatamnete utenti, se sono diversi perchè c'è stata un abilita
@@ -26,10 +16,10 @@ public class DatabaseUtente {
      *aumenta l'overhead e i tempi del sistema (anche se molto poco) ma è necessario per i test con maven che sennò fal
      * =liscono anche se il codice non presenta problemi (lanciando i test da Intellij i tets passavano sempre)
      * */
->>>>>>> Stashed changes
+    
     private static synchronized ConcurrentMap<String, Utente> getUtenti() {
         DB attuale = DatabaseCore.getDB();
-        if (utenti == null || dbCache != attuale) {
+        if (utenti == null || dbCache != attuale || attuale.isClosed()) {
             dbCache = attuale;
             utenti = dbCache.hashMap(
                     "utenti",
@@ -39,12 +29,6 @@ public class DatabaseUtente {
         }
         return utenti;
     }
-<<<<<<< Updated upstream
-=======
-    //Nuova mappa utilizzata per gestire sistema di indici secondari per garantire
-    //efficienza di lookup e permetta di utilizzare mail e usernam come chaivi nelle
-    //altre funzioni senza rischio di bug per duplicazione
-    
     private static synchronized ConcurrentMap<String, String> getIndiceUsername() {
         DB attuale = DatabaseCore.getDB();
         if (indiceUsername == null || dbCache != attuale || attuale.isClosed()) {
@@ -57,14 +41,12 @@ public class DatabaseUtente {
         }
         return indiceUsername;
     }
->>>>>>> Stashed changes
-
-    /**
-     * Forza il ricaricamento della mappa alla prossima chiamata a getUtenti().
-     */
+  
+     //Forza il ricaricamento della mappa alla prossima chiamata a getUtenti().
     public static synchronized void resetPerTest() {
         dbCache = null;
         utenti = null;
+        indiceUsername = null;
     }
 
     /**
@@ -77,12 +59,21 @@ public class DatabaseUtente {
             throw new IllegalArgumentException("richiesta non valida");
 
         String mail = utente.getMail();
+        String username = utente.getUsername();
         ConcurrentMap<String, Utente> mappa = getUtenti();
+        ConcurrentMap<String, String> mappaIndice = getIndiceUsername();
 
         //username essendo la chiave deve essere univoco percui eseguo il controllo
         if (mappa.containsKey(mail))
             throw new Exception("utente già registrato, effettua login per autenticarti");
+
+        if (username != null && mappaIndice.containsKey(username))
+            throw new Exception("username già in uso da un altro utente");
+
         mappa.put(mail, utente);
+        if (username != null) {
+            mappaIndice.put(username, mail);
+        }
         DatabaseCore.commit();
         return true;
     }
@@ -95,6 +86,18 @@ public class DatabaseUtente {
             return null;
         }
         return getUtenti().get(mail);
+    }
+
+    //Recupera l'utente tramite lo username sfruttando l'indice secondario in O(1).
+    public static Utente getUtenteByUsername(String username) {
+        if (username == null) {
+            return null;
+        }
+        String mail = getIndiceUsername().get(username);
+        if (mail == null) {
+            return null;
+        }
+        return getUtente(mail);
     }
 
     /**
@@ -114,9 +117,8 @@ public class DatabaseUtente {
         return null;
     }
 
-    /**
-     * Aggiorna i dati di un utente esistente (es. Modifica Bio o Tag).
-     */
+
+     //Aggiorna i dati di un utente esistente (es. Modifica Bio o Tag).
     public static Boolean aggiornaUtente(Utente utenteModificato) {
         if (utenteModificato == null || utenteModificato.getMail() == null) {
             return false;

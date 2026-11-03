@@ -11,8 +11,6 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreAnnunci {
 
-<<<<<<< Updated upstream
-=======
     //aggiunto pattern observer per gestire la corretta eliminazione degli annunci
     // Lista degli osservatori per gli eventi sugli annunci
     private static final List<AnnuncioObserver> osservatori = new ArrayList<>();
@@ -34,25 +32,17 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
         return (HTreeMap<String, Annuncio>) db.hashMap("annunci", Serializer.STRING, Serializer.JAVA).createOrOpen();
     }
 
->>>>>>> Stashed changes
     @Override
     public Boolean pubblicaAnnuncio(Annuncio annuncio) throws Exception {
-        // Recuperiamo l'istanza del database tramite la classe core
-        DB db = DatabaseCore.getDB();
-        
         try {
-            // Apriamo (o creiamo) la mappa che contiene tutti gli annunci
-            HTreeMap<String, Annuncio> mappaAnnunci = db.hashMap("annunci")
-                .keySerializer(Serializer.STRING)
-                .valueSerializer(Serializer.JAVA)
-                .createOrOpen();
-            
+            HTreeMap<String, Annuncio> mappaAnnunci = getMappaAnnunci();
+
             // Salviamo l'annuncio usando il suo ID univoco
             mappaAnnunci.put(annuncio.getId(), annuncio);
-            
+
             // Salvare fisicamente le modifiche sul file del database
             DatabaseCore.commit();
-            
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,36 +52,28 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
 
     @Override
     public List<Annuncio> ottieniTuttiGliAnnunci() throws Exception {
-        DB db = DatabaseCore.getDB();
         List<Annuncio> listaAnnunci = new ArrayList<>();
-        
+
         try {
-            HTreeMap<String, Annuncio> mappaAnnunci = db.hashMap("annunci")
-                .keySerializer(Serializer.STRING)
-                .valueSerializer(Serializer.JAVA)
-                .createOrOpen();
-            
+            HTreeMap<String, Annuncio> mappaAnnunci = getMappaAnnunci();
+
             // Prendiamo tutti i valori dalla mappa e li mettiamo nella nostra lista
             listaAnnunci.addAll(mappaAnnunci.values());
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return listaAnnunci;
     }
 
     @Override
     public List<Annuncio> ottieniAnnunciUtente(String username) throws Exception {
-        DB db = DatabaseCore.getDB();
         List<Annuncio> listaAnnunci = new ArrayList<>();
-        
+
         try {
-            HTreeMap<String, Annuncio> mappaAnnunci = db.hashMap("annunci")
-                .keySerializer(Serializer.STRING)
-                .valueSerializer(Serializer.JAVA)
-                .createOrOpen();
-            
+            HTreeMap<String, Annuncio> mappaAnnunci = getMappaAnnunci();
+
             // Filtriamo solo gli annunci dell'utente richiesto
             for (Annuncio annuncio : mappaAnnunci.values()) {
                 if (annuncio.getAutoreUsername().equals(username)) {
@@ -99,74 +81,70 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
-        
+
         return listaAnnunci;
     }
 
     @Override
     public Boolean modificaAnnuncio(Annuncio annuncioModificato) throws Exception {
-        DB db = DatabaseCore.getDB();
         try {
-            HTreeMap<String, Annuncio> mappaAnnunci = db.hashMap("annunci")
-                .keySerializer(Serializer.STRING)
-                .valueSerializer(Serializer.JAVA)
-                .createOrOpen();
-            
+            HTreeMap<String, Annuncio> mappaAnnunci = getMappaAnnunci();
+
             if (!mappaAnnunci.containsKey(annuncioModificato.getId())) {
                 return false;
             }
-            
+
             Annuncio annuncioSicuro = mappaAnnunci.get(annuncioModificato.getId());
-            
+
             // SICUREZZA: Blocchiamo la modifica se non sei l'autore originale
             if (!annuncioSicuro.getAutoreUsername().equals(annuncioModificato.getAutoreUsername())) {
-                return false; 
+                return false;
             }
-            
+
             // Aggiorniamo solo i campi modificabili, ID e Autore restano protetti
             annuncioSicuro.setTitolo(annuncioModificato.getTitolo());
             annuncioSicuro.setDescrizione(annuncioModificato.getDescrizione());
             annuncioSicuro.setCompetenzaOfferta(annuncioModificato.getCompetenzaOfferta());
             annuncioSicuro.setCompetenzaRichiesta(annuncioModificato.getCompetenzaRichiesta());
-            
+
             mappaAnnunci.put(annuncioSicuro.getId(), annuncioSicuro);
-            DatabaseCore.commit(); 
+            DatabaseCore.commit();
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public Boolean eliminaAnnuncio(String id, String username) throws Exception {
-        DB db = DatabaseCore.getDB();
         try {
-            HTreeMap<String, Annuncio> mappaAnnunci = db.hashMap("annunci")
-                .keySerializer(Serializer.STRING)
-                .valueSerializer(Serializer.JAVA)
-                .createOrOpen();
-            
+            HTreeMap<String, Annuncio> mappaAnnunci = getMappaAnnunci();
+
             if (!mappaAnnunci.containsKey(id)) {
                 return false;
             }
-            
+
             Annuncio annuncioSicuro = mappaAnnunci.get(id);
-            
+
             // SICUREZZA: Blocchiamo l'eliminazione se non sei l'autore originale
             if (!annuncioSicuro.getAutoreUsername().equals(username)) {
-                return false; 
+                return false;
             }
-            
+
             mappaAnnunci.remove(id);
-            DatabaseCore.commit(); 
+            DatabaseCore.commit();
+
+            // Notifica della cancellazione dell'annuncio a tutti gli osservatori registrati
+            notificaEliminazione(id);
+
             return true;
-            
+
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             return false;
         }
     }
@@ -178,19 +156,19 @@ public class GestoreAnnunciImpl extends RemoteServiceServlet implements GestoreA
 
         for (Annuncio annuncio : tuttiGliAnnunci) {
             // Controllo filtro competenza offerta (se specificato)
-            boolean matchOfferta = (competenzaOfferta == null || competenzaOfferta.trim().isEmpty() || 
-                (annuncio.getCompetenzaOfferta() != null && 
-                 annuncio.getCompetenzaOfferta().toLowerCase().contains(competenzaOfferta.toLowerCase().trim())));
+            boolean matchOfferta = (competenzaOfferta == null || competenzaOfferta.trim().isEmpty() ||
+                    (annuncio.getCompetenzaOfferta() != null &&
+                            annuncio.getCompetenzaOfferta().toLowerCase().contains(competenzaOfferta.toLowerCase().trim())));
 
             // Controllo filtro competenza richiesta (se specificato)
-            boolean matchRichiesta = (competenzaRichiesta == null || competenzaRichiesta.trim().isEmpty() || 
-                (annuncio.getCompetenzaRichiesta() != null && 
-                 annuncio.getCompetenzaRichiesta().toLowerCase().contains(competenzaRichiesta.toLowerCase().trim())));
+            boolean matchRichiesta = (competenzaRichiesta == null || competenzaRichiesta.trim().isEmpty() ||
+                    (annuncio.getCompetenzaRichiesta() != null &&
+                            annuncio.getCompetenzaRichiesta().toLowerCase().contains(competenzaRichiesta.toLowerCase().trim())));
 
             // Filtro per Testo Libero (cerca nel titolo o nella descrizione)
-            boolean matchKeyword = (keyword == null || keyword.trim().isEmpty() || 
-                (annuncio.getTitolo() != null && annuncio.getTitolo().toLowerCase().contains(keyword.toLowerCase().trim())) ||
-                (annuncio.getDescrizione() != null && annuncio.getDescrizione().toLowerCase().contains(keyword.toLowerCase().trim())));
+            boolean matchKeyword = (keyword == null || keyword.trim().isEmpty() ||
+                    (annuncio.getTitolo() != null && annuncio.getTitolo().toLowerCase().contains(keyword.toLowerCase().trim())) ||
+                    (annuncio.getDescrizione() != null && annuncio.getDescrizione().toLowerCase().contains(keyword.toLowerCase().trim())));
 
             // Se entrambi i filtri rispecchiano i criteri, l'annuncio viene incluso nei risultati
             if (matchOfferta && matchRichiesta && matchKeyword) {

@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unchecked")
-public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
-<<<<<<< Updated upstream
-        implements GestoreRichiesteService, SoggettoOsservabile {
+public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService, SoggettoOsservabile {
 
     private final DB db = DatabaseCore.getDB();
     //Lista osservatori
@@ -21,30 +19,22 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
     private final HTreeMap<String, RichiestaScambio> mappaRichieste = db.hashMap("richieste")
             .keySerializer(Serializer.STRING)
             .valueSerializer(Serializer.JAVA)
-=======
-        implements GestoreRichiesteService, SoggettoOsservabile, AnnuncioObserver {
-    //Lista osservatori
-    private final List<OsservatoreScambio> osservatori;
 
     private final HTreeMap<String, RichiestaScambio> getMappaRichieste() {
             return(HTreeMap<String, RichiestaScambio>) DatabaseCore.getDB().hashMap("richieste")
             .keySerializer(Serializer.STRING) //id richiesta
             .valueSerializer(Serializer.JAVA)//oggetto richiesta
->>>>>>> Stashed changes
             .createOrOpen();
     }
     private boolean ReqInDb(String idRichiesta) {
         return getMappaRichieste().containsKey(idRichiesta);
     }
 
-//---------------------------------------------------------------------
+    //---------------------------------------------------------------------
     public GestoreRichiesteServiceImpl() {
         //Registriamo subito il gestore della gamification come osservatore
         osservatori=new ArrayList<>();
-<<<<<<< Updated upstream
         aggiungiOsservatore(new GestoreLeveling(db));
-=======
-        aggiungiOsservatore(new GestoreLeveling(DatabaseCore.getDB()));
 
         // Registrazione come osservatore delle cancellazioni degli annunci
         GestoreAnnunciImpl.aggiungiOsservatore(this);
@@ -68,7 +58,6 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
         } catch (Exception e) {
             e.printStackTrace();
         }
->>>>>>> Stashed changes
     }
 
     //@Override di SoggettoOsservabile
@@ -101,6 +90,7 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
         if (richiesta.getIdRichiesta() == null || richiesta.getIdRichiesta().isEmpty()) {
             richiesta.setIdRichiesta(UUID.randomUUID().toString());
         }
+
         try {
             getMappaRichieste().put(richiesta.getIdRichiesta(), richiesta);
             DatabaseCore.commit();
@@ -219,7 +209,7 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
 
                 // una sola recensione per utente
                 if (richiesta.isRecensioneInviata(recensore)) return false;
-                
+
                 richiesta.setRecensioneInviata(recensore);
                 richiesta.aggiungiRecensione(recensione);
                 getMappaRichieste().put(idRichiesta, richiesta);
@@ -235,10 +225,4 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
             return false;
         }
     }
-
-
-
-
-
-
 }

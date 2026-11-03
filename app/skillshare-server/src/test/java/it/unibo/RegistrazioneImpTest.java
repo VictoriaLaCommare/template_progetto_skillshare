@@ -36,7 +36,7 @@ public class RegistrazioneImpTest {
 
     @BeforeEach
     void setUp() throws Exception {
-
+        DatabaseUtente.resetPerTest();
         // Inizializzazione finta del Web Server
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getServerInfo()).thenReturn("MockServer/1.0");
@@ -54,8 +54,8 @@ public class RegistrazioneImpTest {
         field.set(registratore, threadLocal);
 
         uservalido = new Utente("Mario","Rossi");
-        uservalido.setUsername("mario123");
-        uservalido.setPassword("passwordSicura123");
+        uservalido.setUsername("mario123"+ System.currentTimeMillis());
+        uservalido.setPassword("passwordSicura123" );
         uservalido.setMail("mario@email.com." + System.currentTimeMillis());
         uservalido.setData(new java.util.Date());
 

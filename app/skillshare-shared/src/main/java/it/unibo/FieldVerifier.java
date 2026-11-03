@@ -80,11 +80,11 @@ public class FieldVerifier {
 	}
 
 	public static boolean isValidBio(String bio){
-		return bio != null && bio.length() <= 100;
+		return bio != null;
 	}
 
 	public static boolean isValidTag(String tag){
-		return tag != null && tag.length() > 0;
+		return tag != null && !tag.isEmpty();
 	}
 
 	public static boolean isValidTitoloAnnuncio(String titolo) {

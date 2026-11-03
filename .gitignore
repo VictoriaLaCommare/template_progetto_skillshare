@@ -31,7 +31,6 @@ war/WEB-INF/lib/
 *.gwt.rpc
 
 # --- Database (MapDB) ---
-# *.db # Se ignorate il file del database assicuratevi di riinserirlo prima di consegnare
 *.db.wal.*
 *.db.p
 *.db.t

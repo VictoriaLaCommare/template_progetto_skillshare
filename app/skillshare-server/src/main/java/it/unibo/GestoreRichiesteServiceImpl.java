@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unchecked")
-public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
-        implements GestoreRichiesteService, SoggettoOsservabile, AnnuncioObserver {
+public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements GestoreRichiesteService, SoggettoOsservabile {
 
     //Lista osservatori
     private final List<OsservatoreScambio> osservatori;
@@ -28,7 +27,6 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet
         return getMappaRichieste().containsKey(idRichiesta);
     }
 
-    //---------------------------------------------------------------------
     public GestoreRichiesteServiceImpl() {
         //Registriamo subito il gestore della gamification come osservatore
         osservatori=new ArrayList<>();

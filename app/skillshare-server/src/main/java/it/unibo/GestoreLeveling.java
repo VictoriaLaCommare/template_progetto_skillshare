@@ -10,19 +10,19 @@ L'oggetto Observer concreto: reagisce agli eventi di completamento e recensione
 
  Punti assegnati: Per ogni recensione ricevuta: +valutazione pt (1-5) all'utente recensito
  */
+
 @SuppressWarnings("unchecked")
 public class GestoreLeveling implements OsservatoreScambio {
 
-    public GestoreLeveling(DB db){}
-
-    public HTreeMap<String, StatisticheUtente> getMappaStatistiche() {
+    public GestoreLeveling(DB db) {
+    }
+    
+    private HTreeMap<String, StatisticheUtente> getMappaStatistiche() {
         return DatabaseCore.getDB().hashMap("statistiche")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.JAVA)
                 .createOrOpen();
     }
-
-    //  privati
 
     private void aggiornaDopoScambio(String username) {
         StatisticheUtente s = getOrCreate(username);
@@ -33,8 +33,6 @@ public class GestoreLeveling implements OsservatoreScambio {
     private StatisticheUtente getOrCreate(String username) {
         return (StatisticheUtente) getMappaStatistiche().getOrDefault(username, new StatisticheUtente(username));
     }
-
-    // Observer 
 
     @Override
     public void DopoScambioCompletato(RichiestaScambio richiesta) {

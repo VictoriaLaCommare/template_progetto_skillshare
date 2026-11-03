@@ -227,13 +227,10 @@ public class BachecaProposteIT {
             // 4. Navigazione in Bacheca e filtro "Per Te"
             wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
             BachecaPropostePage bachecaPage = new BachecaPropostePage(driver, TIMEOUT);
-            assertTrue(bachecaPage.isTabellaVisibile());
-
+            assertTrue(bachecaPage.isTabellaVisibile(), "La tabella delle proposte dovrebbe essere visibile.");
             bachecaPage.cliccaAnnunciPerTe();
 
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.xpath("//*[contains(text(), '" + titoloLuigi + "')]")
-            ));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[contains(text(), '" + titoloLuigi + "')]")));
 
             // 5. Asserzioni
             assertTrue(bachecaPage.isAnnuncioPresenteInTabella(titoloMario),

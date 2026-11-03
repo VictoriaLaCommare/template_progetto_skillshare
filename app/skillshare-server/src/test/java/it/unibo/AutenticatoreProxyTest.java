@@ -41,8 +41,6 @@ public class AutenticatoreProxyTest {
         utenteNonValido.setData(new GregorianCalendar(1800, Calendar.DECEMBER, 31).getTime());
     }
 
-
-
     @Test
     public void registraUtente_datiValidi_deveTornareTrue() throws Exception {
         // Eseguiamo la registrazione (salverà nella RAM)
@@ -69,8 +67,10 @@ public class AutenticatoreProxyTest {
     @Test
     @DisplayName("Login con credenziali corrette restituisce l'utente")
     public void effettuaLogin_credenzialiCorrette_deveTornareUtente() throws Exception {
-        // Arrange: Registriamo l'utente nel sistema
-        utenteValido.setMail("login" + System.currentTimeMillis() + "@mail.com");
+        // Arrange: Rendiamo univo sia il login/mail che lo username per questo test specifico
+        String uniqueId = String.valueOf(System.currentTimeMillis());
+        utenteValido.setUsername("mario_" + uniqueId);
+        utenteValido.setMail("login_" + uniqueId + "@mail.com");
 
         proxy.registraUtente(utenteValido);
 
@@ -86,8 +86,9 @@ public class AutenticatoreProxyTest {
     @DisplayName("Login con password errata restituisce null")
     public void effettuaLogin_passwordErrata_deveTornareNull() throws Exception {
         // Arrange: Registriamo l'utente
-        utenteValido.setMail("errata" + System.currentTimeMillis() + "@mail.com");
-        proxy.registraUtente(utenteValido);
+        String uniqueId = String.valueOf(System.currentTimeMillis());
+        utenteValido.setUsername("errata_" + uniqueId);
+        utenteValido.setMail("errata_" + uniqueId + "@mail.com");
 
         // Act: Tentiamo il login con password sbagliata
         Utente utenteLoggato = proxy.effettuaLogin(utenteValido.getMail(), "passwordSbagliatissima");

@@ -47,7 +47,7 @@ public class HomePageGUI {
         RootPanel.get().add(mainPanel);
     }
 
-    // SCHERMATA INIZIALE (LANDING PAGE)
+    // Schermata iniziale
     private void mostraLandingPage() {
         mainPanel.clear();
 

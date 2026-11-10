@@ -40,7 +40,7 @@ public class MatchmakingPage {
         return driver.findElements(By.xpath("//button[contains(., 'Salva Profilo') or contains(., 'Salvato')]"));
     }
 
-    // Clicca il primo bottone disponibile (esegue il toggle)
+    // Clicca il primo bottone disponibile
     public MatchmakingPage cliccaPrimoBottoneProfilo() {
         List<WebElement> bottoni = getBottoniProfilo();
         if (!bottoni.isEmpty()) {

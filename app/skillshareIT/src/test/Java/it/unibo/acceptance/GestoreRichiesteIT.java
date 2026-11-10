@@ -134,7 +134,6 @@ public class GestoreRichiesteIT {
     }
 
     // Scenario 2 – Attesa di conferma dalla controparte
-
     @Test
     @DisplayName("Scenario 2: Prima conferma: sistema registra e mostra attesa della controparte")
     void testTA2_AttesaConfermaControparte() {
@@ -197,7 +196,6 @@ public class GestoreRichiesteIT {
     }
 
     // Scenario 1 – Chiusura definitiva dello scambio
-
     @Test
     @DisplayName(" Chiusura definitiva: entrambe le conferme portano a Completato")
     void ChiusuraDefinitiva() {

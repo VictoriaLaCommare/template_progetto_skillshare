@@ -93,7 +93,6 @@ class GestoreAnnunciIT {
         @Test
         @DisplayName("evidenzia in rosso tutti i campi obbligatori")
         void formVuoto_evidenziaTuttiICampi() {
-            // Act
             pagina.pubblica();
 
             // Assert: tutti i campi devono avere il bordo rosso
@@ -114,7 +113,7 @@ class GestoreAnnunciIT {
         @Test
         @DisplayName("manca il titolo, evidenzia solo il campo titolo")
         void mancaTitolo_evidenziaSoloTitolo() {
-            // Arrange + Act: Compilo tutto tranne il titolo
+            // Compilo tutto tranne il titolo
             pagina.compila("", "Una bellissima descrizione", "Java", "Python");
             pagina.pubblica();
 
@@ -133,15 +132,12 @@ class GestoreAnnunciIT {
         @Test
         @DisplayName("la pubblicazione va a buon fine e il form viene svuotato")
         void datiValidi_pubblicazioneCompletataConSuccesso() {
-            // Arrange
             String titoloTest = "Lezione GWT " + System.currentTimeMillis();
             annunciDaPulire.add(titoloTest);
 
-            // Act
             pagina.compila(titoloTest, "Insegno GWT base", "GWT", "Spring Boot");
             pagina.pubblica();
-
-            // Assert
+            
             assertTrue(pagina.testoMessaggio().toLowerCase().contains("successo"),
                     "Messaggio ottenuto: " + pagina.testoMessaggio());
             

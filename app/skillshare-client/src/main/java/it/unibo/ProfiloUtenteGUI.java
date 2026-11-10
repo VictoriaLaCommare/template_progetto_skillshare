@@ -3,7 +3,6 @@ package it.unibo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.List;
 
 public class ProfiloUtenteGUI {
@@ -39,7 +38,7 @@ public class ProfiloUtenteGUI {
 
             @Override
             public void onSuccess(Utente utenteTarget) {
-                lblStato.setText(""); // Rimuovi il messaggio di caricamento
+                lblStato.setText(""); // Rimozione del messaggio di caricamento
                 if (utenteTarget == null) {
                     mainPanel.add(new Label("Profilo non trovato."));
                     aggiungiTastoChiudi(mainPanel, popup, utenteLoggato, null);
@@ -176,7 +175,7 @@ public class ProfiloUtenteGUI {
                 public void onSuccess(List<RichiestaScambio> storico) {
                     storicoContainer.clear();
                     
-                    // storico vuoto
+                    // Storico vuoto
                     if (storico == null || storico.isEmpty()) {
                         Label lblVuoto = new Label("Nessuno scambio passato");
                         lblVuoto.getElement().setId("msg-storico-vuoto");

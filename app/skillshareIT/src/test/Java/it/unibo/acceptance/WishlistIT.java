@@ -38,7 +38,7 @@ public class WishlistIT {
         }
     }
 
-    /** Precondizione del caso d'uso: l'utente è autenticato. Ogni test usa un utente nuovo. */
+    // Precondizione del caso d'uso: l'utente è autenticato. Ogni test usa un utente nuovo.
     @BeforeEach
     void registraEAccedi() {
         String timestamp = String.valueOf(System.currentTimeMillis());

@@ -50,7 +50,7 @@ public class DatabaseUtenteIndiceTest {
     @Test
     @DisplayName("GestoreProfiloReale recupera utente usando l'indice secondario")
     void testRecuperoTramiteIndice() throws Exception {
-        //Arrange: Inseriamo un utente nel DB
+        //Inseriamo un utente nel DB
         Utente u = new Utente("Peach", "Toadstool");
         u.setMail("peach@mail.com");
         u.setUsername("PrincessPeach");
@@ -58,7 +58,7 @@ public class DatabaseUtenteIndiceTest {
         u.setPassword("segreto");
         DatabaseUtente.registraUtente(u);
 
-        //Act: Lo recuperiamo con GestoreProfiloReale passandogli SOLO lo username
+        //Lo recuperiamo con GestoreProfiloReale passandogli SOLO l'username
         GestoreProfiloReale gestoreProfilo = new GestoreProfiloReale();
         Utente recuperato = gestoreProfilo.ottieniProfiloUtente("PrincessPeach"); //utilizzo indice secondario
 

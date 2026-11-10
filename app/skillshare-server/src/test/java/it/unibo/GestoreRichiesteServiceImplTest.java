@@ -324,7 +324,7 @@ public class GestoreRichiesteServiceImplTest {
     @DisplayName("Recensione, Scenario 2: annullamento, profilo invariato")
     public void testRecensione_Scenario2_Annullamento() throws Exception {
         // GIVEN: scambio completato
-        RichiestaScambio req = creaRichiestaCompletata("RicRec_S2", "RiceRec_S2", "ann-rec-s2");
+        //RichiestaScambio req = creaRichiestaCompletata("RicRec_S2", "RiceRec_S2", "ann-rec-s2");
         GestoreLeveling leveling = new GestoreLeveling(DatabaseCore.getDB());
 
         // Salviamo lo stato iniziale delle statistiche

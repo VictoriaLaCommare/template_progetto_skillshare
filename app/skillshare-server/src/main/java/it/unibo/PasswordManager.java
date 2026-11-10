@@ -9,7 +9,7 @@ public class PasswordManager implements GestorePassword {
 
         //Controllo di sicurezza
         if (utenteinMemoria != null && utenteinMemoria.getPassword().equals(passwordInserita)) {
-            return utenteinMemoria; // Password corretta ->accesso consentito all'account
+            return utenteinMemoria; // Password corretta -> accesso consentito all'account
         }
 
         return null; // Utente non trovato o password errata

@@ -168,7 +168,7 @@ public class VisualizzaProfiloIT {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-logout"))).click();
         wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login")));
 
-        // Rientro dell'Utente A per ACCETTARE la richiesta ricevuta
+        // Rientro dell'Utente A per accettare la richiesta ricevuta
         regPage.apri(BASE_URL);
         wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
         regPage.compilaLogin(emailUtenteA, "passwordSicu123").accedi();

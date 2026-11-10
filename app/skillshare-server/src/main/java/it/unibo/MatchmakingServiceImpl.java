@@ -23,7 +23,7 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
         initDb();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     private void initDb() {
         if (db == null || db.isClosed()) {
             db = DatabaseCore.getDB();
@@ -182,7 +182,7 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
         return risultato;
     }
 
-    /** True se almeno una competenza del profilo è uguale a uno dei tag cercati ("java" non corrisponde a "javascript"). */
+    // True se almeno una competenza del profilo è uguale a uno dei tag cercati.
     private boolean haCompetenza(String tagCompetenze, Set<String> tagCercati) {
         for (String competenza : normalizzaTag(tagCompetenze)) {
             if (tagCercati.contains(competenza)) {
@@ -192,7 +192,7 @@ public class MatchmakingServiceImpl extends RemoteServiceServlet implements Matc
         return false;
     }
 
-    /** Copia dell'utente senza la password, da restituire al client. */
+    // Copia dell'utente senza la password, da restituire al client.
     private Utente senzaPassword(Utente u) {
         Utente copia = new Utente();
         copia.setNome(u.getNome());

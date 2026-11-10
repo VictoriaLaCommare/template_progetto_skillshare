@@ -38,7 +38,7 @@ public class GestoreProfiloTest{
     @BeforeEach
     public void setUp() throws Exception{
         DatabaseUtente.resetPerTest();
-        // Inizializzazione finta del web server
+        // Inizializzazione fittizio del web server
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getServerInfo()).thenReturn("MockServer/1.0");
         when(request.getHeader("User-Agent")).thenReturn("MockBrowser/1.0");

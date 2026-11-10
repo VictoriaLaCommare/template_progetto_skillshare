@@ -64,7 +64,7 @@ public class BachecaProposteIT {
                 btnLogout.click();
             }
         } catch (Exception ignored) {
-            // Gestisce in sicurezza eventuali eccezioni se il test fallisce prima di raggiungere la pagina annunci
+            // Gestione in sicurezza eventuali eccezioni se il test fallisce prima di raggiungere la pagina annunci
         }
     }
 

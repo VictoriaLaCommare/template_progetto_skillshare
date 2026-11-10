@@ -49,7 +49,7 @@ public class HomeProfiloIT {
             // Chiudiamo il popup per ripulire la schermata
             profiloPage.chiudiProfilo();
         } else {
-            // Se non ci sono annunci in bacheca al momento del test, passiamo comunque avvisando
+            // Se non ci sono annunci in bacheca al momento del test, scriviamo un messaggio informativo.
             System.out.println("Attenzione: nessun annuncio presente in home page per testare il click sul profilo.");
         }
     }

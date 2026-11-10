@@ -76,11 +76,11 @@ public class ProfiloUtentePage {
 
     // Statistiche e gamification
 
-    /**
+    /*
      Le statistiche arrivano con una chiamata RPC separata dal profilo:
      va chiamato prima di leggere livello, scambi, media e tag.
      Se il server non risponde, la GUI mostra "Statistiche non disponibili." e qui scatta il timeout.
-     */
+    */
     public ProfiloUtentePage attendiStatistiche() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(TESTO_SCAMBI));
         return this;
@@ -90,10 +90,10 @@ public class ProfiloUtentePage {
         return (int) primoNumeroDi(TESTO_SCAMBI);
     }
 
-    /**
+    /*
      La media viene letta con una regex: GWT compilato stampa un double intero senza decimali
      ("4" e non "4.0"), quindi non si può confrontare una stringa fissa.
-     */
+    */
     public double getMediaRecensioni() {
         return primoNumeroDi(TESTO_MEDIA);
     }
@@ -102,7 +102,7 @@ public class ProfiloUtentePage {
         return driver.findElement(TESTO_LIVELLO).getText().trim();
     }
 
-    /** True se esiste un tag (badge) il cui testo contiene il frammento, es. "Eccellente". */
+    // True se esiste un tag (badge) il cui testo contiene il frammento, es. "Eccellente".
     public boolean haTag(String frammento) {
         return !driver.findElements(
                 By.xpath("//span[contains(text(), '" + frammento + "')]")).isEmpty();

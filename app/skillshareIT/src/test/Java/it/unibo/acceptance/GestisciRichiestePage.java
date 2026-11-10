@@ -7,10 +7,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
-/**
+/*
  Page helper per GestisciRichiesteGUI.
  Fornisce metodi di alto livello usati nei test di accettazione
- */
+*/
 public class GestisciRichiestePage {
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -28,28 +28,28 @@ public class GestisciRichiestePage {
         this.wait = new WebDriverWait(driver, timeout);
     }
 
-    /** Clicca il primo pulsante "Accetta" presente nella pagina. */
+    // Clicca il primo pulsante "Accetta" presente nella pagina.
     public GestisciRichiestePage accettaPrimaRichiesta() {
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[starts-with(@id, 'btn-accetta-')]"))).click();
         return this;
     }
 
-    /** Clicca il primo pulsante "Rifiuta" o "Annulla" presente nella pagina. */
+    // Clicca il primo pulsante "Rifiuta" o "Annulla" presente nella pagina.
     public GestisciRichiestePage rifiutaPrimaRichiesta() {
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[starts-with(@id, 'btn-rifiuta-')]"))).click();
         return this;
     }
 
-    /** Clicca il primo pulsante "Dichiara Terminazione" presente nella pagina. */
+    // Clicca il primo pulsante "Dichiara Terminazione" presente nella pagina.
     public GestisciRichiestePage dichiaraPrimaTerminazione() {
         wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[starts-with(@id, 'btn-termina-')]"))).click();
         return this;
     }
 
-    /**
+    /*
      Attende un alert JavaScript, ne legge il testo e lo accetta.
      return Il testo dell'alert.
      */
@@ -61,10 +61,10 @@ public class GestisciRichiestePage {
         return testo;
     }
 
-    /**
+    /*
      Controlla se almeno un pulsante "Dichiara Terminazione" è visibile.
      Restituisce false se il timeout scade senza trovarlo.
-     */
+    */
     public boolean isBottoneTerminaVisibile() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -75,10 +75,10 @@ public class GestisciRichiestePage {
         }
     }
 
-    /**
+    /*
      Controlla se il messaggio "In attesa della conferma dell'altro utente" è visibile.
      Viene mostrato all'utente che ha già dichiarato la propria terminazione.
-     */
+    */
     public boolean isMessaggioAttesaVisibile() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -90,7 +90,7 @@ public class GestisciRichiestePage {
     }
 
     //  Recensione
-    /** Attende il bottone "Lascia Recensione" (compare solo a scambio Completato). */
+    //  Attende il bottone "Lascia Recensione" (compare solo a scambio Completato).
     public boolean isBottoneRecensioneVisibile() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(BTN_RECENSIONE));
@@ -100,21 +100,21 @@ public class GestisciRichiestePage {
         }
     }
 
-    /**
+    /*
      Controllo immediato, senza attese: usarlo solo dopo aver atteso un elemento
      che garantisce che la lista richieste sia stata caricata (es. isBottoneTerminaVisibile).
-     */
+    */
     public boolean isBottoneRecensioneAssente() {
         return driver.findElements(BTN_RECENSIONE).isEmpty();
     }
 
-    /** Apre o chiude il form (il bottone fa da toggle). */
+    // Apre o chiude il form (il bottone fa da toggle).
     public GestisciRichiestePage cliccaLasciaRecensione() {
         wait.until(ExpectedConditions.elementToBeClickable(BTN_RECENSIONE)).click();
         return this;
     }
 
-    /** True se il form di recensione è aperto (attende il tasto "Invia Recensione"). */
+    // True se il form di recensione è aperto (attende il tasto "Invia Recensione").
     public boolean isFormRecensioneVisibile() {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(BTN_INVIA_RECENSIONE));
@@ -124,7 +124,7 @@ public class GestisciRichiestePage {
         }
     }
 
-    /** True se il form è nascosto o non esiste (veloce quando il form è chiuso). */
+    // True se il form è nascosto o non esiste (veloce quando il form è chiuso).
     public boolean isFormRecensioneChiuso() {
         try {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(BTN_INVIA_RECENSIONE));
@@ -134,7 +134,7 @@ public class GestisciRichiestePage {
         }
     }
 
-    /** Clicca l'n-esima stella (1-5). Presuppone una sola richiesta completata nella pagina. */
+    // Clicca l'n-esima stella (1-5). Presuppone una sola richiesta completata nella pagina.
     public GestisciRichiestePage selezionaStelle(int n) {
         if (n < 1 || n > 5) {
             throw new IllegalArgumentException("Le stelle vanno da 1 a 5, ricevuto: " + n);
@@ -144,7 +144,7 @@ public class GestisciRichiestePage {
         return this;
     }
 
-    /** Numero di stelle piene (★) nel form. Funziona anche a form chiuso: legge il DOM. */
+    // Numero di stelle piene (★) nel form. Funziona anche a form chiuso: legge il DOM.
     public int getStelleSelezionate() {
         return driver.findElements(STELLE_PIENE).size();
     }
@@ -156,7 +156,7 @@ public class GestisciRichiestePage {
         return this;
     }
 
-    /** Valore corrente della TextArea (anche a form chiuso). */
+    // Valore corrente della TextArea (anche a form chiuso).
     public String getCommento() {
         String valore = driver.findElement(TXT_COMMENTO).getDomProperty("value");
         return valore == null ? "" : valore;

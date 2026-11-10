@@ -116,7 +116,7 @@ public class MiaWishlistGUI {
             "<p class='paragrafo'>" + descrizione + "</p>" +
             "</div>"
         );
-        //card.setWidth("100%");
+        
         card.addStyleName("card-wishlist");
         card.addStyleName("larghezzaMax");
         card.addStyleName("card-servizio");

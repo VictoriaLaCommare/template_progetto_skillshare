@@ -29,7 +29,7 @@ public class GestisciRichiesteGUI {
             mainPanel.add(new AppNavbar(utenteLoggato, "richieste"));
         }
 
-        // Intestazione allineata nello stile a "I Miei Annunci"
+        // Intestazione della pagina
         HTML titolo = new HTML(
             "<div>" +
             "<h1>Le Mie Richieste</h1>" +

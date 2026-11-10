@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WishlistServiceImplTest {
 
-    // Accensione database finto
+    // Accensione database fittizio
     @BeforeAll
     public static void testmode() {
         DatabaseCore.enableTestMode();
     }
 
-    // Spegnimento database finto
+    // Spegnimento database fittizio
     @AfterAll
     public static void testmodeoff() {
         DatabaseCore.disableTestMode();

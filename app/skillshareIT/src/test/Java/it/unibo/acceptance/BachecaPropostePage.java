@@ -34,15 +34,13 @@ public class BachecaPropostePage {
         wait.until(ExpectedConditions.elementToBeClickable(btnFiltri)).click();
     }
 
-
-     //Clicca sul pulsante '❤️ Per Te' all'interno del popup
+    //Clicca sul pulsante '❤️ Per Te' all'interno del popup
     public void cliccaAnnunciPerTe() {
         apriFiltriAvanzati();
         wait.until(ExpectedConditions.elementToBeClickable(btnAnnunciPerTe)).click();
     }
 
-
-     //Verifica se un annuncio con un determinato titolo è presente nella tabella
+    //Verifica se un annuncio con un determinato titolo è presente nella tabella
     public boolean isAnnuncioPresenteInTabella(String titoloCercato) {
         try {
             wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
@@ -52,8 +50,7 @@ public class BachecaPropostePage {
         }
     }
 
-
-     //Verifica se viene mostrato il messaggio di assenza proposte
+    //Verifica se viene mostrato il messaggio di assenza proposte
     public boolean isMessaggioNessunaPropostaVisibile() {
         try {
             return wait.until(ExpectedConditions.visibilityOf(msgNessunaProposta)).isDisplayed();
@@ -102,7 +99,7 @@ public class BachecaPropostePage {
     public BachecaPropostePage cliccaRichiediScambioDi(String autoreUsername) {
         wait.until(ExpectedConditions.visibilityOf(tabellaProposte));
         
-        // Cerchiamo il bottone 'richiedi-scambio' che sta dentro alla rigain cui c'è il link del profilo dell'autore"
+        // Cerchiamo il bottone 'richiedi-scambio' che sta dentro alla riga in cui c'è il link del profilo dell'autore
         WebElement bottoneScambio = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath(".//tr[.//button[@id='link-profilo-" + autoreUsername + "']]//button[starts-with(@id, 'btn-richiedi-scambio-')]")
         ));

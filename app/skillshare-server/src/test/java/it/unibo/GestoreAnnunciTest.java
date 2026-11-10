@@ -32,13 +32,13 @@ public class GestoreAnnunciTest {
 
     @BeforeAll
     static void testmode() {
-        // Attiviamo il database finto per i test
+        // Attiviamo il database fittizio per i test
         DatabaseCore.enableTestMode();
     }
 
     @BeforeEach
     void setUp() throws Exception {
-        // Inizializzazione finta del Web Server
+        // Inizializzazione fittizio del Web Server
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getServerInfo()).thenReturn("MockServer/1.0");
         when(request.getHeader("User-Agent")).thenReturn("MockBrowser/1.0");
@@ -46,7 +46,7 @@ public class GestoreAnnunciTest {
         gestore = new GestoreAnnunciImpl();
         gestore.init(servletConfig);
 
-        // Iniezione della request finta tramite reflection
+        // Iniezione della request fittizio tramite reflection
         ThreadLocal<HttpServletRequest> threadLocal = new ThreadLocal<>();
         threadLocal.set(request);
 

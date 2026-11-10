@@ -8,9 +8,7 @@ public class Recensione implements Serializable {
     private int valutazione;
     private String commento;
     private Recensione(){}
-
-
-
+    
     //factory
     public static Recensione creaRecensione() {
         return new Recensione();

@@ -2,11 +2,11 @@ package it.unibo;
 
 import java.util.ArrayList;
 
-/**
- * ConcreteComponent: avvolge i dati grezzi dal DB e li copia
- * in un oggetto pulito con tag e livello vuoti.
- * È il punto di partenza della catena di Decorator.
- */
+/*
+ConcreteComponent: avvolge i dati grezzi dal DB e li copia
+in un oggetto pulito con tag e livello vuoti.
+È il punto di partenza della catena di Decorator.
+*/
 public class DescrizioneUtenteBase implements DescrizioneUtente {
 
     private final StatisticheUtente datiGrezzi;

@@ -64,13 +64,13 @@ public class PersonalizzaProfiloGui {
 
         mainPanel.add(btnVisualizzaProfilo);
 
-        //Inseriamo la bio in una TextArea
+        //Inserimento la bio in una TextArea
         TextArea txtBio = new TextArea();
         txtBio.getElement().setPropertyString("placeholder", "Scrivi una breve bio su di te...");
         txtBio.getElement().setId("prof-bio");
         txtBio.setVisibleLines(4);
         txtBio.addStyleName("txtBio-personalizzaProfilo");
-        if (utenteLoggato.getBio() != null) txtBio.setText(utenteLoggato.getBio()); // Pre-compiliamo se esiste già
+        if (utenteLoggato.getBio() != null) txtBio.setText(utenteLoggato.getBio()); //Precompilazione con la bio attuale dell'utente
         
         Label errBio = new Label();
         errBio.addStyleName("testo-errore");
@@ -84,7 +84,6 @@ public class PersonalizzaProfiloGui {
         txtFoto.getElement().setPropertyString("placeholder", "URL della tua foto profilo");
         txtFoto.getElement().setId("prof-foto");
         txtFoto.addStyleName("larghezzaBox");
-        // Se avete aggiunto il campo foto in Utente.java, decommenta la riga sotto:
         if (utenteLoggato.getImmagineProfilo() != null) txtFoto.setText(utenteLoggato.getImmagineProfilo());
         
         Label errFoto = new Label();

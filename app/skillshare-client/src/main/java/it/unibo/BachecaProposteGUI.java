@@ -209,7 +209,7 @@ public class BachecaProposteGUI {
 
         int riga = 1;
         for (Annuncio annuncio : listaProposte) {
-            final int rigaCorrente = riga;                // copia di riga, usabile dentro la lambda di onSuccess
+            final int rigaCorrente = riga;
             rigaPerAnnuncio.put(annuncio.getId(), riga);
 
             tabellaAnnunci.setText(riga, 0, annuncio.getTitolo());

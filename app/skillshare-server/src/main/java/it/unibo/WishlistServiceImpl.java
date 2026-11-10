@@ -21,7 +21,7 @@ public class WishlistServiceImpl extends RemoteServiceServlet implements Wishlis
         initDb();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     private void initDb() {
         if (db == null || db.isClosed()) {
             db = DatabaseCore.getDB();

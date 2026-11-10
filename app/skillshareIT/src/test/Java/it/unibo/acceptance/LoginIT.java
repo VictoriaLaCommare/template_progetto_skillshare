@@ -11,9 +11,9 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Test di accettazione per il form di Login di SkillShare.
- */
+/*
+ Test di accettazione per il form di Login di SkillShare.
+*/
 class LoginIT {
 
     private static final String BASE_URL = System.getProperty("app.url", "http://localhost:8080/");
@@ -64,7 +64,6 @@ class LoginIT {
         @Test
         @DisplayName("evidenzia in rosso email e password senza contattare il server")
         void formVuoto_evidenziaEntrambiICampi() {
-            // Act
             pagina.accedi();
 
             // Assert: Controlla che i bordi diventino rossi (validazione client)
@@ -83,7 +82,6 @@ class LoginIT {
         @Test
         @DisplayName("evidenzia in rosso solo il campo email")
         void emailMalformata_evidenziaEmail() {
-            // Arrange + Act
             pagina.compilaLogin("mariosenzachiocciola", "password123");
             pagina.accedi();
 
@@ -100,9 +98,7 @@ class LoginIT {
         @Test
         @DisplayName("mostra il messaggio di errore dal server")
         void credenzialiErrate_mostraErrore() {
-            // Arrange
             pagina.compilaLogin("utenteinesistente@example.com", "passwordSbagliata");
-            // Act
             pagina.accedi();
 
             // Assert: Il server deve respingere il login
@@ -123,7 +119,7 @@ class LoginIT {
         @DisplayName("mostra il messaggio di benvenuto con il nome dell'utente")
         void loginValido_mostraBenvenuto() {
             pagina.apri(BASE_URL).vaiAlFormRegistrazione();
-            // Arrange: Registriamo un utente fittizio per garantire l'accesso al DB
+            // Registriamo un utente fittizio per garantire l'accesso al DB
             String nome = "Luigi";
             String emailUnica = "luigi" + System.currentTimeMillis() + "@example.com";
             String password = "passwordSicura123";
@@ -136,19 +132,6 @@ class LoginIT {
 
             GestoreAnnunciPage annunciPage = new GestoreAnnunciPage(driver, TIMEOUT);
             assertNotNull(annunciPage.campoTitolo(), "Il form degli annunci non è apparso dopo il login");
-            // Verifica che la registrazione sia andata a buon fine
-            //assertTrue(pagina.testoMessaggio().toLowerCase().contains("successo"));
-
-            // Act: Eseguiamo il login con le credenziali appena create
-            //pagina.compilaLogin(emailUnica, password).accedi();
-
-            // Assert: Verifica il messaggio di successo proveniente dal server
-            /*String messaggioSuccesso = pagina.testoMessaggioLogin().toLowerCase();
-            assertTrue(messaggioSuccesso.contains("benvenuto"),
-                    "Messaggio ottenuto: " + pagina.testoMessaggioLogin());
-            assertTrue(messaggioSuccesso.contains(nome.toLowerCase()),
-                    "Il messaggio dovrebbe contenere il nome dell'utente");
-            */
         }
     }
 }

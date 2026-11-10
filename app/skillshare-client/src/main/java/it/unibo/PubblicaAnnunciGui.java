@@ -46,10 +46,10 @@ public class PubblicaAnnunciGui {
         }
 
         HTML bannerDashboard = new HTML(
-        "<div>" +
-        "<h1>Bacheca Annunci</h1>" +
-        "<p>Condividi le tue competenze o cerca aiuto nella community!</p>" +
-        "</div>"
+            "<div>" +
+            "<h1>Bacheca Annunci</h1>" +
+            "<p>Condividi le tue competenze o cerca aiuto nella community!</p>" +
+            "</div>"
         );
         bannerDashboard.addStyleName("stylePannello");
 

@@ -19,7 +19,7 @@ public class GestoreRichiesteServiceImpl extends RemoteServiceServlet implements
         DB db = DatabaseCore.getDB();
         return (HTreeMap<String, RichiestaScambio>) db.hashMap("richieste")
             .keySerializer(Serializer.STRING) //id richiesta
-            .valueSerializer(Serializer.JAVA)//oggetto richiesta
+            .valueSerializer(Serializer.JAVA) //oggetto richiesta
             .createOrOpen();
     }
 

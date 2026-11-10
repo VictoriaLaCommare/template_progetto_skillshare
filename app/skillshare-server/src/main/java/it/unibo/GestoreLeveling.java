@@ -6,10 +6,10 @@ import org.mapdb.Serializer;
 
 /*
 L'oggetto Observer concreto: reagisce agli eventi di completamento e recensione
- aggiornando le statistiche nel DB e ricostruendo la catena di Decorator.
+aggiornando le statistiche nel DB e ricostruendo la catena di Decorator.
 
- Punti assegnati: Per ogni recensione ricevuta: +valutazione pt (1-5) all'utente recensito
- */
+Punti assegnati: Per ogni recensione ricevuta: +valutazione pt (1-5) all'utente recensito
+*/
 
 @SuppressWarnings("unchecked")
 public class GestoreLeveling implements OsservatoreScambio {
@@ -50,11 +50,12 @@ public class GestoreLeveling implements OsservatoreScambio {
     }
 
     // Getter dell'intera catena di decorazioni
-    /*Restituisce le statistiche arricchite di un utente applicando
-     la catena di Decorator completa.
-     Solo uno tra Novizio/Esperto/Maestro attiverà il proprio ramo;
-     DecoratoreRecensioni può combinarsi con ognuno essendo legato alle recensioni.
-     */
+    /*
+    Restituisce le statistiche arricchite di un utente applicando
+    la catena di Decorator completa.
+    Solo uno tra Novizio/Esperto/Maestro attiverà il proprio ramo;
+    DecoratoreRecensioni può combinarsi con ognuno essendo legato alle recensioni.
+    */
     public StatisticheUtente getStatistiche(String username) {
         StatisticheUtente statbase = getOrCreate(username);
         DescrizioneUtente catena =

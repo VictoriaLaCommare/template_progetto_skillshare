@@ -85,7 +85,6 @@ public class RichiestaScambio implements Serializable {
         this.confermataTerminazioneRicevente = val;
     }
     
-
     public String getIdRichiesta() {
         return idRichiesta;
     }
@@ -117,6 +116,4 @@ public class RichiestaScambio implements Serializable {
     public void setRicevente(String ricevente) {
         this.ricevente = ricevente;
     }
-
-
 }

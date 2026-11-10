@@ -62,8 +62,8 @@ public class AutenticatoreProxyTest {
         assertThrows(IllegalArgumentException.class,
                 () -> proxy.registraUtente(utenteNonValido));
     }
+    
     // TEST LOGIN
-
     @Test
     @DisplayName("Login con credenziali corrette restituisce l'utente")
     public void effettuaLogin_credenzialiCorrette_deveTornareUtente() throws Exception {
@@ -74,7 +74,7 @@ public class AutenticatoreProxyTest {
 
         proxy.registraUtente(utenteValido);
 
-        // Act: Tentiamo il login
+        // Tentiamo il login
         Utente utenteLoggato = proxy.effettuaLogin(utenteValido.getMail(), utenteValido.getPassword());
 
         // Assert: L'utente restituito non deve essere null e la mail deve coincidere
@@ -90,7 +90,7 @@ public class AutenticatoreProxyTest {
         utenteValido.setUsername("errata_" + uniqueId);
         utenteValido.setMail("errata_" + uniqueId + "@mail.com");
 
-        // Act: Tentiamo il login con password sbagliata
+        // Tentiamo il login con password sbagliata
         Utente utenteLoggato = proxy.effettuaLogin(utenteValido.getMail(), "passwordSbagliatissima");
 
         // Assert: Il sistema deve respingere l'accesso restituendo null
@@ -100,7 +100,7 @@ public class AutenticatoreProxyTest {
     @Test
     @DisplayName("Login con email inesistente restituisce null")
     public void effettuaLogin_utenteNonEsistente_deveTornareNull() throws Exception {
-        // Act: Tentiamo il login con una mail mai registrata
+        // Tentiamo il login con una mail mai registrata
         Utente utenteLoggato = proxy.effettuaLogin("utentefantasma@mail.com", "pass123");
 
         // Assert
@@ -110,6 +110,5 @@ public class AutenticatoreProxyTest {
     @AfterAll
     public static void testmodeoff() {
         DatabaseCore.disableTestMode();
-        //DatabaseUtente.resetPerTest();
     }
 }

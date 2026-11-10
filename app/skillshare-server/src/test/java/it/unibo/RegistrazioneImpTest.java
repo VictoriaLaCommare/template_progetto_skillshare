@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class RegistrazioneImpTest {
 
-    // Configurazione standard per testare una GWT Servlet come dall' esempio
+    // Configurazione standard per testare una GWT Servlet come dall'esempio
     @Mock private ServletConfig servletConfig;
     @Mock private ServletContext servletContext;
     @Mock private HttpServletRequest request;
@@ -37,7 +37,7 @@ public class RegistrazioneImpTest {
     @BeforeEach
     void setUp() throws Exception {
         DatabaseUtente.resetPerTest();
-        // Inizializzazione finta del Web Server
+        // Inizializzazione fittizio del Web Server
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getServerInfo()).thenReturn("MockServer/1.0");
         when(request.getHeader("User-Agent")).thenReturn("MockBrowser/1.0");
@@ -64,8 +64,6 @@ public class RegistrazioneImpTest {
     @AfterAll
     static void testmodeoff() {
         DatabaseCore.disableTestMode();
-        //DatabaseUtente.resetPerTest();
-
     }
 
 
@@ -78,6 +76,7 @@ public class RegistrazioneImpTest {
             throw new RuntimeException(e);
         }
     }
+
     //TEST DI ACCETTAZIONE 2
     @Test
     void RegistraUtente_ConDatiNONCorretti_DeveLanciareIllegalArgumentException(){
@@ -85,6 +84,7 @@ public class RegistrazioneImpTest {
                 () ->registratore.registraUtente(userNONvalido));
 
     }
+
     //TEST DI ACCETTAZIONE 3
     @Test
     public void registraUtente_UnUtenteGiaRegistratoConUnaMail_LanciaClassNotFoundExc() throws Exception {
@@ -92,15 +92,15 @@ public class RegistrazioneImpTest {
         assertThrows(Exception.class,
                 () -> registratore.registraUtente(uservalido));
     }
-    /**TEST LOGIN
-     */
+
+    //TEST LOGIN
     @Test
     @DisplayName("Scenario 1: Login effettuato con successo")
     void effettuaLogin_ConCredenzialiCorrette_RitornaUtente() throws Exception {
-        // Arrange: Prima registriamo l'utente valido
+        // Prima registriamo l'utente valido
         registratore.registraUtente(uservalido);
 
-        // Act: Tentiamo il login con mail e password corrette
+        // Tentiamo il login con mail e password corrette
         Utente utenteLoggato = registratore.effettuaLogin(uservalido.getMail(), "passwordSicura123");
 
         // Assert: L'utente viene autenticato correttamente
@@ -114,7 +114,7 @@ public class RegistrazioneImpTest {
         // Arrange: Registriamo l'utente
         registratore.registraUtente(uservalido);
 
-        // Act & Assert: Verifichiamo che con una password errata il login fallisca (restituendo null o gestendo l'errore)
+        // Verifichiamo che con una password errata il login fallisca (restituendo null o gestendo l'errore)
         Utente utenteLoggato = registratore.effettuaLogin(uservalido.getMail(), "passwordSbagliata");
         assertNull(utenteLoggato, "Il login con password errata deve restituire null");
     }
@@ -122,7 +122,7 @@ public class RegistrazioneImpTest {
     @Test
     @DisplayName("Scenario 3: Fallimento per campi vuoti o mancanti")
     void effettuaLogin_ConCampiVuoti_LanciaEccezione() {
-        // Act & Assert: Campi vuoti devono impedire l'accesso lanciando un'eccezione di validazione
+        // Campi vuoti devono impedire l'accesso lanciando un'eccezione di validazione
         assertThrows(IllegalArgumentException.class,
                 () -> registratore.effettuaLogin("", ""));
     }

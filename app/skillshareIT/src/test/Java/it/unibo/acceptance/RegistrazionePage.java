@@ -1,6 +1,5 @@
 package it.unibo.acceptance;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -111,7 +110,6 @@ public class RegistrazionePage {
 
     public RegistrazionePage accedi() {
         bottoneAccedi.click();
-        //wait.until(d -> !messaggioLogin.getText().isEmpty());
         return this;
     }
 

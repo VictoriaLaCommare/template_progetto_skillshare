@@ -13,11 +13,10 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
+/*
  Test di accettazione del front end per l'UC 13 sulle Recensioni.
  Ruoli:
-
- */
+*/
 public class RecensioneIT {
     private static final String BASE_URL = System.getProperty("app.url", "http://localhost:8080/");
     private static final Duration TIMEOUT = Duration.ofSeconds(15);
@@ -212,7 +211,7 @@ public class RecensioneIT {
 
     // Helper di setup
 
-    /** Registra l'utente, fa il login e attende la schermata iniziale. */
+    // Registra l'utente, fa il login e attende la schermata iniziale.
     private void registraEAccedi(String nome, String cognome, String username,
                                  String email, String dataNascita, String password) {
         regPage.apri(BASE_URL).vaiAlFormRegistrazione();
@@ -221,7 +220,7 @@ public class RecensioneIT {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("annuncio-submit")));
     }
 
-    /** Login di un utente già registrato (riparte dalla pagina iniziale). */
+    // Login di un utente già registrato (riparte dalla pagina iniziale).
     private void accedi(String email, String password) {
         regPage.apri(BASE_URL);
         wait.until(ExpectedConditions.elementToBeClickable(By.id("btn-vai-login"))).click();
@@ -240,7 +239,7 @@ public class RecensioneIT {
         return new GestisciRichiestePage(driver, TIMEOUT);
     }
 
-    /** U1 pubblica un annuncio, U2 gli invia una richiesta. Si conclude con tutti gli utenti sloggati. */
+    // U1 pubblica un annuncio, U2 gli invia una richiesta. Si conclude con tutti gli utenti sloggati.
     private void creaRichiestaInviata() {
         registraEAccedi("Mario", "Rossi", usernameU1, emailU1, "01/01/2000", PWD_U1);
         new GestoreAnnunciPage(driver, TIMEOUT)
@@ -257,10 +256,10 @@ public class RecensioneIT {
         logout();
     }
 
-    /**
+    /*
      Porta lo scambio fino a Completato: U1 accetta e conferma, U2 conferma.
      Si conclude con U2 loggato sulla pagina richieste, dove la card è già "Completato".
-     */
+    */
     private GestisciRichiestePage creaScambioCompletatoComeU2() {
         creaRichiestaInviata();
 
@@ -279,7 +278,7 @@ public class RecensioneIT {
         return richiesteU2;
     }
 
-    /** Apre dalla bacheca il popup del profilo e attende le statistiche (livello, scambi, media, tag). */
+    // Apre dalla bacheca il popup del profilo e attende le statistiche (livello, scambi, media, tag).
     private ProfiloUtentePage apriProfiloDaBacheca(String username) {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("nav-btn-proposte"))).click();
         new BachecaPropostePage(driver, TIMEOUT).cliccaProfiloAutore(username);

@@ -5,10 +5,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/*
  Contiene i dati grezzi (punti, scambi, recensioni) e i dati calcolati
  (livello, tag) che il server popola tramite la catena di Decorator
- prima di spedirla al client.*/
+ prima di spedirla al client.
+*/
 public class StatisticheUtente implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
